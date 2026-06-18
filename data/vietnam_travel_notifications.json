@@ -1,0 +1,229 @@
+[
+  {
+    "eventType": "",
+    "maHDV": "HDV01",
+    "tenHDV": "Trần Thị Như Ý",
+    "maTour": "T01",
+    "tenTour": "Đà Lạt Phố Hoa 3N2Đ",
+    "content": "Nhắc lịch: tour Đà Lạt Phố Hoa 3N2Đ đã đi xong. Xin chân thành cảm ơn bạn đã lựa chọn dịch vụ của chúng tôi.",
+    "date": "07/05/2026 18:00"
+  },
+  {
+    "eventType": "payment_success",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "content": "Booking BK02 đã thanh toán 75.900.000đ.",
+    "date": "21/05/2026 23:47"
+  },
+  {
+    "eventType": "tour_completed",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T01",
+    "tenTour": "Đà Lạt Phố Hoa 3N2Đ",
+    "content": "Tour Đà Lạt Phố Hoa 3N2Đ của booking BK01 đã hoàn thành. Cảm ơn bạn đã sử dụng dịch vụ. Bạn có thể đánh giá tour/HDV ngay bây giờ.",
+    "date": "07/06/2026 20:12",
+    "username": "ngoctuyen",
+    "maBooking": "BK01"
+  },
+  {
+    "eventType": "tour_completed",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "content": "Tour Sapa Mây Núi 4N3Đ của booking BK02 đã hoàn thành. Cảm ơn bạn đã sử dụng dịch vụ. Bạn có thể đánh giá tour/HDV ngay bây giờ.",
+    "date": "07/06/2026 20:12",
+    "username": "phanbaophuc2",
+    "maBooking": "BK02"
+  },
+  {
+    "eventType": "booking_created",
+    "maHDV": "HDV02",
+    "tenHDV": "Nguyễn Văn Minh",
+    "maTour": "T03",
+    "tenTour": "Phú Quốc Nghỉ Dưỡng 3N2Đ",
+    "content": "Booking BK13 vừa được tạo cho tour Phú Quốc Nghỉ Dưỡng 3N2Đ.",
+    "date": "17/06/2026 01:55"
+  },
+  {
+    "eventType": "Account Update",
+    "maHDV": "HDV06",
+    "tenHDV": "Đặng Hoàng Nam",
+    "maTour": "",
+    "tenTour": "",
+    "content": "Tài khoản của bạn đã được cập nhật vào lúc 17/06/2026 11:25. Chi tiết thay đổi:\n- gioiTinh: 'Nữ' -> 'Nam'",
+    "date": "17/06/2026 11:25"
+  },
+  {
+    "eventType": "Account Update",
+    "maHDV": "HDV06",
+    "tenHDV": "Đặng Hoàng Nam",
+    "maTour": "",
+    "tenTour": "",
+    "content": "Tài khoản của bạn đã được cập nhật vào lúc 17/06/2026 11:26. Chi tiết thay đổi:\n- guideState: 'inactive' -> 'available'\n- Trạng thái: 'Tạm nghỉ' -> 'Sẵn sàng'\n- trangThaiTaiKhoan: 'Tạm nghỉ' -> 'Đang hoạt động'",
+    "date": "17/06/2026 11:26"
+  },
+  {
+    "eventType": "Refund Approved",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T04",
+    "tenTour": "Hạ Long Du Thuyền 2N1Đ",
+    "content": "Yêu cầu hoàn tiền cho booking BK04 đã được duyệt thành công. Số tiền hoàn: 20.000.000đ.",
+    "date": "17/06/2026 11:30",
+    "username": "dangkhanhthu4",
+    "maBooking": "BK04"
+  },
+  {
+    "eventType": "admin_reply",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "",
+    "tenTour": "",
+    "content": "Admin đã phản hồi đánh giá của bạn (Mã: REV02).",
+    "date": "17/06/2026 14:13",
+    "username": "phanbaophuc2"
+  },
+  {
+    "eventType": "admin_reply",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "",
+    "tenTour": "",
+    "content": "Admin đã phản hồi đánh giá của bạn (Mã: REV02).",
+    "date": "17/06/2026 14:14",
+    "username": "phanbaophuc2"
+  },
+  {
+    "eventType": "hethong",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T01",
+    "tenTour": "Đà Lạt Phố Hoa 3N2Đ",
+    "content": "Admin đã phản hồi đánh giá của bạn.",
+    "date": "17/06/2026 14:27",
+    "username": "ngoctuyen",
+    "maBooking": "BK01"
+  },
+  {
+    "eventType": "Account Update",
+    "maHDV": "HDV10",
+    "tenHDV": "Nguyễn Trung Hiếu",
+    "maTour": "",
+    "tenTour": "",
+    "content": "Tài khoản của bạn đã được cập nhật vào lúc 18/06/2026 13:07. Chi tiết thay đổi:\n- kn: '0' -> '1'",
+    "date": "18/06/2026 13:07"
+  },
+  {
+    "eventType": "HDV_profile_update",
+    "maHDV": "HDV10",
+    "tenHDV": "Nguyễn Trung Hiếu",
+    "maTour": "",
+    "tenTour": "",
+    "content": "Hướng dẫn viên Nguyễn Trung Hiếu (HDV10) đã tự cập nhật thông tin cá nhân của mình.",
+    "date": "18/06/2026 13:10"
+  },
+  {
+    "eventType": "hethong",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "content": "Đánh giá của bạn đã được ẩn. Lý do: Không phù hợp",
+    "date": "18/06/2026 13:31",
+    "username": "phanbaophuc2",
+    "maBooking": "BK02"
+  },
+  {
+    "eventType": "hethong",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "content": "Đánh giá của bạn đã được hiển thị lại.",
+    "date": "18/06/2026 13:31",
+    "username": "phanbaophuc2",
+    "maBooking": "BK02"
+  },
+  {
+    "eventType": "hethong",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T01",
+    "tenTour": "Đà Lạt Phố Hoa 3N2Đ",
+    "content": "Đánh giá của bạn đã bị xóa bởi Admin.",
+    "date": "18/06/2026 13:31",
+    "username": "ngoctuyen",
+    "maBooking": "BK01"
+  },
+  {
+    "eventType": "hethong",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "content": "Đánh giá của bạn đã được ẩn. Lý do: Kh phù hợp",
+    "date": "18/06/2026 13:32",
+    "username": "phanbaophuc2",
+    "maBooking": "BK02"
+  },
+  {
+    "eventType": "hethong",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "content": "Đánh giá của bạn đã được hiển thị lại.",
+    "date": "18/06/2026 13:35",
+    "username": "phanbaophuc2",
+    "maBooking": "BK02"
+  },
+  {
+    "eventType": "booking_created",
+    "maHDV": "HDV05",
+    "tenHDV": "Võ Thị Kim Ngân",
+    "maTour": "T07",
+    "tenTour": "Mộc Châu Hoa Nở 3N2Đ",
+    "content": "Booking BK14 vừa được tạo cho tour Mộc Châu Hoa Nở 3N2Đ.",
+    "date": "18/06/2026 19:27"
+  },
+  {
+    "eventType": "payment_success",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T07",
+    "tenTour": "Mộc Châu Hoa Nở 3N2Đ",
+    "content": "Booking BK14 đã thanh toán 35.756.500đ.",
+    "date": "18/06/2026 19:28"
+  },
+  {
+    "eventType": "booking_created",
+    "maHDV": "HDV04",
+    "tenHDV": "Phạm Quốc Bảo",
+    "maTour": "T04",
+    "tenTour": "Hạ Long Du Thuyền 2N1Đ",
+    "content": "Booking BK15 vừa được tạo cho tour Hạ Long Du Thuyền 2N1Đ.",
+    "date": "18/06/2026 19:30"
+  },
+  {
+    "eventType": "payment_success",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T04",
+    "tenTour": "Hạ Long Du Thuyền 2N1Đ",
+    "content": "Booking BK15 đã thanh toán 9.970.500đ.",
+    "date": "18/06/2026 20:47"
+  },
+  {
+    "eventType": "booking_created",
+    "maHDV": "HDV04",
+    "tenHDV": "Phạm Quốc Bảo",
+    "maTour": "T04",
+    "tenTour": "Hạ Long Du Thuyền 2N1Đ",
+    "content": "Booking BK16 vừa được tạo cho tour Hạ Long Du Thuyền 2N1Đ.",
+    "date": "18/06/2026 20:47"
+  }
+]

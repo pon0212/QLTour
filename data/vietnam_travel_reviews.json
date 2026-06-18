@@ -1,0 +1,62 @@
+[
+  {
+    "maReview": "REV02",
+    "username": "phanbaophuc2",
+    "fullname": "Phan Bảo Phúc",
+    "target": "Tour",
+    "target_id": "T02",
+    "content": "Chất lượng tốt hơn kì vọng !",
+    "date": "17/06/2026 13:38",
+    "maBooking": "BK02",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "rating": 5.0,
+    "maHDV": "HDV01",
+    "tenHDV": "Trần Thị Như Ý"
+  },
+  {
+    "maReview": "REV03",
+    "username": "phanbaophuc2",
+    "fullname": "Phan Bảo Phúc",
+    "target": "HDV",
+    "target_id": "HDV01",
+    "content": "Nhiệt tình",
+    "date": "17/06/2026 13:38",
+    "maBooking": "BK02",
+    "maTour": "T02",
+    "tenTour": "Sapa Mây Núi 4N3Đ",
+    "rating": 5.0,
+    "maHDV": "HDV01",
+    "tenHDV": "Trần Thị Như Ý"
+  },
+  {
+    "maReview": "REV04",
+    "username": "ngoctuyen",
+    "fullname": "Trần Nguyễn Ngọc Tuyền",
+    "target": "HDV",
+    "target_id": "HDV03",
+    "content": "Tốt",
+    "date": "17/06/2026 14:03",
+    "maBooking": "BK01",
+    "maTour": "T01",
+    "tenTour": "Đà Lạt Phố Hoa 3N2Đ",
+    "rating": 5.0,
+    "maHDV": "HDV03",
+    "tenHDV": "Lê Thị Thanh Hương"
+  },
+  {
+    "maReview": "REV05",
+    "username": "ngoctuyen",
+    "fullname": "Trần Nguyễn Ngọc Tuyền",
+    "target": "Tour",
+    "target_id": "T01",
+    "content": "Tốt",
+    "date": "18/06/2026 22:30",
+    "maBooking": "BK01",
+    "maTour": "T01",
+    "tenTour": "Đà Lạt Phố Hoa 3N2Đ",
+    "rating": 5.0,
+    "maHDV": "HDV03",
+    "tenHDV": "Lê Thị Thanh Hương"
+  }
+]
