@@ -1486,5 +1486,45 @@
     "action": "LOGIN",
     "status": "SUCCESS",
     "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:28:31",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:37:06",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:42:11",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:43:08",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:44:17",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
   }
 ]

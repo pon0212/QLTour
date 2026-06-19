@@ -236,10 +236,55 @@ def _render_matplotlib_charts(parent, report):
 def _render_report_tab(app):
     clear_container(app)
 
+    # Tạo Canvas và Scrollbar để report có thể scroll khi nội dung dài
+    canvas_wrapper = tk.Frame(app["container"], bg=THEME["bg"])
+    canvas_wrapper.pack(fill="both", expand=True)
+    
+    canvas = tk.Canvas(canvas_wrapper, bg=THEME["bg"], highlightthickness=0)
+    scrollbar = tk.Scrollbar(canvas_wrapper, orient="vertical", command=canvas.yview)
+    
+    report_body = tk.Frame(canvas, bg=THEME["bg"])
+    
+    canvas.configure(yscrollcommand=scrollbar.set)
+    
+    # Sử dụng auto-hide scrollbar
+    bind_autohide_scrollbar(canvas, scrollbar, "vertical")
+    
+    canvas.pack(side="left", fill="both", expand=True)
+    
+    canvas_window = canvas.create_window((0, 0), window=report_body, anchor="nw")
+    
+    def on_frame_configure(event):
+        canvas.configure(scrollregion=canvas.bbox("all"))
+    
+    def on_canvas_configure(event):
+        canvas.itemconfig(canvas_window, width=event.width)
+    
+    report_body.bind("<Configure>", on_frame_configure)
+    canvas.bind("<Configure>", on_canvas_configure)
+    
+    # Hỗ trợ scroll bằng chuột
+    def on_mousewheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    
+    canvas.bind_all("<MouseWheel>", on_mousewheel)
+    
+    # Cleanup mousewheel binding khi report bị destroy
+    def cleanup_mousewheel():
+        try:
+            canvas.unbind_all("<MouseWheel>")
+        except:
+            pass
+    
+    canvas_wrapper.bind("<Destroy>", lambda e: cleanup_mousewheel())
+    
+    # Thêm padding cho nội dung
+    content_frame = tk.Frame(report_body, bg=THEME["bg"])
+    content_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
     report = build_revenue_report(app["ql"])
     overview = report.get("overview", {})
-    stats_row = tk.Frame(app["container"], bg=THEME["bg"])
+    stats_row = tk.Frame(content_frame, bg=THEME["bg"])
     stats_row.pack(fill="x", pady=(0, 10))
     stats = [
         ("Tổng phải thu", format_currency(overview.get("tongPhaiThu", overview.get("doanhThuDuKien", 0))), THEME["primary"]),
@@ -259,7 +304,7 @@ def _render_report_tab(app):
         tk.Label(card, text=title, bg=THEME["surface"], fg=THEME["muted"], font=("Times New Roman", 11, "bold")).pack(anchor="w", padx=14, pady=(12, 3))
         tk.Label(card, text=value, bg=THEME["surface"], fg=color, font=("Times New Roman", 16, "bold")).pack(anchor="w", padx=14, pady=(0, 12))
 
-    actions = tk.Frame(app["container"], bg=THEME["bg"])
+    actions = tk.Frame(content_frame, bg=THEME["bg"])
     actions.pack(fill="x", pady=(0, 10))
     style_button(actions, "Làm mới", "#0ea5e9", lambda: reload_admin_current_tab(app)).pack(side="left", padx=(0, 8))
     style_button(actions, "Báo cáo doanh thu chi tiết", "#0f766e", lambda: open_revenue_report_window(app)).pack(side="left", padx=(0, 8))
@@ -279,7 +324,7 @@ def _render_report_tab(app):
         foreground=[("selected", THEME["primary"])],
     )
 
-    notebook = ttk.Notebook(app["container"], style="Report.TNotebook")
+    notebook = ttk.Notebook(content_frame, style="Report.TNotebook")
     notebook.pack(fill="both", expand=True)
 
     # Tab 1: Bảng dữ liệu
@@ -341,8 +386,7 @@ def _render_report_tab(app):
     chart_wrapper.pack(fill="both", expand=True, padx=15, pady=15)
     _render_matplotlib_charts(chart_wrapper, report)
 
-    # Tạo status card sau bảng
-    create_admin_status_card(app, "report", "Đang ở Báo cáo tổng hợp")
+    # Tạo status card ngoài canvas
     update_admin_status_card(app, "report", "Đang ở Báo cáo tổng hợp", THEME["primary"])
 
 # =========================
@@ -1536,11 +1580,46 @@ def dashboard_tab(app):
     #     fg=THEME["text"],
     # ).pack(anchor="w", pady=(0, 20))
 
-    dashboard_body = tk.Frame(app["container"], bg=THEME["bg"])
-    dashboard_body.pack(fill="both", expand=True, padx=0, pady=0)
+    # Tạo Canvas và Scrollbar để dashboard có thể scroll khi nội dung dài
+    canvas_wrapper = tk.Frame(app["container"], bg=THEME["bg"])
+    canvas_wrapper.pack(fill="both", expand=True)
+    
+    canvas = tk.Canvas(canvas_wrapper, bg=THEME["bg"], highlightthickness=0)
+    scrollbar = tk.Scrollbar(canvas_wrapper, orient="vertical", command=canvas.yview)
+    
+    dashboard_body = tk.Frame(canvas, bg=THEME["bg"])
+    
+    canvas.configure(yscrollcommand=scrollbar.set)
+    
+    # Sử dụng auto-hide scrollbar
+    bind_autohide_scrollbar(canvas, scrollbar, "vertical")
+    
+    canvas.pack(side="left", fill="both", expand=True)
+    
+    canvas_window = canvas.create_window((0, 0), window=dashboard_body, anchor="nw")
+    
+    def on_frame_configure(event):
+        canvas.configure(scrollregion=canvas.bbox("all"))
+    
+    def on_canvas_configure(event):
+        canvas.itemconfig(canvas_window, width=event.width)
+    
+    dashboard_body.bind("<Configure>", on_frame_configure)
+    canvas.bind("<Configure>", on_canvas_configure)
+    
+    # Hỗ trợ scroll bằng chuột
+    def on_mousewheel(event):
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    
+    canvas.bind_all("<MouseWheel>", on_mousewheel)
     dashboard_body.grid_columnconfigure(0, weight=1)
 
-    stats = tk.Frame(dashboard_body, bg=THEME["bg"])
+    # Thêm padding cho nội dung
+    content_frame = tk.Frame(dashboard_body, bg=THEME["bg"])
+    content_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+    content_frame.grid_columnconfigure(0, weight=1)
+
+    stats = tk.Frame(content_frame, bg=THEME["bg"])
     stats.grid(row=0, column=0, sticky="ew", pady=(0, stats_gap))
 
     revenue = sum(safe_int(t.get("gia", 0)) * ql.get_occupied_seats(t["ma"]) for t in ql.list_tours)
@@ -1560,7 +1639,7 @@ def dashboard_tab(app):
         tk.Label(card, text=title, bg=THEME["surface"], fg=THEME["muted"], font=("Times New Roman", 13, "bold")).pack(anchor="w", padx=16, pady=stat_title_pad)
         tk.Label(card, text=value, bg=THEME["surface"], fg=color, font=("Times New Roman", 22, "bold")).pack(anchor="w", padx=16, pady=stat_value_pad)
 
-    lower = tk.Frame(dashboard_body, bg=THEME["bg"])
+    lower = tk.Frame(content_frame, bg=THEME["bg"])
     lower.grid(row=1, column=0, sticky="ew", pady=(0, 0), padx=0)
     lower.grid_rowconfigure(0, weight=1, minsize=235)
     lower.grid_rowconfigure(1, weight=0)
@@ -1624,7 +1703,7 @@ def dashboard_tab(app):
 
     def arrange_dashboard_boxes(_event=None):
         try:
-            width = dashboard_body.winfo_width()
+            width = content_frame.winfo_width()
             left.grid_forget()
             right.grid_forget()
 
@@ -1651,10 +1730,19 @@ def dashboard_tab(app):
         except tk.TclError:
             return
 
-    dashboard_body.bind("<Configure>", arrange_dashboard_boxes)
+    # Cleanup mousewheel binding khi dashboard bị destroy
+    def cleanup_mousewheel():
+        try:
+            canvas.unbind_all("<MouseWheel>")
+        except:
+            pass
+    
+    canvas_wrapper.bind("<Destroy>", lambda e: cleanup_mousewheel())
+
+    content_frame.bind("<Configure>", arrange_dashboard_boxes)
     lower.bind("<Configure>", arrange_dashboard_boxes)
     right.bind("<Configure>", sync_note_wrap)
-    dashboard_body.after_idle(arrange_dashboard_boxes)
+    content_frame.after_idle(arrange_dashboard_boxes)
     note_label.after_idle(sync_note_wrap)
 
     set_status(app, f"Đang ở Dashboard - Hiển thị {len(stat_items)} chỉ số", THEME["primary"])
