@@ -1558,5 +1558,173 @@
     "action": "LOGIN",
     "status": "SUCCESS",
     "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:55:53",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Mật khẩu không hợp lệ."
+  },
+  {
+    "timestamp": "2026-06-19T13:55:54",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:56:09",
+    "actor": "khach",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Không tìm thấy tài khoản."
+  },
+  {
+    "timestamp": "2026-06-19T13:56:13",
+    "actor": "khach01",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Không tìm thấy tài khoản."
+  },
+  {
+    "timestamp": "2026-06-19T13:56:18",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:57:27",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "CREATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK17 | Tạo booking cho tour T03 | Số người: 2 | Voucher: Không"
+  },
+  {
+    "timestamp": "2026-06-19T13:59:03",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:02:20",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:03:55",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:04:17",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:05:53",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:06:28",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:08:56",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:09:25",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Mật khẩu không hợp lệ."
+  },
+  {
+    "timestamp": "2026-06-19T14:09:27",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:11:13",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:22:39",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:24:31",
+    "actor": "admin",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Không tìm thấy tài khoản."
+  },
+  {
+    "timestamp": "2026-06-19T14:24:37",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:26:44",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:28:49",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
   }
 ]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import re
 import tkinter as tk
@@ -26,65 +25,16 @@ from core.app import (
 # VALIDATION
 # =========================
 def is_valid_phone(phone):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_phone` (is valid phone).
-    Tham số:
-        phone: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return feature_is_valid_phone(phone)
 
 def is_valid_email(email):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_email` (is valid email).
-    Tham số:
-        email: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return feature_is_valid_email(email)
 
 def is_valid_password(pwd):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_password` (is valid password).
-    Tham số:
-        pwd: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return feature_is_valid_password(pwd)
 
 def safe_int(value):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `safe_int` (safe int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return feature_safe_int(value)
-
 
 # =========================
 # THEME
@@ -156,19 +106,6 @@ DEFAULT_DATA = {
 # DATA STORE
 # =========================
 def normalize_review_item(r, datastore=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_review_item` (normalize review item).
-    Tham số:
-        r: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = core_normalize_review_item(
         r,
         fullname_keys=("fullname", "tenKhach", "hoTen", "tenNguoiDanhGia"),
@@ -191,6 +128,7 @@ def normalize_review_item(r, datastore=None):
         if tour:
             ma_hdv = str(tour.get("hdvPhuTrach", "")).strip()
             normalized["maHDV"] = ma_hdv
+            
     if not ma_hdv and datastore is not None and normalized.get("maBooking"):
         bookings_list = getattr(datastore, "list_bookings", getattr(datastore, "data", {}).get("bookings", []))
         booking = next((b for b in bookings_list if str(b.get("maBooking", b.get("ma", ""))).strip().upper() == str(normalized.get("maBooking", "")).strip().upper()), None)
@@ -199,6 +137,7 @@ def normalize_review_item(r, datastore=None):
             if b_tour:
                 ma_hdv = str(b_tour.get("hdvPhuTrach", "")).strip()
                 normalized["maHDV"] = ma_hdv
+                
     if ma_hdv and not ten_hdv and datastore is not None:
         hdv = datastore.find_hdv(ma_hdv)
         if hdv:
@@ -209,19 +148,6 @@ def normalize_review_item(r, datastore=None):
 
 
 def normalize_notification_item(n, datastore=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_notification_item` (normalize notification item).
-    Tham số:
-        n: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return core_normalize_notification_item(
         n,
         datastore=datastore,
@@ -229,22 +155,6 @@ def normalize_notification_item(n, datastore=None):
     )
 
 def auto_fit_treeview_columns(tree, columns, min_widths=None, max_widths=None, padding=24):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `auto_fit_treeview_columns` (auto fit treeview columns).
-    Tham số:
-        tree: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        columns: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        min_widths: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        max_widths: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        padding: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     def estimate_width(text):
         text = "" if text is None else str(text)
         return max(40, len(text) * 8 + padding)
@@ -266,21 +176,6 @@ def auto_fit_treeview_columns(tree, columns, min_widths=None, max_widths=None, p
 
 class DataStore(JSONDataStore):
     def __init__(self, path=DATA_FILE, rev_path=REVIEWS_FILE, notif_path=NOTIF_FILE):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `__init__` (  init  ).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            rev_path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            notif_path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         super().__init__(
             path=path,
             rev_path=rev_path,
@@ -296,41 +191,12 @@ class DataStore(JSONDataStore):
 # UI HELPER
 # =========================
 def apply_zebra(tree):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `apply_zebra` (apply zebra).
-    Tham số:
-        tree: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
     for idx, item in enumerate(tree.get_children()):
         tree.item(item, tags=(("even" if idx % 2 == 0 else "odd"),))
 
-
 def style_button(parent, text, bg, command, fg="white"):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `style_button` (style button).
-    Tham số:
-        parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        command: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        fg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return RoundedButton(
         parent,
         text=text,
@@ -350,20 +216,7 @@ def style_button(parent, text, bg, command, fg="white"):
         command=command,
     )
 
-
 def configure_ui_fonts(root):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `configure_ui_fonts` (configure ui fonts).
-    Tham số:
-        root: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     default_font = ("Times New Roman", 12)
     heading_font = ("Times New Roman", 12, "bold")
     root.option_add("*Font", default_font)
@@ -381,10 +234,7 @@ def configure_ui_fonts(root):
     style.configure("TCombobox", font=default_font)
 
 def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
-    """
-    Mục đích:
-        Tự động ẩn/hiện scrollbar khi nội dung có hoặc không tràn khung.
-    """
+    """Tự động ẩn/hiện scrollbar khi nội dung có hoặc không tràn khung."""
     is_vertical = str(orient).lower().startswith("v")
     pack_side = "right" if is_vertical else "bottom"
     pack_fill = "y" if is_vertical else "x"
@@ -431,19 +281,6 @@ def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
     return _refresh
 
 def create_scrollable_frame(parent, bg):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `create_scrollable_frame` (create scrollable frame).
-    Tham số:
-        parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     outer = tk.Frame(parent, bg=bg)
     canvas = tk.Canvas(outer, bg=bg, highlightthickness=0, bd=0)
     scrollbar = ttk.Scrollbar(outer, orient="vertical", command=canvas.yview)
@@ -461,21 +298,6 @@ def create_scrollable_frame(parent, bg):
     return outer, content
 
 def responsive_wraplength(widget, offset=80, min_width=260, fallback=760):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `responsive_wraplength` (responsive wraplength).
-    Tham số:
-        widget: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        offset: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        min_width: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        fallback: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     width = widget.winfo_width()
     if width <= 1:
         return fallback
@@ -486,19 +308,6 @@ def responsive_wraplength(widget, offset=80, min_width=260, fallback=760):
 # GUIDE UI
 # =========================
 def khoi_tao_hdv(root, user_data=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `khoi_tao_hdv` (khởi tạo HDV).
-    Tham số:
-        root: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        user_data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not user_data:
         user_data = {"maHDV": "HDV01", "tenHDV": "Hướng Dẫn Viên"}
 
@@ -523,7 +332,7 @@ def khoi_tao_hdv(root, user_data=None):
     }
 
     app["login_time_var"].set(
-    "Đăng nhập lúc: " + app["login_time"].strftime("%d/%m/%Y - %H:%M:%S")
+        "Đăng nhập lúc: " + app["login_time"].strftime("%d/%m/%Y - %H:%M:%S")
     )
 
     for widget in root.winfo_children():
@@ -687,12 +496,10 @@ def khoi_tao_hdv(root, user_data=None):
     )
     brand_subtitle.pack(fill="x", pady=(2, 0))
 
-
     ten_hdv = user_data.get("tenHDV", "Hướng Dẫn Viên")
     ma_hdv = user_data.get("maHDV", "HDV01")
     account_card = tk.Frame(sidebar, bg=SIDEBAR_CARD_BG, highlightbackground=SIDEBAR_BORDER, highlightthickness=1)
     account_card.pack(fill="x", padx=16, pady=(0, 8))
-
 
     tk.Label(
         account_card,
@@ -721,18 +528,7 @@ def khoi_tao_hdv(root, user_data=None):
 
     tk.Label(
         account_card,
-        textvariable=app["login_time_var"],
-        bg=SIDEBAR_CARD_BG,
-        fg="#93c5fd",
-        font=("Times New Roman", 10, "italic"),
-        pady=8,
-        wraplength=220,
-        justify="center",
-    ).pack(fill="x")
-
-    tk.Label(
-        account_card,
-        text="Đang hoạt động",
+        text=f"Đang hoạt động",
         bg=SIDEBAR_CARD_BG,
         fg="#22c55e",
         font=("Times New Roman", 10, "bold"),
@@ -742,20 +538,7 @@ def khoi_tao_hdv(root, user_data=None):
     menu.pack(fill="x", padx=12, pady=(2, 0))
 
     def reload_current_page():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `reload_current_page` (reload current page).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         app["ql"].load()
-
         current_tab = app.get("current_tab", "tour")
 
         if current_tab == "tour":
@@ -774,56 +557,16 @@ def khoi_tao_hdv(root, user_data=None):
             tab_danh_sach_tour()
             set_status("Đã tải lại dữ liệu", THEME["success"])
 
-
     def set_status(text, color=THEME["primary"]):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `set_status` (set status).
-        Tham số:
-            text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            color: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         app["status_var"].set(text)
         if app.get("status_label"):
             app["status_label"].config(fg=color)
 
     def set_badge(text, bg="#123a5a", fg="#d1fae5"):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `set_badge` (set badge).
-        Tham số:
-            text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            fg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if app.get("status_badge"):
             app["status_badge"].config(text=text, bg=bg, fg=fg)
 
     def set_active_menu(button):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `set_active_menu` (set active menu).
-        Tham số:
-            button: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         prev = app.get("active_menu_btn")
         if prev and prev.winfo_exists() and prev is not button:
             prev.configure(bg=SIDEBAR_BG, fg="#dbe4f5")
@@ -831,20 +574,6 @@ def khoi_tao_hdv(root, user_data=None):
         button.configure(bg=SIDEBAR_BTN_ACTIVE, fg="white")
 
     def menu_btn(text, cmd, icon=""):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `menu_btn` (menu btn).
-        Tham số:
-            text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            cmd: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            icon: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         label = f"  {icon}  {text}" if icon else f"  {text}"
         btn = RoundedButton(
             menu,
@@ -934,10 +663,10 @@ def khoi_tao_hdv(root, user_data=None):
     header_badge.pack(anchor="e", pady=(6, 0))
 
     style_button(
-    head_right,
-    "↻ Tải lại",
-    THEME["primary"],
-    reload_current_page
+        head_right,
+        "↻ Tải lại",
+        THEME["primary"],
+        reload_current_page
     ).pack(anchor="e")
 
     content_shell = tk.Frame(right_panel, bg=THEME["bg"])
@@ -952,48 +681,12 @@ def khoi_tao_hdv(root, user_data=None):
     canvas_window = content_canvas.create_window((0, 0), window=content_area, anchor="nw")
 
     def on_content_configure(_event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_content_configure` (on content configure).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         content_canvas.configure(scrollregion=content_canvas.bbox("all"))
 
     def on_canvas_resize(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_canvas_resize` (on canvas resize).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         content_canvas.itemconfigure(canvas_window, width=max(event.width - 2, 1))
 
     def on_outer_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_outer_mousewheel` (on outer mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             content_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
@@ -1028,36 +721,12 @@ def khoi_tao_hdv(root, user_data=None):
     app["status_label"].pack(fill="both", expand=True)
 
     def clear_container():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `clear_container` (clear container).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         for widget in content_area.winfo_children():
             widget.destroy()
         if app.get("content_canvas"):
             app["content_canvas"].yview_moveto(0)
 
     def get_my_tours():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `get_my_tours` (get my tours).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         rows = []
         for t in app["ql"].list_tours:
             if t.get("hdvPhuTrach") != ma_hdv:
@@ -1068,52 +737,12 @@ def khoi_tao_hdv(root, user_data=None):
         return rows
 
     def get_active_tours():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `get_active_tours` (get active tours).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return [t for t in get_my_tours() if normalize_tour_status(t.get("trangThai", "")) == TOUR_STATUS_STARTED]
 
     def format_currency(value):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `format_currency` (format currency).
-        Tham số:
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return f"{safe_int(value):,} đ".replace(",", ".")
 
     def build_stat_card(parent, title, value, note, accent):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `build_stat_card` (build stat card).
-        Tham số:
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            note: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            accent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         card = tk.Frame(parent, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
         card.pack(side="left", fill="both", expand=True, padx=7)
         tk.Frame(card, bg=accent, height=4).pack(fill="x")
@@ -1125,21 +754,6 @@ def khoi_tao_hdv(root, user_data=None):
         return card
 
     def info_pair(parent, left_items, right_items, bg):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `info_pair` (info pair).
-        Tham số:
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            left_items: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            right_items: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         left = tk.Frame(parent, bg=bg)
         left.pack(side="left", fill="both", expand=True, padx=(0, 16))
         right = tk.Frame(parent, bg=bg)
@@ -1158,21 +772,6 @@ def khoi_tao_hdv(root, user_data=None):
             tk.Label(row, text=str(value), anchor="w", bg=bg, fg=THEME["text"], font=("Times New Roman", 12), wraplength=360, justify="left").pack(side="left", fill="x", expand=True)
 
     def make_section(parent, title, subtitle="", accent=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `make_section` (make section).
-        Tham số:
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            subtitle: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            accent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         section = tk.Frame(parent, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
         section.pack(fill="x", pady=(0, 14))
         if accent:
@@ -1187,18 +786,6 @@ def khoi_tao_hdv(root, user_data=None):
         return section, body
 
     def hien_thi_chi_tiet(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `hien_thi_chi_tiet` (hiển thị chi tiết).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         sel = app["tv_tours"].selection()
         if not sel:
             return
@@ -1282,7 +869,6 @@ def khoi_tao_hdv(root, user_data=None):
                 bind_autohide_scrollbar(itinerary_text, itinerary_sb, "vertical")
                 
                 itinerary_text.pack(side="left", fill="both", expand=True)
-                
                 itinerary_text.insert("1.0", "\n".join(itinerary_lines))
                 itinerary_text.configure(state="disabled")
 
@@ -1349,21 +935,8 @@ def khoi_tao_hdv(root, user_data=None):
         sy = ttk.Scrollbar(wrapper, orient="vertical", command=tv.yview)
         bind_autohide_scrollbar(tv, sy, "vertical")
         tv.pack(side="left", fill="both", expand=True)
-       
 
         def fit_booking_columns(event=None):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `fit_booking_columns` (fit booking columns).
-            Tham số:
-                event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             width = max(520, wrapper.winfo_width() - 20)
             ratios = {"stt": 0.08, "ten": 0.32, "sdt": 0.16, "sl": 0.10, "tt": 0.19, "thanhtoan": 0.15}
             mins = {"stt": 48, "ten": 170, "sdt": 100, "sl": 76, "tt": 120, "thanhtoan": 110}
@@ -1376,18 +949,6 @@ def khoi_tao_hdv(root, user_data=None):
         set_status(f"Đang xem chi tiết tour {ma_tour}", THEME["primary"])
 
     def tab_danh_sach_tour():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `tab_danh_sach_tour` (tab danh sách tour).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         clear_container()
 
         my_tours = get_my_tours()
@@ -1438,18 +999,6 @@ def khoi_tao_hdv(root, user_data=None):
         tv.pack(side="left", fill="both", expand=True)
 
         def fit_tour_columns(event=None):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `fit_tour_columns` (fit tour columns).
-            Tham số:
-                event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             width = max(560, wrapper.winfo_width() - 20)
             ratios = {"ma": 0.10, "ten": 0.44, "ngay": 0.18, "khach": 0.14, "tt": 0.14}
             mins = {"ma": 78, "ten": 240, "ngay": 110, "khach": 100, "tt": 110}
@@ -1493,18 +1042,6 @@ def khoi_tao_hdv(root, user_data=None):
             tk.Label(empty_body, text="Hiện tại bạn chưa có tour nào được phân công.", font=("Times New Roman", 13), bg=THEME["surface"], fg=THEME["muted"]).pack(anchor="w")
 
     def tab_thong_ke():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `tab_thong_ke` (tab thống kê).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         clear_container()
         app["current_tab"] = "stats"
         app["ql"].load()
@@ -1533,7 +1070,6 @@ def khoi_tao_hdv(root, user_data=None):
         for r in my_reviews:
             val = r.get("rating")
             if val == "":
-                # Fallback nếu rating trống
                 skill = safe_int(r.get("skill", 0))
                 attitude = safe_int(r.get("attitude", 0))
                 problem = safe_int(r.get("problem", r.get("problem_solving", 0)))
@@ -1575,11 +1111,9 @@ def khoi_tao_hdv(root, user_data=None):
             accent="#7c3aed",
         )
 
-        # Container chính cho stats với shadow effect
         stats_container = tk.Frame(top_body, bg=THEME["surface"])
         stats_container.pack(fill="x", pady=(0, 15))
         
-        # Tạo 2 hàng để hiển thị 4 stats
         stats_data = [
             {
                 "title": "Hướng dẫn viên",
@@ -1611,12 +1145,10 @@ def khoi_tao_hdv(root, user_data=None):
             },
         ]
         
-        # Tạo grid layout 2x2
         for idx, stat in enumerate(stats_data):
             row_idx = idx // 2
             col_idx = idx % 2
             
-            # Card frame với border và padding
             card = tk.Frame(
                 stats_container,
                 bg="#ffffff",
@@ -1628,7 +1160,6 @@ def khoi_tao_hdv(root, user_data=None):
             card.grid(row=row_idx, column=col_idx, sticky="ew", padx=6, pady=6)
             stats_container.grid_columnconfigure(col_idx, weight=1)
             
-            # Title (không dùng icon)
             tk.Label(
                 card,
                 text=stat["title"],
@@ -1638,7 +1169,6 @@ def khoi_tao_hdv(root, user_data=None):
                 anchor="w"
             ).pack(anchor="w", pady=(0, 8))
             
-            # Value với subtitle
             value_frame = tk.Frame(card, bg="#ffffff")
             value_frame.pack(fill="x", pady=(0, 5))
             
@@ -1661,7 +1191,6 @@ def khoi_tao_hdv(root, user_data=None):
                     anchor="w"
                 ).pack(side="left", padx=(5, 0))
             
-            # Note
             tk.Label(
                 card,
                 text=stat["note"],
@@ -1671,7 +1200,6 @@ def khoi_tao_hdv(root, user_data=None):
                 anchor="w"
             ).pack(anchor="w")
 
-        # Chỉ số chuyên môn - Phiên bản cải tiến với progress bar đẹp hơn
         _, chart_body = make_section(
             content_area,
             "Chỉ số đánh giá chuyên môn (%)",
@@ -1679,7 +1207,6 @@ def khoi_tao_hdv(root, user_data=None):
             accent="#059669",
         )
 
-        # Container cho progress bars với border đẹp
         progress_container = tk.Frame(chart_body, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1, padx=20, pady=15)
         progress_container.pack(fill="x", pady=(0, 10))
 
@@ -1690,11 +1217,9 @@ def khoi_tao_hdv(root, user_data=None):
         ]
 
         for icon, name, val, color in [(c[3], c[0], c[1], c[2]) for c in criteria]:
-            # Frame cho mỗi tiêu chí
             criteria_frame = tk.Frame(progress_container, bg=THEME["surface"])
             criteria_frame.pack(fill="x", pady=8)
             
-            # Header với icon và tên
             header_frame = tk.Frame(criteria_frame, bg=THEME["surface"])
             header_frame.pack(fill="x", pady=(0, 6))
             
@@ -1715,18 +1240,15 @@ def khoi_tao_hdv(root, user_data=None):
                 fg=color
             ).pack(side="right")
             
-            # Progress bar container
             progress_bg = tk.Frame(criteria_frame, bg="#e2e8f0", height=24, relief="flat", bd=0)
             progress_bg.pack(fill="x")
             progress_bg.pack_propagate(False)
             
-            # Progress bar fill với rounded effect
             fill_percent = max(0, min(100, float(val)))
             if fill_percent > 0:
                 fill_frame = tk.Frame(progress_bg, bg=color, height=24)
                 fill_frame.place(x=0, y=0, relwidth=fill_percent/100, relheight=1)
                 
-                # Label giá trị bên trong progress bar nếu đủ rộng
                 if fill_percent > 15:
                     tk.Label(
                         fill_frame,
@@ -1736,7 +1258,6 @@ def khoi_tao_hdv(root, user_data=None):
                         fg="white"
                     ).place(relx=0.95, rely=0.5, anchor="e")
         
-        # Thêm note giải thích
         note_frame = tk.Frame(chart_body, bg="#fffbeb", highlightbackground="#fcd34d", highlightthickness=1, padx=12, pady=10)
         note_frame.pack(fill="x", pady=(5, 10))
         
@@ -1789,7 +1310,6 @@ def khoi_tao_hdv(root, user_data=None):
         review_tv.pack(side="left", fill="both", expand=True)
 
         for r in my_reviews:
-            # Normalize tên khách
             fullname = str(r.get("fullname") or r.get("tenKhach") or r.get("hoTen") or r.get("tenNguoiDanhGia") or "").strip()
             username = str(r.get("username") or r.get("user") or "").strip()
             if fullname and username:
@@ -1801,16 +1321,13 @@ def khoi_tao_hdv(root, user_data=None):
             else:
                 customer_text = "Ẩn danh"
 
-            # Normalize tour
             ma_tour = str(r.get("maTour") or "").strip()
             tour = app["ql"].find_tour(ma_tour)
             ten_tour = str(tour.get("ten", "")).strip() if tour else ""
             tour_text = f"{ma_tour} - {ten_tour}" if ten_tour else ma_tour
 
-            # Booking
             ma_booking = str(r.get("maBooking") or r.get("soBooking") or "").strip()
 
-            # Rating
             rating_value = r.get("rating", "")
             if rating_value == "":
                 skill = safe_int(r.get("skill", 0))
@@ -1824,7 +1341,6 @@ def khoi_tao_hdv(root, user_data=None):
                 except ValueError:
                     rating_value = 5.0
 
-            # Nội dung & Ngày
             review_content = str(r.get("content") or r.get("comment") or r.get("noiDung") or r.get("danhGia") or "").strip()
             short_content = review_content[:55] + "..." if len(review_content) > 55 else review_content
             
@@ -1846,7 +1362,6 @@ def khoi_tao_hdv(root, user_data=None):
 
         apply_zebra(review_tv)
 
-        # Nút làm mới đánh giá
         style_button(review_body, "↻ LÀM MỚI ĐÁNH GIÁ", THEME["primary"], tab_thong_ke).pack(anchor="w", pady=(10, 0))
 
         # 4. Popup chi tiết khi double click
@@ -1940,25 +1455,12 @@ def khoi_tao_hdv(root, user_data=None):
             style_button(pop_body, "Đóng cửa sổ", THEME["primary"], popup.destroy).pack(anchor="center")
 
         review_tv.bind("<Double-1>", on_review_double_click)
-
         set_status(f"Đang ở Đánh giá khách hàng - Hiển thị {total_reviews} đánh giá", THEME["primary"])
+
     def tab_thong_bao():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `tab_thong_bao` (tab thông báo).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         clear_container()
         app["current_tab"] = "notify"
 
-        # Create split frame
         split_fr = tk.Frame(content_area, bg=THEME["bg"])
         split_fr.pack(fill="both", expand=True)
         split_fr.grid_columnconfigure(0, weight=1, uniform="col")
@@ -1995,18 +1497,6 @@ def khoi_tao_hdv(root, user_data=None):
         txt.pack(fill="both", expand=True, pady=(0, 18))
 
         def gui_thong_bao():
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `gui_thong_bao` (gửi thông báo).
-            Tham số:
-                Không có.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             content = txt.get("1.0", "end").strip()
             if not tour_var.get():
                 return messagebox.showwarning("Lỗi", "Vui lòng chọn đoàn khách muốn gửi thông báo!")
@@ -2040,7 +1530,6 @@ def khoi_tao_hdv(root, user_data=None):
             accent=THEME["primary"],
         )
 
-        # Retrieve and filter notifications for the logged in guide
         my_ma_hdv = str(ma_hdv).strip().upper()
         relevant_notifs = []
         seen_notifs = set()
@@ -2052,7 +1541,6 @@ def khoi_tao_hdv(root, user_data=None):
             target_ids = {my_ma_hdv, str(user_data.get("email", "")).strip().upper(), str(user_data.get("sdt", "")).strip().upper()}
 
             if (notif_hdv and notif_hdv == my_ma_hdv) or (notif_user and notif_user in target_ids):
-                # Chống trùng
                 content_val = str(normalized_notif.get("content", "")).strip()
                 date_val = str(normalized_notif.get("date", "")).strip()
                 evt_type = str(normalized_notif.get("eventType", "")).strip()
@@ -2162,7 +1650,6 @@ def khoi_tao_hdv(root, user_data=None):
 
             apply_zebra(notif_tree)
 
-            # --- DOUBLE CLICK NOTIFICATION FOR DETAILS ---
             def on_notif_double_click(event):
                 sel = notif_tree.selection()
                 if not sel:
@@ -2226,76 +1713,88 @@ def khoi_tao_hdv(root, user_data=None):
             notif_tree.bind("<Double-1>", on_notif_double_click)
 
     def tab_cai_dat():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `tab_cai_dat` (tab cài đặt) - Phiên bản cải tiến.
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         clear_container()
         app["current_tab"] = "settings"
-        _, body = make_section(
-            content_area,
-            "Cài đặt tài khoản cá nhân",
-            "Quản lý thông tin liên hệ và mật khẩu để đảm bảo liên lạc vận hành luôn chính xác.",
-            accent="#d97706",
-        )
 
         hdv_data = app["ql"].find_hdv(ma_hdv)
         if not hdv_data:
-            tk.Label(body, text="Lỗi: Không tìm thấy thông tin tài khoản!", fg=THEME["danger"], bg=THEME["surface"], font=("Times New Roman", 13, "bold")).pack(anchor="w")
+            tk.Label(content_area, text="Lỗi: Không tìm thấy thông tin tài khoản!", fg=THEME["danger"], bg=THEME["bg"], font=("Times New Roman", 13, "bold")).pack(anchor="w", pady=20, padx=20)
             return
 
-        # Container chính với scroll
-        main_container = tk.Frame(body, bg=THEME["surface"])
-        main_container.pack(fill="both", expand=True)
-        
-        # Canvas và scrollbar cho nội dung dài
-        canvas = tk.Canvas(main_container, bg=THEME["surface"], bd=0, highlightthickness=0)
-        scrollbar = ttk.Scrollbar(main_container, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, bg=THEME["surface"])
-        
-        canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        
-        def on_frame_configure(event):
-            canvas.configure(scrollregion=canvas.bbox("all"))
-        scrollable_frame.bind("<Configure>", on_frame_configure)
-        
-        def on_canvas_configure(event):
-            canvas.itemconfig(canvas_window, width=event.width)
-        canvas.bind("<Configure>", on_canvas_configure)
-        
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-        
-        # Mousewheel
-        def _on_mousewheel(event):
-            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
-        scrollable_frame.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
-        scrollable_frame.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+        # Vùng chứa chính: Gắn trực tiếp vào content_area (Đã bỏ Canvas lồng dư thừa)
+        main_container = tk.Frame(content_area, bg=THEME["bg"])
+        main_container.pack(fill="both", expand=True, padx=5, pady=5)
+
+        widgets = {}
+
+        # ==========================================
+        # HELPER: TẠO KHỐI FORM (CARD-STYLE)
+        # ==========================================
+        def create_form_card(parent, title, accent_color, fields, readonly=False):
+            # Tạo viền Card
+            card = tk.Frame(parent, bg="#ffffff", highlightbackground=THEME["border"], highlightthickness=1)
+            card.pack(fill="x", pady=(0, 20))
+            
+            # Vạch màu trên cùng (Top accent bar)
+            tk.Frame(card, bg=accent_color, height=3).pack(fill="x")
+            
+            # Header
+            header = tk.Frame(card, bg="#ffffff")
+            header.pack(fill="x", padx=25, pady=(15, 5))
+            tk.Label(
+                header, text=title, bg="#ffffff", fg=accent_color, font=("Times New Roman", 13, "bold")
+            ).pack(side="left")
+            
+            # Lưới chứa nội dung
+            grid_frame = tk.Frame(card, bg="#ffffff", padx=25, pady=10)
+            grid_frame.pack(fill="x")
+            
+            # Thiết lập lưới cột (2 cột chính chia đôi màn hình)
+            grid_frame.grid_columnconfigure(0, weight=0, minsize=140)
+            grid_frame.grid_columnconfigure(1, weight=1)
+            grid_frame.grid_columnconfigure(2, weight=0, minsize=40) 
+            grid_frame.grid_columnconfigure(3, weight=0, minsize=140)
+            grid_frame.grid_columnconfigure(4, weight=1)
+            
+            for idx, item in enumerate(fields):
+                # Unpack dữ liệu tùy theo readonly hay editable
+                if readonly:
+                    label_text, value = item
+                else:
+                    label_text, key, kind = item
+
+                row_idx = idx // 2
+                col_offset = (idx % 2) * 3  # Trả về 0 (bên trái) hoặc 3 (bên phải)
+                
+                # Label
+                tk.Label(
+                    grid_frame,
+                    text=f"{label_text}:" if readonly else label_text,
+                    anchor="w",
+                    bg="#ffffff",
+                    font=("Times New Roman", 12, "bold" if not readonly else "normal"),
+                    fg=THEME["muted"] if readonly else THEME["text"]
+                ).grid(row=row_idx, column=col_offset, sticky="w", pady=10)
+                
+                # Input / Value
+                if readonly:
+                    tk.Label(
+                        grid_frame, text=str(value), anchor="w", bg="#ffffff", font=("Times New Roman", 12), fg=THEME["text"]
+                    ).grid(row=row_idx, column=col_offset + 1, sticky="w", pady=10)
+                else:
+                    if kind == "gender":
+                        widget = ttk.Combobox(grid_frame, values=["Nam", "Nữ", "Khác"], state="readonly", font=("Times New Roman", 12))
+                        widget.set(str(hdv_data.get(key, "") or "Nam"))
+                    else:
+                        show_char = "*" if kind == "password" else ""
+                        widget = tk.Entry(grid_frame, font=("Times New Roman", 12), relief="solid", bd=1, show=show_char)
+                        if kind != "password":
+                            widget.insert(0, str(hdv_data.get(key, "") or ""))
+                    
+                    widget.grid(row=row_idx, column=col_offset + 1, sticky="ew", pady=10, ipady=5)
+                    widgets[key] = widget
 
         # === PHẦN 1: THÔNG TIN HỆ THỐNG (READ-ONLY) ===
-        locked = tk.Frame(scrollable_frame, bg="#eef6ff", highlightbackground="#93c5fd", highlightthickness=2, padx=18, pady=15)
-        locked.pack(fill="x", pady=(0, 15), padx=10)
-        
-        tk.Label(
-            locked,
-            text="🔒 THÔNG TIN HỆ THỐNG",
-            bg="#eef6ff",
-            fg=THEME["primary"],
-            font=("Times New Roman", 14, "bold")
-        ).pack(anchor="w", pady=(0, 12))
-        
-        readonly_grid = tk.Frame(locked, bg="#eef6ff")
-        readonly_grid.pack(fill="x")
-        
         readonly_items = [
             ("Mã HDV", hdv_data.get("maHDV", "-")),
             ("Username", hdv_data.get("username", "-")),
@@ -2304,153 +1803,57 @@ def khoi_tao_hdv(root, user_data=None):
             ("Số tour đã dẫn", str(hdv_data.get("soTourDaDan", "0"))),
             ("Điểm đánh giá trung bình", f"{hdv_data.get('avg_rating', 0):.1f} / 5.0"),
         ]
-        
-        for idx, (label, value) in enumerate(readonly_items):
-            row_idx = idx // 2
-            col_idx = idx % 2
-            
-            item_frame = tk.Frame(readonly_grid, bg="#eef6ff")
-            item_frame.grid(row=row_idx, column=col_idx, sticky="ew", padx=10, pady=5)
-            readonly_grid.grid_columnconfigure(col_idx, weight=1)
-            
-            tk.Label(
-                item_frame,
-                text=f"{label}:",
-                bg="#eef6ff",
-                fg=THEME["muted"],
-                font=("Times New Roman", 11, "bold"),
-                anchor="w"
-            ).pack(side="left", padx=(0, 8))
-            
-            tk.Label(
-                item_frame,
-                text=str(value),
-                bg="#eef6ff",
-                fg=THEME["text"],
-                font=("Times New Roman", 11),
-                anchor="w"
-            ).pack(side="left", fill="x", expand=True)
+        create_form_card(main_container, "THÔNG TIN HỆ THỐNG", THEME["primary"], readonly_items, readonly=True)
 
-        widgets = {}
-
-        # === PHẦN 2: CÁC NHÓM THÔNG TIN CÓ THỂ CHỈNH SỬA ===
-        def add_group(icon, title, color, fields):
-            group = tk.Frame(scrollable_frame, bg="#ffffff", highlightbackground=color, highlightthickness=2, padx=18, pady=15)
-            group.pack(fill="x", pady=(0, 15), padx=10)
-            
-            # Header với icon
-            header = tk.Frame(group, bg="#ffffff")
-            header.pack(fill="x", pady=(0, 12))
-            
-            tk.Label(
-                header,
-                text=f"{icon} {title}",
-                bg="#ffffff",
-                fg=color,
-                font=("Times New Roman", 14, "bold")
-            ).pack(side="left")
-            
-            # Grid cho các fields
-            grid_frame = tk.Frame(group, bg="#ffffff")
-            grid_frame.pack(fill="x")
-            
-            for idx, (label, key, kind) in enumerate(fields):
-                row_idx = idx // 2
-                col_idx = idx % 2
-                
-                field_frame = tk.Frame(grid_frame, bg="#ffffff")
-                field_frame.grid(row=row_idx, column=col_idx, sticky="ew", padx=5, pady=8)
-                grid_frame.grid_columnconfigure(col_idx, weight=1)
-                
-                tk.Label(
-                    field_frame,
-                    text=label,
-                    width=16,
-                    anchor="w",
-                    bg="#ffffff",
-                    font=("Times New Roman", 11, "bold"),
-                    fg=THEME["text"]
-                ).pack(side="left")
-                
-                if kind == "gender":
-                    widget = ttk.Combobox(field_frame, values=["Nam", "Nữ", "Khác"], state="readonly", width=28, font=("Times New Roman", 11))
-                    widget.set(str(hdv_data.get(key, "") or "Nam"))
-                else:
-                    show_char = "*" if kind == "password" else ""
-                    widget = tk.Entry(field_frame, font=("Times New Roman", 11), relief="solid", bd=1, width=32, show=show_char)
-                    if kind != "password":
-                        widget.insert(0, str(hdv_data.get(key, "") or ""))
-                
-                widget.pack(side="left", fill="x", expand=True, ipady=4)
-                widgets[key] = widget
-
-        # Nhóm 1: Thông tin cá nhân
-        add_group("👤", "THÔNG TIN CÁ NHÂN", "#2563eb", [
+        # === PHẦN 2: THÔNG TIN CHỈNH SỬA ĐƯỢC ===
+        create_form_card(main_container, "THÔNG TIN CÁ NHÂN", "#2563eb", [
             ("Họ và tên", "tenHDV", "text"),
             ("Ngày sinh", "ngaySinh", "text"),
             ("Giới tính", "gioiTinh", "gender"),
             ("Địa chỉ", "diaChi", "text"),
         ])
         
-        # Nhóm 2: Liên hệ
-        add_group("📞", "THÔNG TIN LIÊN HỆ", "#059669", [
+        create_form_card(main_container, "THÔNG TIN LIÊN HỆ", "#059669", [
             ("Số điện thoại", "sdt", "text"),
             ("Email", "email", "text"),
         ])
         
-        # Nhóm 3: Nghiệp vụ
-        add_group("🎓", "NGHIỆP VỤ HƯỚNG DẪN VIÊN", "#7c3aed", [
-            ("Khu vực", "khuVuc", "text"),
+        create_form_card(main_container, "NGHIỆP VỤ CHUYÊN MÔN", "#7c3aed", [
+            ("Khu vực hoạt động", "khuVuc", "text"),
             ("Ngoại ngữ", "ngoaiNgu", "text"),
             ("Chuyên môn", "chuyenMon", "text"),
             ("Chứng chỉ", "chungChi", "text"),
         ])
+
+        # === PHẦN 3: BẢO MẬT (Custom Layout) ===
+        sec_card = tk.Frame(main_container, bg="#ffffff", highlightbackground=THEME["border"], highlightthickness=1)
+        sec_card.pack(fill="x", pady=(0, 20))
+        tk.Frame(sec_card, bg="#fb923c", height=3).pack(fill="x")
         
-        # Nhóm 4: Bảo mật
-        security_group = tk.Frame(scrollable_frame, bg="#fff7ed", highlightbackground="#fb923c", highlightthickness=2, padx=18, pady=15)
-        security_group.pack(fill="x", pady=(0, 15), padx=10)
+        sec_head = tk.Frame(sec_card, bg="#ffffff")
+        sec_head.pack(fill="x", padx=25, pady=(15, 0))
+        tk.Label(sec_head, text="BẢO MẬT TÀI KHOẢN", bg="#ffffff", fg="#c2410c", font=("Times New Roman", 13, "bold")).pack(anchor="w")
+        tk.Label(sec_head, text="* Lưu ý: Để trống ô mật khẩu nếu bạn không muốn thay đổi mật khẩu hiện tại.", bg="#ffffff", fg="#9a3412", font=("Times New Roman", 11, "italic")).pack(anchor="w", pady=(2, 0))
         
-        tk.Label(
-            security_group,
-            text="🔐 BẢO MẬT TÀI KHOẢN",
-            bg="#fff7ed",
-            fg="#c2410c",
-            font=("Times New Roman", 14, "bold")
-        ).pack(anchor="w", pady=(0, 8))
+        sec_grid = tk.Frame(sec_card, bg="#ffffff", padx=25, pady=10)
+        sec_grid.pack(fill="x")
+        sec_grid.grid_columnconfigure(0, weight=0, minsize=140)
+        sec_grid.grid_columnconfigure(1, weight=1)
+        sec_grid.grid_columnconfigure(2, weight=1) # Cột trống cân bằng không gian
         
-        tk.Label(
-            security_group,
-            text="⚠️ Để trống ô mật khẩu nếu bạn không muốn thay đổi mật khẩu hiện tại.",
-            bg="#fff7ed",
-            fg="#9a3412",
-            font=("Times New Roman", 10, "italic"),
-            wraplength=800,
-            justify="left"
-        ).pack(anchor="w", pady=(0, 10))
-        
-        pass_frame = tk.Frame(security_group, bg="#fff7ed")
-        pass_frame.pack(fill="x")
-        
-        tk.Label(
-            pass_frame,
-            text="Mật khẩu mới",
-            width=16,
-            anchor="w",
-            bg="#fff7ed",
-            font=("Times New Roman", 11, "bold"),
-            fg="#0f172a"
-        ).pack(side="left")
-        
-        pass_widget = tk.Entry(pass_frame, font=("Times New Roman", 11), relief="solid", bd=1, width=32, show="*")
-        pass_widget.pack(side="left", fill="x", expand=True, ipady=4)
+        tk.Label(sec_grid, text="Mật khẩu mới", anchor="w", bg="#ffffff", font=("Times New Roman", 12, "bold"), fg=THEME["text"]).grid(row=0, column=0, sticky="w", pady=10)
+        pass_widget = tk.Entry(sec_grid, font=("Times New Roman", 12), relief="solid", bd=1, show="*")
+        pass_widget.grid(row=0, column=1, sticky="ew", pady=10, ipady=5)
         widgets["password"] = pass_widget
 
-        # === PHẦN 3: ACTIONS ===
-        actions_container = tk.Frame(scrollable_frame, bg=THEME["surface"])
-        actions_container.pack(fill="x", pady=(10, 20), padx=10)
+        # === PHẦN 4: NÚT HÀNH ĐỘNG ===
+        actions_wrapper = tk.Frame(main_container, bg=THEME["bg"])
+        actions_wrapper.pack(fill="x", pady=(10, 40))
+
+        actions_container = tk.Frame(actions_wrapper, bg=THEME["bg"])
+        actions_container.pack(anchor="center") # Giữ nút căn giữa thanh lịch
 
         def save_profile():
-            """Lưu thông tin profile với validation đầy đủ"""
             allowed_fields = ["tenHDV", "sdt", "email", "ngaySinh", "gioiTinh", "diaChi", "khuVuc", "ngoaiNgu", "chuyenMon", "chungChi"]
             values = {key: widgets[key].get().strip() for key in allowed_fields}
             new_name = values["tenHDV"]
@@ -2502,26 +1905,10 @@ def khoi_tao_hdv(root, user_data=None):
             messagebox.showinfo("Thành công", "Đã cập nhật thông tin cá nhân thành công!")
             tab_cai_dat()
 
-        style_button(actions_container, "💾 LƯU THAY ĐỔI", THEME["success"], save_profile).pack(side="left", padx=(0, 8))
-        style_button(actions_container, "🔄 LÀM MỚI", THEME["primary"], tab_cai_dat).pack(side="left", padx=(0, 8))
-        style_button(actions_container, "🔑 ĐỔI MẬT KHẨU", THEME["warning"], save_profile).pack(side="left")
+        style_button(actions_container, "LƯU THAY ĐỔI", THEME["success"], save_profile).pack(side="left", padx=10)
+        style_button(actions_container, "HỦY/LÀM MỚI", THEME["muted"], tab_cai_dat).pack(side="left", padx=10)
 
     def open_view(title, subtitle, view_fn, button):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `open_view` (open view).
-        Tham số:
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            subtitle: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            view_fn: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            button: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         set_active_menu(button)
         app["page_title_var"].set(title)
         app["page_subtitle_var"].set(subtitle)
@@ -2644,20 +2031,7 @@ def khoi_tao_hdv(root, user_data=None):
         nav_buttons[0],
     )
 
-
 def logout_system(root):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `logout_system` (logout system).
-    Tham số:
-        root: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if messagebox.askyesno("Xác nhận", "Bạn có muốn đăng xuất khỏi hệ thống?"):
         for widget in root.winfo_children():
             widget.destroy()

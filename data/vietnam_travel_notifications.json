@@ -225,5 +225,14 @@
     "tenTour": "Hạ Long Du Thuyền 2N1Đ",
     "content": "Booking BK16 vừa được tạo cho tour Hạ Long Du Thuyền 2N1Đ.",
     "date": "18/06/2026 20:47"
+  },
+  {
+    "eventType": "booking_created",
+    "maHDV": "HDV02",
+    "tenHDV": "Nguyễn Văn Minh",
+    "maTour": "T03",
+    "tenTour": "Quãng Ngãi",
+    "content": "Booking BK17 vừa được tạo cho tour Quãng Ngãi.",
+    "date": "19/06/2026 13:57"
   }
 ]
