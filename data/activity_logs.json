@@ -1726,5 +1726,213 @@
     "action": "LOGIN",
     "status": "SUCCESS",
     "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:29:43",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:30:23",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:30:45",
+    "actor": "khach01",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Không tìm thấy tài khoản."
+  },
+  {
+    "timestamp": "2026-06-19T14:30:48",
+    "actor": "khach01",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Không tìm thấy tài khoản."
+  },
+  {
+    "timestamp": "2026-06-19T14:30:54",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T14:41:58",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:16:57",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:17:52",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:18:05",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:18:15",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:19:34",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:20:59",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:22:45",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:25:21",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:26:50",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:29:24",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:30:55",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "UPDATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK16 | Thanh toán thêm 8.670.000đ bằng Tiền mặt"
+  },
+  {
+    "timestamp": "2026-06-19T15:31:01",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "UPDATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK15 | Hủy booking | Trạng thái mới: Chờ hoàn tiền"
+  },
+  {
+    "timestamp": "2026-06-19T15:32:23",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "CREATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK18 | Tạo booking cho tour T03 | Số người: 7 | Voucher: Không"
+  },
+  {
+    "timestamp": "2026-06-19T15:33:39",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:34:26",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "UPDATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK18 | Thanh toán thêm 10.395.000đ bằng Chuyển khoản"
+  },
+  {
+    "timestamp": "2026-06-19T15:34:50",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Mật khẩu không hợp lệ."
+  },
+  {
+    "timestamp": "2026-06-19T15:34:53",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:37:43",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:39:05",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:41:49",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
   }
 ]

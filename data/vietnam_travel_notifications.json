@@ -234,5 +234,32 @@
     "tenTour": "Quãng Ngãi",
     "content": "Booking BK17 vừa được tạo cho tour Quãng Ngãi.",
     "date": "19/06/2026 13:57"
+  },
+  {
+    "eventType": "payment_success",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T04",
+    "tenTour": "Hạ Long Du Thuyền 2N1Đ",
+    "content": "Booking BK16 đã thanh toán 8.670.000đ.",
+    "date": "19/06/2026 15:30"
+  },
+  {
+    "eventType": "booking_created",
+    "maHDV": "HDV02",
+    "tenHDV": "Nguyễn Văn Minh",
+    "maTour": "T03",
+    "tenTour": "Quãng Ngãi",
+    "content": "Booking BK18 vừa được tạo cho tour Quãng Ngãi.",
+    "date": "19/06/2026 15:32"
+  },
+  {
+    "eventType": "payment_success",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T03",
+    "tenTour": "Quãng Ngãi",
+    "content": "Booking BK18 đã thanh toán 19.305.000đ.",
+    "date": "19/06/2026 15:34"
   }
 ]

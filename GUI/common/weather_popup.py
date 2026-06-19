@@ -754,10 +754,8 @@ class TourWeatherPopup:
         if dia_diem_list:
             location = dia_diem_list[0]
             self.weather_state["current_place"] = location
-            print(f"[weather_popup] selected place: {location}")
             query = build_weather_location_query(self.tour, location)
             self.weather_state["current_query"] = query
-            print(f"[weather_popup] final query: {query}")
             self._load_weather_async(query)
     
     def _reload_weather(self):
@@ -819,7 +817,6 @@ class TourWeatherPopup:
                 try:
                     lat_val = float(lat)
                     lon_val = float(lon)
-                    print(f"[weather_popup] Sử dụng tọa độ từ tour: {lat_val}, {lon_val}")
                     weather_res = fetch_weather_by_coordinates(lat_val, lon_val)
                     if weather_res.get("ok"):
                         result = {
@@ -853,7 +850,6 @@ class TourWeatherPopup:
                     timeout=20
                 )
             
-            print(f"[weather_popup] result: {result}")
             
             def post_result():
                 try:
@@ -888,7 +884,6 @@ class TourWeatherPopup:
             return
             
         if request_id != self.weather_request_id:
-            print(f"[weather_popup] ignored stale result: {request_id}")
             return
         self._update_weather_ui(result)
     
