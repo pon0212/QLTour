@@ -1934,5 +1934,45 @@
     "action": "LOGIN",
     "status": "SUCCESS",
     "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:43:45",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:45:44",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:47:30",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:49:02",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T15:50:41",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
   }
 ]

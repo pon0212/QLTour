@@ -2002,26 +2002,8 @@ def khoi_tao_khach(root, user_data=None):
         clear_container()
         app["current_tab"] = "notification"
 
-        _, body = make_section(
-            content_area, "Thông báo từ hệ thống",
-            "Cập nhật các thông báo mới nhất từ các tour bạn đã đăng ký.",
-            accent="#d97706",
-        )
-
-        container = tk.Frame(body, bg=THEME["surface"]); container.pack(fill="both", expand=True)
-        canvas = tk.Canvas(container, bg=THEME["surface"], bd=0, highlightthickness=0)
-        scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, bg=THEME["surface"])
-        canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-
-        scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-        
-        scrollable_frame.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", lambda ev: canvas.yview_scroll(int(-1 * (ev.delta / 120)), "units")))
-        scrollable_frame.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+        list_frame = tk.Frame(content_area, bg="#ffffff")
+        list_frame.pack(fill="both", expand=True)
 
         my_tour_codes = {str(b.get("maTour", "")).strip() for b in app["ql"].list_bookings if str(b.get("usernameDat", "")).strip() == str(user_data.get("username", "")).strip() and b.get("maTour")}
         relevant_notifs, seen_notifs = [], set()
@@ -2045,80 +2027,140 @@ def khoi_tao_khach(root, user_data=None):
         relevant_notifs.sort(key=lambda x: parse_date(x.get("date") or x.get("thoiGian") or ""), reverse=True)
 
         event_colors = {
-            "Account Update": {"bg": "#f0fdfa", "border": "#ccfbf1", "tag_bg": "#0d9488", "tag_fg": "#ffffff"},
-            "Refund Approved": {"bg": "#f0fdf4", "border": "#bbf7d0", "tag_bg": "#22c55e", "tag_fg": "#ffffff"},
-            "Refund Declined": {"bg": "#fef2f2", "border": "#fecaca", "tag_bg": "#ef4444", "tag_fg": "#ffffff"},
-            "tour_completed": {"bg": "#eff6ff", "border": "#bfdbfe", "tag_bg": "#3b82f6", "tag_fg": "#ffffff"},
-            "booking_created": {"bg": "#faf5ff", "border": "#e9d5ff", "tag_bg": "#a855f7", "tag_fg": "#ffffff"},
-            "default": {"bg": "#f8fafc", "border": "#e2e8f0", "tag_bg": "#64748b", "tag_fg": "#ffffff"},
+            "Account Update": {"bg": "#ffffff", "hover": "#f8fafc", "border": "#e2e8f0", "fg": "#0d9488"},
+            "Refund Approved": {"bg": "#ffffff", "hover": "#f8fafc", "border": "#e2e8f0", "fg": "#16a34a"},
+            "Refund Declined": {"bg": "#ffffff", "hover": "#f8fafc", "border": "#e2e8f0", "fg": "#dc2626"},
+            "tour_completed": {"bg": "#ffffff", "hover": "#f8fafc", "border": "#e2e8f0", "fg": "#2563eb"},
+            "booking_created": {"bg": "#ffffff", "hover": "#f8fafc", "border": "#e2e8f0", "fg": "#7c3aed"},
+            "default": {"bg": "#ffffff", "hover": "#f8fafc", "border": "#e2e8f0", "fg": "#475569"},
         }
-        event_type_translations = {"Account Update": "Cập nhật tài khoản", "Refund Approved": "Hoàn tiền", "Refund Declined": "Từ chối hoàn", "tour_completed": "Hoàn thành", "booking_created": "Đặt tour"}
+        event_type_translations = {"Account Update": "Cập nhật tài khoản", "Refund Approved": "Hoàn tiền", "Refund Declined": "Từ chối hoàn tiền", "tour_completed": "Hoàn thành tour", "booking_created": "Đặt tour thành công"}
 
         def show_notif_detail(n):
-            popup = tk.Toplevel(body.winfo_toplevel())
+            popup = tk.Toplevel(content_area.winfo_toplevel())
             popup.title("Chi tiết thông báo")
-            popup.geometry("600x450"); popup.configure(bg="#ffffff")
-            popup.transient(body.winfo_toplevel()); popup.grab_set()
+            popup.geometry("600x450")
+            popup.configure(bg="#ffffff")
+            popup.transient(content_area.winfo_toplevel())
+            popup.grab_set()
 
-            e_type = n.get("eventType") or "default"
-            colors = event_colors.get(e_type, event_colors["default"])
-            tk.Frame(popup, height=6, bg=colors["tag_bg"]).pack(fill="x")
-            
+            # Center popup
+            popup.update_idletasks()
+            pw = content_area.winfo_toplevel().winfo_width()
+            ph = content_area.winfo_toplevel().winfo_height()
+            px = content_area.winfo_toplevel().winfo_x()
+            py = content_area.winfo_toplevel().winfo_y()
+            w, h = 600, 450
+            x = px + (pw - w) // 2
+            y = py + (ph - h) // 2
+            popup.geometry(f"{w}x{h}+{x}+{y}")
+
             pad_frame = tk.Frame(popup, bg="#ffffff", padx=25, pady=20)
             pad_frame.pack(fill="both", expand=True)
 
-            meta = tk.Frame(pad_frame, bg="#ffffff"); meta.pack(fill="x", pady=(0, 15))
-            tk.Label(meta, text=event_type_translations.get(e_type, e_type.upper()), bg=colors["tag_bg"], fg=colors["tag_fg"], font=("Times New Roman", 10, "bold"), padx=8, pady=3).pack(side="left")
+            meta = tk.Frame(pad_frame, bg="#ffffff"); meta.pack(fill="x", pady=(0, 10))
+            e_type = n.get("eventType") or "default"
+            type_color = event_colors.get(e_type, event_colors["default"])["fg"]
+            tk.Label(meta, text=event_type_translations.get(e_type, "Thông báo").upper(), bg="#ffffff", fg=type_color, font=("Times New Roman", 12, "bold")).pack(side="left")
             tk.Label(meta, text=n.get("date") or n.get("thoiGian") or "", bg="#ffffff", fg="#64748b", font=("Times New Roman", 11)).pack(side="right")
 
-            info = tk.Frame(pad_frame, bg="#f8fafc", bd=1, relief="solid", highlightbackground="#e2e8f0"); info.pack(fill="x", pady=(0, 15))
-            info_inner = tk.Frame(info, bg="#f8fafc", padx=12, pady=12); info_inner.pack(fill="both")
+            tk.Frame(pad_frame, bg="#e2e8f0", height=1).pack(fill="x", pady=(0, 15))
+
+            info = tk.Frame(pad_frame, bg="#ffffff")
+            info.pack(fill="x", pady=(0, 15))
 
             r_idx = 0
             def add_row(lbl, val):
                 nonlocal r_idx
                 if val:
-                    tk.Label(info_inner, text=lbl, font=("Times New Roman", 11, "bold"), bg="#f8fafc").grid(row=r_idx, column=0, sticky="w", pady=2)
-                    tk.Label(info_inner, text=val, font=("Times New Roman", 11), bg="#f8fafc").grid(row=r_idx, column=1, sticky="w", pady=2, padx=(10, 0))
+                    tk.Label(info, text=lbl, font=("Times New Roman", 11, "bold"), bg="#ffffff", fg="#475569").grid(row=r_idx, column=0, sticky="w", pady=3)
+                    tk.Label(info, text=val, font=("Times New Roman", 11), bg="#ffffff", fg="#1e293b").grid(row=r_idx, column=1, sticky="w", pady=3, padx=(12, 0))
                     r_idx += 1
 
             t_str = f"[{n.get('maTour')}] {n.get('tenTour')}" if n.get('maTour') and n.get('tenTour') else (n.get('maTour') or n.get('tenTour'))
             add_row("Tour:", t_str)
-            add_row("Mã BK:", n.get("maBooking"))
+            add_row("Mã booking:", n.get("maBooking"))
             hdv = app["ql"].find_hdv(n.get("maHDV"))
-            add_row("HDV:", n.get("tenHDV") or (hdv.get("tenHDV") if hdv else "") or n.get("maHDV"))
+            add_row("Hướng dẫn viên:", n.get("tenHDV") or (hdv.get("tenHDV") if hdv else "") or n.get("maHDV"))
 
-            tk.Label(pad_frame, text="Nội dung:", font=("Times New Roman", 12, "bold"), bg="#ffffff").pack(anchor="w", pady=(0, 5))
-            txt_container = tk.Frame(pad_frame, bg="#ffffff", bd=1, relief="solid"); txt_container.pack(fill="both", expand=True, pady=(0, 15))
-            ct = tk.Text(txt_container, bg="#ffffff", font=("Times New Roman", 12), wrap="word", bd=0, padx=10, pady=10)
+            tk.Label(pad_frame, text="Nội dung thông báo:", font=("Times New Roman", 11, "bold"), bg="#ffffff", fg="#475569").pack(anchor="w", pady=(5, 5))
+            txt_container = tk.Frame(pad_frame, bg="#ffffff", bd=1, relief="solid", highlightbackground="#e2e8f0"); txt_container.pack(fill="both", expand=True, pady=(0, 15))
+            ct = tk.Text(txt_container, bg="#ffffff", font=("Times New Roman", 11), wrap="word", bd=0, padx=10, pady=10, fg="#1e293b")
             s = ttk.Scrollbar(txt_container, orient="vertical", command=ct.yview); ct.configure(yscrollcommand=s.set)
             ct.pack(side="left", fill="both", expand=True); s.pack(side="right", fill="y")
             ct.insert("1.0", str(n.get("content") or n.get("noiDung") or n.get("thongBao") or "").strip())
             ct.configure(state="disabled")
-            ttk.Button(pad_frame, text="Đóng", command=popup.destroy).pack(anchor="e")
+            
+            btn_close = ttk.Button(pad_frame, text="Đóng", command=popup.destroy)
+            btn_close.pack(anchor="e")
 
         if not relevant_notifs:
-            tk.Label(scrollable_frame, text="Bạn chưa có thông báo nào.", bg=THEME["surface"], fg=THEME["muted"], font=("Times New Roman", 13, "italic")).pack(anchor="w", pady=20, padx=10)
+            tk.Label(list_frame, text="Bạn chưa có thông báo nào.", bg="#ffffff", fg=THEME["muted"], font=("Times New Roman", 13, "italic")).pack(anchor="w", pady=20, padx=10)
         else:
             for n in relevant_notifs:
-                colors = event_colors.get(n.get("eventType") or "default", event_colors["default"])
-                card = tk.Frame(scrollable_frame, bg=colors["bg"], highlightbackground=colors["border"], highlightthickness=1)
-                card.pack(fill="x", pady=8, padx=15)
-                inner = tk.Frame(card, bg=colors["bg"], padx=15, pady=12); inner.pack(fill="both", expand=True)
+                e_type = n.get("eventType") or "default"
+                colors = event_colors.get(e_type, event_colors["default"])
+                
+                # Single flat frame with bottom border
+                card = tk.Frame(list_frame, bg="#ffffff", highlightbackground=colors["border"], highlightthickness=1)
+                card.pack(fill="x", pady=4, padx=15)
+                
+                inner = tk.Frame(card, bg="#ffffff", padx=14, pady=10)
+                inner.pack(fill="both", expand=True)
 
-                h_fr = tk.Frame(inner, bg=colors["bg"]); h_fr.pack(fill="x")
-                tk.Label(h_fr, text=event_type_translations.get(n.get("eventType") or "default", "Thông báo"), bg=colors["tag_bg"], fg=colors["tag_fg"], font=("Times New Roman", 10, "bold"), padx=6).pack(side="left")
-                if n.get("maTour"): tk.Label(h_fr, text=f" Tour: {n.get('maTour')}", font=("Times New Roman", 12, "bold"), bg=colors["bg"], fg=THEME["primary"]).pack(side="left", padx=5)
-                tk.Label(h_fr, text=str(n.get("date") or n.get("thoiGian") or ""), font=("Times New Roman", 11), bg=colors["bg"], fg=THEME["muted"]).pack(side="right")
+                h_fr = tk.Frame(inner, bg="#ffffff")
+                h_fr.pack(fill="x")
+                
+                tag_lbl = tk.Label(
+                    h_fr, text=event_type_translations.get(e_type, "Thông báo"), 
+                    bg="#ffffff", fg=colors["fg"], font=("Times New Roman", 11, "bold")
+                )
+                tag_lbl.pack(side="left")
+                
+                if n.get("maTour"):
+                    tour_lbl = tk.Label(h_fr, text=f" | Tour: {n.get('maTour')}", font=("Times New Roman", 11), bg="#ffffff", fg=THEME["primary"])
+                    tour_lbl.pack(side="left")
+                else:
+                    tour_lbl = None
+                
+                time_lbl = tk.Label(h_fr, text=str(n.get("date") or n.get("thoiGian") or ""), font=("Times New Roman", 11), bg="#ffffff", fg=THEME["muted"])
+                time_lbl.pack(side="right")
 
                 t_title = n.get("tenTour", "").strip() or n.get("maTour", "").strip()
-                if t_title and t_title != n.get("maTour"): tk.Label(inner, text=t_title, font=("Times New Roman", 12, "bold"), bg=colors["bg"]).pack(anchor="w", pady=(5, 2))
+                if t_title and t_title != n.get("maTour"):
+                    title_lbl = tk.Label(inner, text=t_title, font=("Times New Roman", 11, "bold"), bg="#ffffff", fg=THEME["text"])
+                    title_lbl.pack(anchor="w", pady=(3, 1))
+                else:
+                    title_lbl = None
 
                 text = str(n.get("content") or n.get("noiDung") or n.get("thongBao") or "").strip()
-                msg = tk.Label(inner, text=(text[:147] + "..." if len(text) > 150 else text), font=("Times New Roman", 12), bg=colors["bg"], justify="left", wraplength=700)
-                msg.pack(anchor="w", pady=(0, 5))
+                preview_text = text[:147] + "..." if len(text) > 150 else text
+                msg = tk.Label(inner, text=preview_text, font=("Times New Roman", 11), bg="#ffffff", fg="#475569", justify="left", wraplength=650)
+                msg.pack(anchor="w", pady=(2, 2))
+                
+                # Setup hover list
+                widgets_to_hover = [card, inner, h_fr, tag_lbl, time_lbl, msg]
+                if tour_lbl: widgets_to_hover.append(tour_lbl)
+                if title_lbl: widgets_to_hover.append(title_lbl)
 
-                for w in [card, inner, h_fr, msg]: w.bind("<Double-1>", lambda e, notif=n: show_notif_detail(notif))
+                def make_hover(hover_color, normal_color, wl):
+                    def enter(e):
+                        for w_item in wl:
+                            try: w_item.configure(bg=hover_color)
+                            except: pass
+                    def leave(e):
+                        for w_item in wl:
+                            try: w_item.configure(bg=normal_color)
+                            except: pass
+                    for w_item in wl:
+                        w_item.bind("<Enter>", enter, add="+")
+                        w_item.bind("<Leave>", leave, add="+")
+                        w_item.configure(cursor="hand2")
+
+                make_hover(colors["hover"], "#ffffff", widgets_to_hover)
+                
+                for w in widgets_to_hover:
+                    w.bind("<Button-1>", lambda e, notif=n: show_notif_detail(notif))
 
         set_status("Đang ở mục: Thông báo", THEME["primary"])
 
