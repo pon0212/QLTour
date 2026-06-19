@@ -1586,7 +1586,6 @@ def khoi_tao_hdv(root, user_data=None):
                 "value": f"{ten_hdv}",
                 "subtitle": ma_hdv,
                 "color": THEME["primary"],
-                "icon": "👤",
                 "note": "Tài khoản đang đăng nhập"
             },
             {
@@ -1594,7 +1593,6 @@ def khoi_tao_hdv(root, user_data=None):
                 "value": f"{avg_rating:.1f}",
                 "subtitle": "/ 5.0",
                 "color": THEME["warning"],
-                "icon": "⭐",
                 "note": f"Từ {total_reviews} đánh giá"
             },
             {
@@ -1602,7 +1600,6 @@ def khoi_tao_hdv(root, user_data=None):
                 "value": f"{avg_rating * 20:.0f}%",
                 "subtitle": "",
                 "color": THEME["success"],
-                "icon": "📊",
                 "note": "Tỷ lệ phần trăm"
             },
             {
@@ -1610,7 +1607,6 @@ def khoi_tao_hdv(root, user_data=None):
                 "value": str(total_reviews),
                 "subtitle": "lượt",
                 "color": "#7c3aed",
-                "icon": "💬",
                 "note": "Tổng số phản hồi"
             },
         ]
@@ -1626,34 +1622,21 @@ def khoi_tao_hdv(root, user_data=None):
                 bg="#ffffff",
                 highlightbackground=stat["color"],
                 highlightthickness=2,
-                padx=20,
-                pady=15
+                padx=15,
+                pady=12
             )
-            card.grid(row=row_idx, column=col_idx, sticky="ew", padx=8, pady=8)
+            card.grid(row=row_idx, column=col_idx, sticky="ew", padx=6, pady=6)
             stats_container.grid_columnconfigure(col_idx, weight=1)
             
-            # Icon và Title
-            header = tk.Frame(card, bg="#ffffff")
-            header.pack(fill="x", pady=(0, 8))
-            
+            # Title (không dùng icon)
             tk.Label(
-                header,
-                text=stat["icon"],
-                font=("Times New Roman", 24),
-                bg="#ffffff"
-            ).pack(side="left", padx=(0, 10))
-            
-            title_frame = tk.Frame(header, bg="#ffffff")
-            title_frame.pack(side="left", fill="x", expand=True)
-            
-            tk.Label(
-                title_frame,
+                card,
                 text=stat["title"],
-                font=("Times New Roman", 11, "bold"),
+                font=("Times New Roman", 10, "bold"),
                 bg="#ffffff",
                 fg=THEME["muted"],
                 anchor="w"
-            ).pack(anchor="w")
+            ).pack(anchor="w", pady=(0, 8))
             
             # Value với subtitle
             value_frame = tk.Frame(card, bg="#ffffff")
@@ -1662,7 +1645,7 @@ def khoi_tao_hdv(root, user_data=None):
             tk.Label(
                 value_frame,
                 text=stat["value"],
-                font=("Times New Roman", 26, "bold"),
+                font=("Times New Roman", 20, "bold"),
                 bg="#ffffff",
                 fg=stat["color"],
                 anchor="w"
@@ -1672,7 +1655,7 @@ def khoi_tao_hdv(root, user_data=None):
                 tk.Label(
                     value_frame,
                     text=stat["subtitle"],
-                    font=("Times New Roman", 14),
+                    font=("Times New Roman", 12),
                     bg="#ffffff",
                     fg=THEME["muted"],
                     anchor="w"
@@ -1682,7 +1665,7 @@ def khoi_tao_hdv(root, user_data=None):
             tk.Label(
                 card,
                 text=stat["note"],
-                font=("Times New Roman", 10, "italic"),
+                font=("Times New Roman", 9, "italic"),
                 bg="#ffffff",
                 fg=THEME["muted"],
                 anchor="w"

@@ -1526,5 +1526,37 @@
     "action": "LOGIN",
     "status": "SUCCESS",
     "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:47:18",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:49:49",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Mật khẩu không hợp lệ."
+  },
+  {
+    "timestamp": "2026-06-19T13:49:51",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-19T13:51:33",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
   }
 ]
