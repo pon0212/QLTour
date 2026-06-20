@@ -41,6 +41,7 @@ from core.app import (
     TOUR_STATUS_CANCELLED,
     show_wrapped_message,
     show_detailed_notification_popup,
+    get_review_rating,
 )
 
 # =========================
@@ -277,7 +278,10 @@ def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
 
     def _show():
         if not state["visible"]:
-            scrollbar.pack(side=pack_side, fill=pack_fill, padx=0, pady=0)
+            if widget.winfo_manager() == "pack":
+                scrollbar.pack(side=pack_side, fill=pack_fill, padx=0, pady=0, before=widget)
+            else:
+                scrollbar.pack(side=pack_side, fill=pack_fill, padx=0, pady=0)
             state["visible"] = True
 
     def _hide():
@@ -1840,11 +1844,13 @@ def khoi_tao_khach(root, user_data=None):
                 ma_review = str(review.get("maReview", "")).strip()
                 review_by_id[ma_review] = review
                 reply = str(review.get("adminReply", "")).strip()
+                r_rating = get_review_rating(review)
+                rating_disp = str(r_rating) if r_rating > 0 else "Chưa có"
                 tree.insert("", "end", values=(
                     _short(ma_review, 16), _short(review.get("maBooking", ""), 16),
                     _short(review.get("tenTour", "") or review.get("maTour", ""), 28),
                     _short(review.get("target", ""), 12), _short(review.get("date", ""), 16),
-                    _short(review.get("rating", ""), 8), _short(review.get("content", ""), 38),
+                    _short(rating_disp, 8), _short(review.get("content", ""), 38),
                     _short(reply, 42) if reply else "Chưa có phản hồi",
                 ), tags=(ma_review,))
 
@@ -1871,7 +1877,11 @@ def khoi_tao_khach(root, user_data=None):
                 top.transient(root); top.grab_set()
                 box = tk.Frame(top, bg=THEME["surface"], padx=18, pady=16)
                 box.pack(fill="both", expand=True, padx=16, pady=16)
-                for label, value in [("Mã đánh giá", review.get("maReview", "")), ("Booking", review.get("maBooking", "")), ("Tour", review.get("tenTour", "") or review.get("maTour", "")), ("Đối tượng", review.get("target", "")), ("Ngày gửi", review.get("date", "")), ("Điểm", review.get("rating", "")), ("Nội dung", review.get("content", "")), ("Phản hồi", review.get("adminReply", "") or "Chưa có phản hồi")]:
+                
+                det_rating = get_review_rating(review)
+                det_rating_disp = str(det_rating) if det_rating > 0 else "Chưa có"
+                
+                for label, value in [("Mã đánh giá", review.get("maReview", "")), ("Booking", review.get("maBooking", "")), ("Tour", review.get("tenTour", "") or review.get("maTour", "")), ("Đối tượng", review.get("target", "")), ("Ngày gửi", review.get("date", "")), ("Điểm", det_rating_disp), ("Nội dung", review.get("content", "")), ("Phản hồi", review.get("adminReply", "") or "Chưa có phản hồi")]:
                     row = tk.Frame(box, bg=THEME["surface"]); row.pack(fill="x", pady=4)
                     tk.Label(row, text=f"{label}:", width=16, anchor="nw", bg=THEME["surface"], font=("Times New Roman", 11, "bold")).pack(side="left")
                     tk.Label(row, text=str(value), anchor="w", justify="left", wraplength=430, bg=THEME["surface"], font=("Times New Roman", 11)).pack(side="left", fill="x", expand=True)

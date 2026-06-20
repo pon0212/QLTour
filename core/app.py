@@ -421,28 +421,32 @@ def sync_ghi_chu_dieu_hanh(tour: dict):
     status = normalize_tour_status(tour.get("trangThai", ""))
     note = str(tour.get("ghiChuDieuHanh", "")).strip()
 
-    completed_note = "Tour đã hoàn tất đúng lịch, khách phản hồi tốt và không phát sinh sự cố điều hành."
-    ongoing_note = "Tour đang diễn ra, hướng dẫn viên đang theo đoàn và lịch trình được theo dõi hằng ngày."
-    open_note = "Tour đang mở bán, còn nhận thêm khách và ưu tiên nhóm gia đình."
-    cancelled_note = "Tour đã bị hủy. Lịch trình không còn hiệu lực."
-    not_open_note = "Tour sắp mở bán, đang chuẩn bị chương trình và lịch trình chi tiết."
+    completed_note = "Tour đã hoàn tất, cần tổng hợp doanh thu, kiểm tra công nợ, ghi nhận đánh giá khách hàng và lưu hồ sơ điều hành."
+    ongoing_note = "Tour đang được triển khai, cần theo dõi lịch trình, hỗ trợ HDV và xử lý kịp thời các phát sinh."
+    open_note = "Tour đang mở bán, cần theo dõi số lượng khách đăng ký, tình trạng thanh toán và hỗ trợ khách đặt tour."
+    cancelled_note = "Tour đã hủy, cần kiểm tra booking liên quan, xử lý hoàn tiền nếu có và lưu lý do hủy tour."
+    not_open_note = "Tour đang trong giai đoạn chuẩn bị, cần hoàn thiện lịch trình, phân công HDV và kiểm tra thông tin mở bán."
+    full_note = "Tour đã đủ số lượng khách dự kiến, cần kiểm tra thanh toán, danh sách khách và chuẩn bị điều hành trước ngày khởi hành."
 
     note_lower = note.lower()
 
     if status == TOUR_STATUS_COMPLETED:
-        if not note or note_lower in ["không có", "", "không"] or "đang diễn ra" in note_lower or "đang mở bán" in note_lower or "sắp mở bán" in note_lower or "còn nhận thêm khách" in note_lower or "đã hủy" in note_lower:
+        if not note or note_lower in ["không có", "", "không"] or "đang diễn ra" in note_lower or "đang mở bán" in note_lower or "sắp mở bán" in note_lower or "còn nhận thêm khách" in note_lower or "đã hủy" in note_lower or "đủ khách" in note_lower:
             tour["ghiChuDieuHanh"] = completed_note
     elif status == TOUR_STATUS_CANCELLED:
-        if not note or note_lower in ["không có", "", "không"] or "hoàn tất" in note_lower or "đang diễn ra" in note_lower or "đang mở bán" in note_lower or "sắp mở bán" in note_lower or "hoàn thành" in note_lower or "hoàn tất đúng lịch" in note_lower:
+        if not note or note_lower in ["không có", "", "không"] or "hoàn tất" in note_lower or "đang diễn ra" in note_lower or "đang mở bán" in note_lower or "sắp mở bán" in note_lower or "hoàn thành" in note_lower or "hoàn tất đúng lịch" in note_lower or "đủ khách" in note_lower:
             tour["ghiChuDieuHanh"] = cancelled_note
     elif status == TOUR_STATUS_STARTED:
-        if not note or note_lower in ["không có", "", "không"] or "đang mở bán" in note_lower or "sắp mở bán" in note_lower or "hoàn tất" in note_lower or "hoàn thành" in note_lower or "đã hủy" in note_lower:
+        if not note or note_lower in ["không có", "", "không"] or "đang mở bán" in note_lower or "sắp mở bán" in note_lower or "hoàn tất" in note_lower or "hoàn thành" in note_lower or "đã hủy" in note_lower or "đủ khách" in note_lower:
             tour["ghiChuDieuHanh"] = ongoing_note
     elif status == TOUR_STATUS_OPEN:
-        if not note or note_lower in ["không có", "", "không"] or "đang diễn ra" in note_lower or "hoàn tất" in note_lower or "hoàn thành" in note_lower or "đã hủy" in note_lower:
+        if not note or note_lower in ["không có", "", "không"] or "đang diễn ra" in note_lower or "hoàn tất" in note_lower or "hoàn thành" in note_lower or "đã hủy" in note_lower or "sắp mở bán" in note_lower or "đủ khách" in note_lower:
             tour["ghiChuDieuHanh"] = open_note
+    elif status == TOUR_STATUS_FULL:
+        if not note or note_lower in ["không có", "", "không"] or "đang mở bán" in note_lower or "đang diễn ra" in note_lower or "hoàn tất" in note_lower or "hoàn thành" in note_lower or "đã hủy" in note_lower or "sắp mở bán" in note_lower:
+            tour["ghiChuDieuHanh"] = full_note
     elif status == TOUR_STATUS_NOT_OPEN:
-        if not note or note_lower in ["không có", "", "không"] or "đang diễn ra" in note_lower or "hoàn tất" in note_lower or "hoàn thành" in note_lower or "đã hủy" in note_lower or "đang mở bán" in note_lower:
+        if not note or note_lower in ["không có", "", "không"] or "đang diễn ra" in note_lower or "hoàn tất" in note_lower or "hoàn thành" in note_lower or "đã hủy" in note_lower or "đang mở bán" in note_lower or "đủ khách" in note_lower:
             tour["ghiChuDieuHanh"] = not_open_note
 
 
@@ -2946,6 +2950,25 @@ def _safe_float(value, default: float = 0.0) -> float:
         return default
 
 
+def get_review_rating(review):
+    """
+    Mục đích:
+        Lấy điểm đánh giá từ review một cách an toàn và nhất quán.
+    """
+    if not isinstance(review, dict):
+        return 0
+    for key in ("rating", "soSao", "diem", "ratingTour", "ratingHDV"):
+        value = review.get(key)
+        if value is not None:
+            try:
+                rating = int(float(str(value).strip()))
+                if 1 <= rating <= 5:
+                    return rating
+            except Exception:
+                pass
+    return 0
+
+
 def _normalize_review_rating(rating_value):
     if rating_value is None or rating_value == "":
         return ""
@@ -2962,9 +2985,11 @@ def _normalize_review_rating(rating_value):
     numeric = _safe_float(rating_value, -1)
     if numeric < 0:
         return None
-    if 0 < numeric <= 1:
+    if 1.0 <= numeric <= 5.0:
+        return round(numeric, 1)
+    if 0 < numeric < 1:
         numeric = round(numeric * 5.0, 1)
-    if numeric > 5:
+    elif numeric > 5:
         # Backward-compatibility: support legacy 1-20 and 1-60 scales.
         if numeric <= 20:
             numeric = round((numeric / 20.0) * 5.0, 1)
@@ -3041,6 +3066,11 @@ def is_review_hidden(review) -> bool:
 
 def normalize_review_for_display(review, datastore=None):
     normalized = normalize_review_item(review or {}, include_rating=True, include_ma_hdv=True)
+    
+    # Ensure rating is properly normalized for display using get_review_rating
+    rating_val = get_review_rating(review)
+    normalized["rating"] = rating_val if rating_val > 0 else ""
+
     ma_tour = str(normalized.get("maTour", "")).strip()
     ma_hdv = str(normalized.get("maHDV", "") or normalized.get("target_id", "")).strip()
     if datastore is not None:

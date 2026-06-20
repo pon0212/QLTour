@@ -290,5 +290,36 @@
     "tenTour": "Quãng Ngãi",
     "content": "Booking BK18 đã thanh toán 24.502.500đ.",
     "date": "20/06/2026 17:27"
+  },
+  {
+    "eventType": "review_reply",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T09",
+    "tenTour": "Nha Trang Biển Xanh 3N2Đ",
+    "content": "Đánh giá của bạn đã bị xóa bởi Admin.",
+    "date": "20/06/2026 23:23",
+    "username": "ngoctuyen",
+    "maBooking": "BK21"
+  },
+  {
+    "eventType": "review_reply",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T09",
+    "tenTour": "Nha Trang Biển Xanh 3N2Đ",
+    "content": "Đánh giá của bạn đã bị xóa bởi Admin.",
+    "date": "20/06/2026 23:23",
+    "username": "ngoctuyen",
+    "maBooking": "BK21"
+  },
+  {
+    "eventType": "user_broadcast",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "",
+    "tenTour": "",
+    "content": "Chào mừng đến với VIETNAMTRAVEL",
+    "date": "21/06/2026 00:35"
   }
 ]

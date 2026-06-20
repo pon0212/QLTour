@@ -30,7 +30,7 @@
       "maHDV": "HDV02",
       "tenHDV": "Nguyễn Văn Minh",
       "username": "hdv02",
-      "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "password": "$2b$12$pBCsL8MzJhwyea13LjnLMeCd5dda9tvnZfgqUGeAwV.KI5FdHbOQi",
       "sdt": "0345678912",
       "email": "hdv02@gmail.com",
       "kn": 5,
@@ -42,10 +42,10 @@
       "ngoaiNgu": "Anh, Pháp",
       "chuyenMon": "Tour di sản",
       "chungChi": "Nghiệp vụ HDV 2020",
-      "soTourDaDan": 18,
+      "soTourDaDan": 19,
       "trangThai": "Đã phân công",
-      "total_reviews": 12,
-      "avg_rating": 4.7,
+      "total_reviews": 0,
+      "avg_rating": 0.0,
       "skill_score": 86,
       "attitude_score": 88,
       "problem_solving_score": 85,
@@ -94,7 +94,7 @@
       "ngoaiNgu": "Anh, Trung",
       "chuyenMon": "Tour lịch sử",
       "chungChi": "Nghiệp vụ HDV 2019",
-      "soTourDaDan": 32,
+      "soTourDaDan": 33,
       "trangThai": "Đã phân công",
       "total_reviews": 24,
       "avg_rating": 4.8,
@@ -508,9 +508,128 @@
           "moTa": "Lịch trình đang được cập nhật chi tiết."
         }
       ],
-      "soLuotDaDat": 40,
+      "soLuotDaDat": 41,
       "soLuotMoBan": 45,
       "tourState": "open"
+    },
+    {
+      "ma": "T05",
+      "ten": "Hà Nội",
+      "ngay": "04/05/2026",
+      "ngayKetThuc": "05/05/2026",
+      "soNgay": "2N1D",
+      "khach": "20",
+      "gia": "2300000",
+      "diemDi": "Hải Phòng",
+      "diemDen": "Hà Nội",
+      "ghiChuDieuHanh": "Tour đã hoàn tất đúng lịch, khách phản hồi tốt và không phát sinh sự cố điều hành.",
+      "trangThai": "Đã kết thúc",
+      "hdvPhuTrach": "HDV01",
+      "lichTrinh": [
+        {
+          "ngay": "Ngày 1",
+          "tieuDe": "Hải Phòng - Hà nội",
+          "diaDiem": [
+            "Hà nội"
+          ],
+          "moTa": "Lịch trình đang được cập nhật chi tiết."
+        }
+      ],
+      "soLuotDaDat": 0,
+      "soLuotMoBan": 20,
+      "tourState": "completed"
+    },
+    {
+      "ma": "T09",
+      "ten": "Nha Trang Biển Xanh 3N2Đ",
+      "ngay": "01/06/2026",
+      "ngayKetThuc": "03/06/2026",
+      "soNgay": "3N2D",
+      "khach": "30",
+      "gia": "3150000",
+      "diemDi": "TP.HCM",
+      "diemDen": "Nha Trang",
+      "ghiChuDieuHanh": "Tour đã hoàn thành đúng lịch, khách thanh toán đủ và không còn công nợ.",
+      "trangThai": "Đã kết thúc",
+      "hdvPhuTrach": "HDV02",
+      "tourState": "completed",
+      "soLuotDaDat": 5,
+      "soLuotMoBan": 30,
+      "lichTrinh": [
+        {
+          "ngay": "Ngày 1",
+          "tieuDe": "TP.HCM - Nha Trang",
+          "diaDiem": [
+            "Biển Trần Phú",
+            "Tháp Bà Ponagar"
+          ],
+          "moTa": "Khởi hành từ TP.HCM, đến Nha Trang nhận phòng và tham quan thành phố biển."
+        },
+        {
+          "ngay": "Ngày 2",
+          "tieuDe": "Khám phá đảo",
+          "diaDiem": [
+            "Hòn Mun",
+            "Hòn Tằm",
+            "VinWonders Nha Trang"
+          ],
+          "moTa": "Tham quan các đảo nổi tiếng, trải nghiệm hoạt động biển và nghỉ dưỡng."
+        },
+        {
+          "ngay": "Ngày 3",
+          "tieuDe": "Nha Trang - TP.HCM",
+          "diaDiem": [
+            "Chợ Đầm"
+          ],
+          "moTa": "Mua sắm đặc sản tại Chợ Đầm, khởi hành về TP.HCM."
+        }
+      ]
+    },
+    {
+      "ma": "T10",
+      "ten": "Đà Nẵng Hội An 3N2Đ",
+      "ngay": "08/06/2026",
+      "ngayKetThuc": "10/06/2026",
+      "soNgay": "3N2D",
+      "khach": "35",
+      "gia": "3650000",
+      "diemDi": "TP.HCM",
+      "diemDen": "Đà Nẵng - Hội An",
+      "ghiChuDieuHanh": "Tour đã hoàn thành đúng lịch, khách phản hồi tốt và đã thanh toán đủ.",
+      "trangThai": "Đã kết thúc",
+      "hdvPhuTrach": "HDV04",
+      "tourState": "completed",
+      "soLuotDaDat": 4,
+      "soLuotMoBan": 35,
+      "lichTrinh": [
+        {
+          "ngay": "Ngày 1",
+          "tieuDe": "TP.HCM - Đà Nẵng",
+          "diaDiem": [
+            "Biển Mỹ Khê",
+            "Cầu Rồng"
+          ],
+          "moTa": "Đến Đà Nẵng, tham quan biển Mỹ Khê và ngắm Cầu Rồng về đêm."
+        },
+        {
+          "ngay": "Ngày 2",
+          "tieuDe": "Bà Nà - Hội An",
+          "diaDiem": [
+            "Bà Nà Hills",
+            "Cầu Vàng",
+            "Phố cổ Hội An"
+          ],
+          "moTa": "Tham quan Bà Nà Hills, Cầu Vàng và trải nghiệm phố cổ Hội An."
+        },
+        {
+          "ngay": "Ngày 3",
+          "tieuDe": "Đà Nẵng - TP.HCM",
+          "diaDiem": [
+            "Chợ Hàn"
+          ],
+          "moTa": "Mua đặc sản tại Chợ Hàn, kết thúc chương trình và trở về TP.HCM."
+        }
+      ]
     }
   ],
   "bookings": [
@@ -965,7 +1084,7 @@
       "tenKhach": "Trần Nguyễn Ngọc Tuyền",
       "sdt": "0321316760",
       "soNguoi": "18",
-      "trangThai": "Chờ hoàn tiền",
+      "trangThai": "Hoàn tiền",
       "ngayDat": "18/06/2026",
       "tongTienGoc": 39420000,
       "giamGiaDoiTuong": 3613500,
@@ -987,11 +1106,11 @@
       "maVoucher": "",
       "tenVoucher": "",
       "giamGiaVoucher": 0,
-      "trangThaiHoanTien": "Chờ duyệt",
+      "trangThaiHoanTien": "Đã hoàn tiền",
       "soTienHoan": 35756500,
       "ngayYeuCauHoanTien": "20/06/2026 17:26",
-      "ngayXuLyHoanTien": "",
-      "nguoiXuLyHoanTien": "",
+      "ngayXuLyHoanTien": "20/06/2026 21:45",
+      "nguoiXuLyHoanTien": "admin",
       "ghiChuHoanTien": "",
       "tourStatusChanges": [
         {
@@ -1003,13 +1122,15 @@
         }
       ],
       "username": "ngoctuyen",
-      "refundStatus": "pending",
-      "bookingState": "cancelled",
+      "refundStatus": "approved",
+      "bookingState": "refunded",
       "lastPaymentAt": "18/06/2026 19:28",
       "paidBy": "ngoctuyen",
       "cancelledAt": "20/06/2026 17:26",
       "cancelledBy": "ngoctuyen",
-      "cancelReason": ""
+      "cancelReason": "",
+      "refundedAt": "20/06/2026 21:45",
+      "refundedBy": "admin"
     },
     {
       "maBooking": "BK15",
@@ -1017,7 +1138,7 @@
       "tenKhach": "Trần Nguyễn Ngọc Tuyền",
       "sdt": "0321316760",
       "soNguoi": "4",
-      "trangThai": "Chờ hoàn tiền",
+      "trangThai": "Hoàn tiền",
       "ngayDat": "18/06/2026",
       "tongTienGoc": 11560000,
       "giamGiaDoiTuong": 1589500,
@@ -1039,21 +1160,23 @@
       "maVoucher": "",
       "tenVoucher": "",
       "giamGiaVoucher": 0,
-      "trangThaiHoanTien": "Chờ duyệt",
+      "trangThaiHoanTien": "Đã hoàn tiền",
       "soTienHoan": 9970500,
       "ngayYeuCauHoanTien": "19/06/2026 15:31",
-      "ngayXuLyHoanTien": "",
-      "nguoiXuLyHoanTien": "",
+      "ngayXuLyHoanTien": "20/06/2026 21:45",
+      "nguoiXuLyHoanTien": "admin",
       "ghiChuHoanTien": "",
       "username": "ngoctuyen",
-      "refundStatus": "pending",
-      "bookingState": "cancelled",
+      "refundStatus": "approved",
+      "bookingState": "refunded",
       "paidAmount": 9970500,
       "lastPaymentAt": "18/06/2026 20:47",
       "paidBy": "ngoctuyen",
       "cancelledAt": "19/06/2026 15:31",
       "cancelledBy": "ngoctuyen",
-      "cancelReason": ""
+      "cancelReason": "",
+      "refundedAt": "20/06/2026 21:45",
+      "refundedBy": "admin"
     },
     {
       "maBooking": "BK16",
@@ -1212,6 +1335,135 @@
       "username": "ngoctuyen",
       "refundStatus": "",
       "bookingState": "confirmed"
+    },
+    {
+      "maBooking": "BK20",
+      "maTour": "T03",
+      "tenKhach": "Nhug",
+      "sdt": "0983755141",
+      "soNguoi": "1",
+      "tongTien": 4500000,
+      "tienCoc": 0,
+      "daThanhToan": 2300000,
+      "conNo": 2200000,
+      "hinhThucThanhToan": "Tiền mặt",
+      "nguonKhach": "Khách lẻ",
+      "usernameDat": "ngoctuyen",
+      "ghiChu": "",
+      "trangThai": "Đã cọc",
+      "tongTienGoc": 4500000,
+      "giamGiaDoiTuong": 0,
+      "coCauDoTuoi": {
+        "treEm": 0,
+        "trungNien": 1,
+        "nguoiCaoTuoi": 0
+      },
+      "ngayDat": "20/06/2026",
+      "danhSachKhach": [],
+      "maVoucher": "",
+      "tenVoucher": "",
+      "giamGiaVoucher": 0,
+      "trangThaiHoanTien": "",
+      "soTienHoan": 0,
+      "ngayYeuCauHoanTien": "",
+      "ngayXuLyHoanTien": "",
+      "nguoiXuLyHoanTien": "",
+      "ghiChuHoanTien": "",
+      "username": "ngoctuyen",
+      "refundStatus": "",
+      "bookingState": "confirmed"
+    },
+    {
+      "maBooking": "BK21",
+      "maTour": "T09",
+      "tenKhach": "Trần Nguyễn Ngọc Tuyền",
+      "sdt": "0321316760",
+      "soNguoi": "5",
+      "trangThai": "Đã hoàn thành",
+      "ngayDat": "20/05/2026",
+      "tongTienGoc": 15750000,
+      "giamGiaDoiTuong": 630000,
+      "tongTien": 15120000,
+      "tienCoc": 4725000,
+      "daThanhToan": 15120000,
+      "conNo": 0,
+      "hinhThucThanhToan": "Chuyển khoản",
+      "nguonKhach": "Khách lẻ",
+      "ghiChu": "Booking đã hoàn thành, khách đã thanh toán đủ và tour đã kết thúc.",
+      "usernameDat": "ngoctuyen",
+      "user": "ngoctuyen",
+      "username": "ngoctuyen",
+      "danhSachKhach": [],
+      "coCauDoTuoi": {
+        "treEm": 1,
+        "trungNien": 4,
+        "nguoiCaoTuoi": 0
+      },
+      "soTreEm": 1,
+      "soNguoiLon": 4,
+      "soCaoTuoi": 0,
+      "phuongTien": "Xe du lịch",
+      "maVoucher": "",
+      "tenVoucher": "",
+      "giamGiaVoucher": 0,
+      "trangThaiHoanTien": "",
+      "soTienHoan": 0,
+      "ngayYeuCauHoanTien": "",
+      "ngayXuLyHoanTien": "",
+      "nguoiXuLyHoanTien": "",
+      "ghiChuHoanTien": "",
+      "refundStatus": "",
+      "bookingState": "completed",
+      "paidAmount": 15750000,
+      "lastPaymentAt": "31/05/2026 09:30",
+      "paidBy": "ngoctuyen",
+      "completedNotified": true
+    },
+    {
+      "maBooking": "BK22",
+      "maTour": "T10",
+      "tenKhach": "Phan Bảo Phúc",
+      "sdt": "0909729457",
+      "soNguoi": "4",
+      "trangThai": "Đã hoàn thành",
+      "ngayDat": "28/05/2026",
+      "tongTienGoc": 14600000,
+      "giamGiaDoiTuong": 1277500,
+      "tongTien": 13322500,
+      "tienCoc": 4380000,
+      "daThanhToan": 13322500,
+      "conNo": 0,
+      "hinhThucThanhToan": "Tiền mặt",
+      "nguonKhach": "Khách lẻ",
+      "ghiChu": "Booking đã hoàn thành, khách đã thanh toán đủ và tour đã kết thúc.",
+      "usernameDat": "phanbaophuc2",
+      "user": "phanbaophuc2",
+      "username": "phanbaophuc2",
+      "danhSachKhach": [],
+      "coCauDoTuoi": {
+        "treEm": 0,
+        "trungNien": 3,
+        "nguoiCaoTuoi": 1
+      },
+      "soTreEm": 0,
+      "soNguoiLon": 3,
+      "soCaoTuoi": 1,
+      "phuongTien": "Xe du lịch",
+      "maVoucher": "",
+      "tenVoucher": "",
+      "giamGiaVoucher": 0,
+      "trangThaiHoanTien": "",
+      "soTienHoan": 0,
+      "ngayYeuCauHoanTien": "",
+      "ngayXuLyHoanTien": "",
+      "nguoiXuLyHoanTien": "",
+      "ghiChuHoanTien": "",
+      "refundStatus": "",
+      "bookingState": "completed",
+      "paidAmount": 14600000,
+      "lastPaymentAt": "07/06/2026 10:15",
+      "paidBy": "phanbaophuc2",
+      "completedNotified": true
     }
   ],
   "users": [
