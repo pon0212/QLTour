@@ -184,9 +184,9 @@ def _render_matplotlib_charts(parent, report):
         # 1. Biểu đồ tròn: Cơ cấu tài chính hệ thống (Đã thu, Còn nợ, Đã hoàn)
         ax_pie = fig.add_subplot(121)
         
-        total_da_thu = safe_int(overview.get("daThu", 0))
-        total_con_no = safe_int(overview.get("conNo", 0))
-        total_da_hoan = safe_int(overview.get("tongHoanTien", 0))
+        total_da_thu = max(0, safe_int(overview.get("daThu", 0)))
+        total_con_no = max(0, safe_int(overview.get("conNo", 0)))
+        total_da_hoan = max(0, safe_int(overview.get("tongHoanTien", 0)))
 
         pie_labels = []
         pie_values = []
@@ -225,40 +225,30 @@ def _render_matplotlib_charts(parent, report):
             ax_pie.set_title("Cơ cấu dòng tiền booking", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"])
             ax_pie.axis('off')
 
-        # 2. Biểu đồ cột: Cơ cấu tài chính Đã thu, Còn nợ, Đã hoàn theo từng tour
+        # 2. Biểu đồ cột: Doanh thu thực nhận theo tour
         ax_bar = fig.add_subplot(122)
         
-        # Chỉ lấy các tour có phát sinh doanh thu (phải thu > 0 hoặc đã thu > 0)
-        filtered_tours = [r for r in tours_data if safe_int(r.get("tongPhaiThu", 0)) > 0 or safe_int(r.get("daThu", 0)) > 0]
-        # Sắp xếp các tour theo tổng doanh thu dự kiến giảm dần và lấy tối đa 6 tour hàng đầu
-        filtered_tours = sorted(filtered_tours, key=lambda x: safe_int(x.get("tongPhaiThu", 0)), reverse=True)
-        if len(filtered_tours) > 6:
-            filtered_tours = filtered_tours[:6]
+        # Chỉ lấy các tour có doanh thu thực nhận > 0
+        filtered_tours = [r for r in tours_data if safe_int(r.get("doanhThuThucNhan", 0)) > 0]
+        # Sắp xếp các tour theo doanh thu thực nhận giảm dần và lấy tối đa 8 tour
+        filtered_tours = sorted(filtered_tours, key=lambda x: safe_int(x.get("doanhThuThucNhan", 0)), reverse=True)
+        if len(filtered_tours) > 8:
+            filtered_tours = filtered_tours[:8]
 
         if filtered_tours:
             tour_labels = [r.get("maTour", "") for r in filtered_tours]
-            da_thu_vals = [safe_int(r.get("daThu", 0)) for r in filtered_tours]
-            con_no_vals = [safe_int(r.get("conNo", 0)) for r in filtered_tours]
-            da_hoan_vals = [safe_int(r.get("hoanTien", 0)) for r in filtered_tours]
+            thuc_nhan_vals = [safe_int(r.get("doanhThuThucNhan", 0)) for r in filtered_tours]
 
             x_indices = list(range(len(tour_labels)))
-            bar_width = 0.25
 
-            x_da_thu = [i - bar_width for i in x_indices]
-            x_con_no = x_indices
-            x_da_hoan = [i + bar_width for i in x_indices]
-
-            # Vẽ các cột nhóm
-            ax_bar.bar(x_da_thu, da_thu_vals, bar_width, label='Đã thu', color=THEME["success"])
-            ax_bar.bar(x_con_no, con_no_vals, bar_width, label='Còn nợ', color=THEME["warning"])
-            ax_bar.bar(x_da_hoan, da_hoan_vals, bar_width, label='Đã hoàn', color=THEME["danger"])
+            # Vẽ các cột đơn
+            ax_bar.bar(x_indices, thuc_nhan_vals, width=0.5, label='Thực nhận', color=THEME["success"])
 
             ax_bar.set_title("Doanh thu thực nhận theo tour", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"], pad=15)
             ax_bar.set_ylabel("Số tiền (VND)", fontname="Times New Roman", fontsize=10, color=THEME["text"])
             ax_bar.set_xticks(x_indices)
             ax_bar.set_xticklabels(tour_labels, fontname="Times New Roman", fontsize=9, color=THEME["text"], rotation=15)
             
-            # Định dạng trục Y hiển thị dạng Triệu (M) hoặc Nghìn (k) để biểu đồ trông gọn gàng
             y_formatter = ticker.FuncFormatter(lambda y, pos: f'{int(y/1e6)}M' if y >= 1e6 else (f'{int(y/1e3)}k' if y >= 1e3 else f'{int(y)}'))
             ax_bar.yaxis.set_major_formatter(y_formatter)
             ax_bar.tick_params(axis='y', labelcolor=THEME["text"])
@@ -267,7 +257,7 @@ def _render_matplotlib_charts(parent, report):
             ax_bar.set_axisbelow(True)
             ax_bar.legend(prop={"family": "Times New Roman", "size": 9})
         else:
-            ax_bar.text(0.5, 0.5, "Không có dữ liệu các tour", ha="center", va="center", fontname="Times New Roman", color=THEME["muted"])
+            ax_bar.text(0.5, 0.5, "Chưa có dữ liệu để hiển thị.", ha="center", va="center", fontname="Times New Roman", color=THEME["muted"])
             ax_bar.set_title("Doanh thu thực nhận theo tour", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"])
             ax_bar.axis('off')
 
@@ -446,9 +436,11 @@ BOOKING_STATUSES = ["Mới tạo", "Đã cọc", "Đã thanh toán", "Đã hủy
 
 def refresh_tour_lifecycle_for_admin(app, show_popup=False):
     changes = refresh_all_tour_statuses(app["ql"])
-    if changes:
+    from core.app import normalize_all_tour_operation_notes
+    notes_changed = normalize_all_tour_operation_notes(app["ql"].data.get("tours", []))
+    if changes or notes_changed:
         app["ql"].save()
-        if show_popup:
+        if show_popup and changes:
             lines = ["Hệ thống đã tự động cập nhật trạng thái tour:"]
             for item in changes:
                 lines.append(
@@ -7091,17 +7083,23 @@ def show_detailed_notification_popup(root, notif, datastore):
     scrollbar.pack(side="right", fill="y")
 
     # Thông tin chi tiết
+    def get_val(keys, default="Không có"):
+        for k in keys:
+            val = notif.get(k)
+            if val is not None and str(val).strip() != "" and str(val).strip().upper() != "N/A":
+                return str(val).strip()
+        return default
+
     details_data = [
-        ("Mã thông báo", notif.get("maThongBao", notif.get("id", "N/A"))),
-        ("Người nhận", notif.get("tenHDV", notif.get("username", notif.get("recipient", "Hệ thống")))),
-        ("Vai trò nhận", notif.get("role", "Hướng dẫn viên")),
-        ("Tiêu đề", notif.get("title", notif.get("title", "N/A"))),
-        ("Loại thông báo", notif.get("eventType", notif.get("category", "Hệ thống"))),
-        ("Mã tour", notif.get("maTour", notif.get("tourId", "N/A"))),
-        ("Tên tour", notif.get("tenTour", notif.get("tourName", "N/A"))),
-        ("Ngày gửi", notif.get("date", notif.get("ngayGui", "Chưa rõ"))),
-        ("Trạng thái", notif.get("trangThai", "Chưa đọc")),
-        ("Mức độ ưu tiên", notif.get("priority", "Trung bình")),
+        ("Mã thông báo", get_val(["maThongBao", "id"], "Không có")),
+        ("Người nhận", get_val(["tenHDV", "username", "recipient"], "Không có")),
+        ("Vai trò nhận", get_val(["role", "receiverRole"], "Không có")),
+        ("Tiêu đề", get_val(["title"], "Không có")),
+        ("Loại thông báo", get_val(["eventType", "category"], "Hệ thống")),
+        ("Mã tour", get_val(["maTour", "tourId"], "Không có")),
+        ("Tên tour", get_val(["tenTour", "tourName"], "Không có")),
+        ("Ngày gửi", get_val(["date", "ngayGui"], "Chưa rõ")),
+        ("Mức độ ưu tiên", get_val(["priority"], "Trung bình")),
     ]
 
     info_grid = tk.Frame(scrollable_frame, bg=THEME["surface"], padx=14, pady=14)
@@ -7251,20 +7249,90 @@ def admin_notifications_tab(app):
     category_cb = ttk.Combobox(
         form_card, 
         textvariable=category_var, 
-        values=["Tất cả", "Khách hàng", "Hướng dẫn viên", "Tài khoản cụ thể"], 
+        values=["Tất cả", "Khách hàng", "Hướng dẫn viên", "Theo Tour", "Tài khoản cụ thể"], 
         state="readonly", 
         font=("Times New Roman", 11)
     )
     category_cb.pack(fill="x", pady=(0, 8))
 
-    # Trường 2: Người nhận cụ thể (ẩn/hiện/disable)
+    # Trường 2a: Chọn Tour (chỉ hiện khi chọn "Theo Tour")
+    tour_selector_lbl = tk.Label(form_card, text="Chọn Tour (gửi cho HDV phụ trách):", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"])
+    tour_selector_lbl.pack(anchor="w", pady=(4, 2))
+    tour_var = tk.StringVar()
+    all_tours = [
+        t for t in app["ql"].list_tours
+        if t.get("hdvPhuTrach")
+    ]
+    tour_display_list = [
+        f"{t.get('maTour', '')} - {t.get('ten', '')}"
+        for t in all_tours
+    ]
+    tour_cb = ttk.Combobox(
+        form_card,
+        textvariable=tour_var,
+        values=tour_display_list,
+        state="readonly",
+        font=("Times New Roman", 11)
+    )
+    tour_cb.pack(fill="x", pady=(0, 8))
+    # HDV info label (chỉ xuất hiện khi chọn Tour)
+    hdv_info_var = tk.StringVar(value="")
+    hdv_info_lbl = tk.Label(form_card, textvariable=hdv_info_var, font=("Times New Roman", 10, "italic"), bg=THEME["surface"], fg=THEME["success"])
+    hdv_info_lbl.pack(anchor="w", pady=(0, 6))
+    tour_selector_lbl.pack_forget()
+    tour_cb.pack_forget()
+    hdv_info_lbl.pack_forget()
+
+    # Trường 2b: Người nhận cụ thể (ẩn/hiện/disable)
     specific_lbl = tk.Label(form_card, text="Tên đăng nhập / Mã HDV cụ thể:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"])
     specific_lbl.pack(anchor="w", pady=(4, 2))
     recipient_ent = tk.Entry(form_card, font=("Times New Roman", 11), relief="solid", bd=1, state="disabled")
     recipient_ent.pack(fill="x", pady=(0, 8))
+    specific_lbl.pack_forget()
+    recipient_ent.pack_forget()
+
+    def on_tour_selected(_event=None):
+        sel = tour_var.get()
+        if not sel:
+            hdv_info_var.set("")
+            return
+        # Lấy mã tour từ display string "MATOUR - TenTour"
+        ma_t = sel.split(" - ")[0].strip()
+        tour_obj = next((t for t in all_tours if str(t.get("maTour", "")).strip() == ma_t), None)
+        if not tour_obj:
+            hdv_info_var.set("Không tìm thấy thông tin tour.")
+            return
+        ma_hdv_val = str(tour_obj.get("hdvPhuTrach", "")).strip()
+        if not ma_hdv_val:
+            hdv_info_var.set("⚠ Tour này chưa có HDV phụ trách!")
+            return
+        hdv_obj = app["ql"].find_hdv(ma_hdv_val)
+        if hdv_obj:
+            ten_hdv_val = hdv_obj.get("tenHDV", ma_hdv_val)
+            hdv_info_var.set(f"✓ HDV phụ trách: {ten_hdv_val} (Mã: {ma_hdv_val})")
+        else:
+            hdv_info_var.set(f"Mã HDV: {ma_hdv_val} (Chưa có thông tin hồ sơ)")
+
+    tour_cb.bind("<<ComboboxSelected>>", on_tour_selected)
 
     def on_category_changed(_event=None):
-        if category_var.get() == "Tài khoản cụ thể":
+        cat = category_var.get()
+        # Reset
+        tour_selector_lbl.pack_forget()
+        tour_cb.pack_forget()
+        hdv_info_lbl.pack_forget()
+        specific_lbl.pack_forget()
+        recipient_ent.pack_forget()
+        hdv_info_var.set("")
+        tour_var.set("")
+
+        if cat == "Theo Tour":
+            tour_selector_lbl.pack(anchor="w", pady=(4, 2))
+            tour_cb.pack(fill="x", pady=(0, 4))
+            hdv_info_lbl.pack(anchor="w", pady=(0, 8))
+        elif cat == "Tài khoản cụ thể":
+            specific_lbl.pack(anchor="w", pady=(4, 2))
+            recipient_ent.pack(fill="x", pady=(0, 8))
             recipient_ent.config(state="normal")
             recipient_ent.focus()
         else:
@@ -7350,9 +7418,6 @@ def admin_notifications_tab(app):
             "priority": priority_val or "Trung bình",
             "date": current_time,
             "createdAt": current_time,
-            "isRead": False,
-            "read": False,
-            "status": "Chưa đọc",
             "sender": "admin",
             "maTour": "",
             "tenTour": "",
@@ -7373,6 +7438,38 @@ def admin_notifications_tab(app):
             new_notif["receiverRole"] = "HDV"
             new_notif["role"] = "HDV"
             new_notif["targetRole"] = "HDV"
+        elif category == "Theo Tour":
+            # Yêu cầu 2: Gửi thông báo theo Tour → tìm HDV phụ trách
+            sel_tour = tour_var.get().strip()
+            if not sel_tour:
+                return messagebox.showwarning("Lỗi", "Vui lòng chọn tour!")
+            ma_t = sel_tour.split(" - ")[0].strip()
+            tour_obj = next((t for t in all_tours if str(t.get("maTour", "")).strip() == ma_t), None)
+            if not tour_obj:
+                return messagebox.showwarning("Lỗi", f"Không tìm thấy tour '{ma_t}'!")
+            ma_hdv_val = str(tour_obj.get("hdvPhuTrach", "")).strip()
+            if not ma_hdv_val:
+                return messagebox.showwarning("Lỗi", f"Tour '{ma_t}' chưa có HDV phụ trách!")
+            hdv_obj = app["ql"].find_hdv(ma_hdv_val)
+            if not hdv_obj:
+                return messagebox.showwarning("Lỗi", f"Không tìm thấy hồ sơ HDV '{ma_hdv_val}'. Hãy kiểm tra lại!")
+            # Kiểm tra username HDV
+            username_hdv = hdv_obj.get("username") or ma_hdv_val
+            if not username_hdv:
+                return messagebox.showwarning("Lỗi", f"HDV '{ma_hdv_val}' chưa có tên đăng nhập (username)!")
+            ten_hdv_val = hdv_obj.get("tenHDV", ma_hdv_val)
+            ten_tour_val = tour_obj.get("ten", "")
+            new_notif["eventType"] = "guide_direct"
+            new_notif["maHDV"] = ma_hdv_val
+            new_notif["tenHDV"] = ten_hdv_val
+            new_notif["username"] = username_hdv
+            new_notif["receiverUsername"] = username_hdv
+            new_notif["targetUsername"] = username_hdv
+            new_notif["receiverRole"] = "HDV"
+            new_notif["role"] = "HDV"
+            new_notif["targetRole"] = "HDV"
+            new_notif["maTour"] = ma_t
+            new_notif["tenTour"] = ten_tour_val
         elif category == "Tài khoản cụ thể":
             if not recipient_val:
                 return messagebox.showwarning("Lỗi", "Vui lòng nhập tài khoản người nhận cụ thể!")
@@ -7448,8 +7545,8 @@ def admin_notifications_tab(app):
     notif_wrapper = tk.Frame(right_col, bg=THEME["surface"], bd=1, relief="solid")
     notif_wrapper.pack(fill="both", expand=True)
 
-    # treeview - Nhiều cột hơn
-    notif_tv = ttk.Treeview(notif_wrapper, columns=("maTB", "nguoinhan", "vaitro", "tieude", "noidung", "loai", "ngay", "trangthai", "matour", "tentour"), show="headings", height=15)
+    # treeview - Không hiển thị trạng thái đọc/chưa đọc (Yêu cầu 4)
+    notif_tv = ttk.Treeview(notif_wrapper, columns=("maTB", "nguoinhan", "vaitro", "tieude", "noidung", "loai", "ngay", "matour", "tentour"), show="headings", height=15)
     notif_tv.heading("maTB", text="Mã TB")
     notif_tv.heading("nguoinhan", text="Người nhận")
     notif_tv.heading("vaitro", text="Vai trò nhận")
@@ -7457,20 +7554,18 @@ def admin_notifications_tab(app):
     notif_tv.heading("noidung", text="Nội dung")
     notif_tv.heading("loai", text="Loại")
     notif_tv.heading("ngay", text="Ngày gửi")
-    notif_tv.heading("trangthai", text="Trạng thái")
     notif_tv.heading("matour", text="Mã Tour")
     notif_tv.heading("tentour", text="Tên Tour")
 
     notif_tv.column("maTB", width=70, minwidth=60, anchor="center", stretch=False)
-    notif_tv.column("nguoinhan", width=100, minwidth=80, anchor="w", stretch=False)
-    notif_tv.column("vaitro", width=80, minwidth=70, anchor="w", stretch=False)
-    notif_tv.column("tieude", width=120, minwidth=100, anchor="w", stretch=False)
-    notif_tv.column("noidung", width=150, minwidth=120, anchor="w", stretch=True)
+    notif_tv.column("nguoinhan", width=110, minwidth=80, anchor="w", stretch=False)
+    notif_tv.column("vaitro", width=90, minwidth=70, anchor="w", stretch=False)
+    notif_tv.column("tieude", width=130, minwidth=100, anchor="w", stretch=False)
+    notif_tv.column("noidung", width=180, minwidth=120, anchor="w", stretch=True)
     notif_tv.column("loai", width=90, minwidth=80, anchor="w", stretch=False)
     notif_tv.column("ngay", width=130, minwidth=110, anchor="center", stretch=False)
-    notif_tv.column("trangthai", width=80, minwidth=70, anchor="center", stretch=False)
-    notif_tv.column("matour", width=70, minwidth=60, anchor="center", stretch=False)
-    notif_tv.column("tentour", width=120, minwidth=100, anchor="w", stretch=False)
+    notif_tv.column("matour", width=80, minwidth=60, anchor="center", stretch=False)
+    notif_tv.column("tentour", width=130, minwidth=100, anchor="w", stretch=False)
 
     notif_sy = ttk.Scrollbar(notif_wrapper, orient="vertical", command=notif_tv.yview)
     notif_sx = ttk.Scrollbar(notif_wrapper, orient="horizontal", command=notif_tv.xview)
@@ -7530,12 +7625,8 @@ def admin_notifications_tab(app):
         ngay = shorten_text(n.get("date", n.get("ngayGui", "")), 16)
         enriched["date"] = n.get("date", n.get("ngayGui", ""))
 
-        # Trạng thái (đọc/chưa đọc)
-        trangthai = n.get("trangThai", n.get("status", "Chưa đọc"))
-        enriched["trangThai"] = trangthai
-
         # Mã tour
-        matour = shorten_text(n.get("maTour", ""), 15)
+        matour = shorten_text(n.get("maTour", ""), 15) or "-"
         
         # Tên tour
         tentour = shorten_text(n.get("tenTour", ""), 20)
@@ -7571,7 +7662,6 @@ def admin_notifications_tab(app):
             noidung,
             type_label,
             ngay,
-            trangthai,
             matour,
             tentour,
         ))

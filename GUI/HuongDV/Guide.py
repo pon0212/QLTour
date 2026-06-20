@@ -1046,18 +1046,42 @@ def khoi_tao_hdv(root, user_data=None):
         app["current_tab"] = "stats"
         app["ql"].load()
 
-        # 1. Lọc đánh giá đúng HDV đang đăng nhập
+        # 1. Lọc đánh giá đúng HDV đăng nhập (3 bước ưu tiên)
+        from core.app import get_review_rating
         my_reviews = []
+        ma_hdv_upper = str(ma_hdv).strip().upper()
         for r in app["ql"].list_reviews:
-            review_status = str(r.get("trangThai", "")).strip().lower()
-            if bool(r.get("hidden")) or review_status in {"hidden", "deleted", "archived", "đã ẩn", "da an", "đã xóa", "da xoa"}:
+            if not isinstance(r, dict):
                 continue
-            target = str(r.get("target", "")).strip().lower()
-            if target not in {"hdv", "guide"}:
-                continue
+
             ma_hdv_r = str(r.get("maHDV", "")).strip().upper()
-            target_id_r = str(r.get("target_id", "")).strip().upper()
-            if ma_hdv_r == ma_hdv.upper() or target_id_r == ma_hdv.upper():
+            ma_tour_r = str(r.get("maTour", "")).strip().upper()
+            ma_booking_r = str(r.get("maBooking", "")).strip().upper()
+
+            matched = False
+            # Buoc 1: maHDV trung truc tiep
+            if ma_hdv_r and ma_hdv_r == ma_hdv_upper:
+                matched = True
+            # Buoc 2: Thieu maHDV, doi chieu qua maTour -> hdvPhuTrach
+            elif not ma_hdv_r and ma_tour_r:
+                tour = app["ql"].find_tour(ma_tour_r)
+                if tour and str(tour.get("hdvPhuTrach", "")).strip().upper() == ma_hdv_upper:
+                    matched = True
+            # Buoc 3: Thieu ca maHDV lan maTour, tim qua maBooking -> maTour -> hdvPhuTrach
+            elif not ma_hdv_r and not ma_tour_r and ma_booking_r:
+                found_booking = None
+                for bk in app["ql"].data.get("bookings", []):
+                    if str(bk.get("maBooking", "")).strip().upper() == ma_booking_r:
+                        found_booking = bk
+                        break
+                if found_booking:
+                    ma_tour_from_bk = str(found_booking.get("maTour", "")).strip().upper()
+                    if ma_tour_from_bk:
+                        tour = app["ql"].find_tour(ma_tour_from_bk)
+                        if tour and str(tour.get("hdvPhuTrach", "")).strip().upper() == ma_hdv_upper:
+                            matched = True
+
+            if matched:
                 my_reviews.append(r)
 
         # Đánh số REVxxx tự động nếu thiếu
@@ -1068,18 +1092,16 @@ def khoi_tao_hdv(root, user_data=None):
         # Tính toán thống kê chi tiết từ review thực tế
         valid_ratings = []
         for r in my_reviews:
-            val = r.get("rating")
-            if val == "":
+            rating_num = get_review_rating(r)
+            if rating_num == 0:
+                # Fallback: tính từ điểm thành phần (skill/attitude/problem)
                 skill = safe_int(r.get("skill", 0))
                 attitude = safe_int(r.get("attitude", 0))
                 problem = safe_int(r.get("problem", r.get("problem_solving", 0)))
                 scores_temp = [x for x in [skill, attitude, problem] if x > 0]
-                rating_num = round(sum(scores_temp) / len(scores_temp) / 20, 1) if scores_temp else 5.0
-            else:
-                try:
-                    rating_num = float(val)
-                except (TypeError, ValueError):
-                    rating_num = 5.0
+                # Chỉ nhận nếu tính được hợp lệ
+                if scores_temp:
+                    rating_num = round(sum(scores_temp) / len(scores_temp) / 20, 1)
             if 1 <= rating_num <= 5:
                 valid_ratings.append(rating_num)
 
@@ -1267,18 +1289,13 @@ def khoi_tao_hdv(root, user_data=None):
             tour_d = app["ql"].find_tour(ma_tour_d)
             ten_tour_d = str(tour_d.get("ten", "")).strip() if tour_d else ""
             
-            rating_val_d = r.get("rating", "")
-            if rating_val_d == "":
+            rating_val_d = get_review_rating(r)
+            if rating_val_d == 0:
                 skill = safe_int(r.get("skill", 0))
                 attitude = safe_int(r.get("attitude", 0))
                 problem = safe_int(r.get("problem", r.get("problem_solving", 0)))
                 scores_temp = [x for x in [skill, attitude, problem] if x > 0]
-                rating_val_d = round(sum(scores_temp) / len(scores_temp) / 20, 1) if scores_temp else 5.0
-            else:
-                try:
-                    rating_val_d = float(rating_val_d)
-                except ValueError:
-                    rating_val_d = 5.0
+                rating_val_d = round(sum(scores_temp) / len(scores_temp) / 20, 1) if scores_temp else 0.0
 
             review_content_d = str(r.get("content") or r.get("comment") or r.get("noiDung") or r.get("danhGia") or "").strip()
             review_date_d = str(r.get("date") or r.get("ngayGui") or r.get("thoiGian") or r.get("ngay") or "").strip()
@@ -1309,14 +1326,15 @@ def khoi_tao_hdv(root, user_data=None):
             details = [
                 ("Mã đánh giá", r.get("maReview", "-")),
                 ("Khách hàng", f"{fullname_d} ({username_d})" if username_d else fullname_d),
-                ("Mã booking", ma_booking_d),
-                ("Mã tour", ma_tour_d),
+                ("Mã booking", ma_booking_d or "-"),
+                ("Mã tour", ma_tour_d or "-"),
                 ("Tên tour", ten_tour_d or "Không tìm thấy"),
                 ("Mã HDV", ma_hdv),
                 ("Tên HDV", ten_hdv),
-                ("Điểm đánh giá", f"{rating_val_d:.1f} / 5.0"),
-                ("Ngày gửi", review_date_d),
+                ("Điểm đánh giá", f"{rating_val_d:.1f} ⭐ / 5.0" if rating_val_d > 0 else "Chưa có đánh giá"),
+                ("Ngày gửi", review_date_d or "-"),
             ]
+
 
             for idx, (lbl, val) in enumerate(details):
                 row_idx = idx // 2
@@ -1364,21 +1382,20 @@ def khoi_tao_hdv(root, user_data=None):
             if not tour_text:
                 tour_text = "Không xác định"
 
-            rating_value = r.get("rating", "")
-            if rating_value == "":
+            rating_value = get_review_rating(r)
+            if rating_value == 0:
                 skill = safe_int(r.get("skill", 0))
                 attitude = safe_int(r.get("attitude", 0))
                 problem = safe_int(r.get("problem", r.get("problem_solving", 0)))
                 scores_temp = [x for x in [skill, attitude, problem] if x > 0]
-                rating_value = round(sum(scores_temp) / len(scores_temp) / 20, 1) if scores_temp else 5.0
-            else:
-                try:
-                    rating_value = float(rating_value)
-                except ValueError:
-                    rating_value = 5.0
+                rating_value = round(sum(scores_temp) / len(scores_temp) / 20, 1) if scores_temp else 0.0
 
-            stars = "⭐" * int(round(rating_value))
-            rating_text = f"{stars}  {rating_value:.1f} / 5.0"
+            if rating_value > 0:
+                stars = "⭐" * int(round(rating_value))
+                rating_text = f"{stars}  {rating_value:.1f} / 5.0"
+            else:
+                rating_text = "Chưa có đánh giá"
+
             review_date = str(r.get("date") or r.get("ngayGui") or r.get("thoiGian") or r.get("ngay") or "Chưa rõ").strip()
             review_content = str(r.get("content") or r.get("comment") or r.get("noiDung") or r.get("danhGia") or "").strip()
 
@@ -1396,7 +1413,7 @@ def khoi_tao_hdv(root, user_data=None):
             row2 = tk.Frame(card, bg="#ffffff")
             row2.pack(fill="x", pady=(0, 8))
             tour_lbl_text = f"Tour: {tour_text}   |   Ngày gửi: {review_date}"
-            tk.Label(row2, text=tour_lbl_text, font=("Times New Roman", 9.5, "italic"), fg=THEME["muted"], bg="#ffffff").pack(side="left")
+            tk.Label(row2, text=tour_lbl_text, font=("Times New Roman", 10, "italic"), fg=THEME["muted"], bg="#ffffff").pack(side="left")
 
             # Hàng 3: Nội dung đánh giá
             content_lbl = tk.Label(card, text=review_content, font=("Times New Roman", 11), fg=THEME["text"], bg="#ffffff", justify="left", anchor="w", wraplength=700)
@@ -1415,7 +1432,7 @@ def khoi_tao_hdv(root, user_data=None):
                 reply_text_frame.pack(side="left", fill="both", expand=True, padx=(8, 0))
 
                 reply_title = f"Phản hồi từ Admin ({r.get('adminReplyBy', 'Quản trị viên')} - {r.get('adminReplyDate', '')}):"
-                tk.Label(reply_text_frame, text=reply_title, font=("Times New Roman", 9.5, "bold"), fg="#0ea5e9", bg="#f8fafc", anchor="w").pack(fill="x")
+                tk.Label(reply_text_frame, text=reply_title, font=("Times New Roman", 10, "bold"), fg="#0ea5e9", bg="#f8fafc", anchor="w").pack(fill="x")
                 tk.Label(reply_text_frame, text=admin_reply, font=("Times New Roman", 10.5, "italic"), fg=THEME["text"], bg="#f8fafc", justify="left", anchor="w", wraplength=650).pack(fill="x", pady=(2, 0))
 
             bind_double_click(card, lambda event, r_item=r: show_review_detail(r_item))
@@ -1897,7 +1914,7 @@ def khoi_tao_hdv(root, user_data=None):
             header_badge.config(text="BÁO CÁO CÁ NHÂN", bg="#ede9fe", fg="#7c3aed")
         elif title == "Gửi thông báo":
             set_badge("CHẾ ĐỘ THÔNG BÁO", "#7f1d1d", "#fee2e2")
-            header_badge.config(text="THÔNG BÁO KHẨN", bg="#fee2e2", fg="#dc2626")
+            header_badge.config(text="THÔNG BÁO", bg="#fee2e2", fg="#dc2626")
         else:
             set_badge("CẬP NHẬT TÀI KHOẢN", "#78350f", "#fef3c7")
             header_badge.config(text="CÀI ĐẶT CÁ NHÂN", bg="#fef3c7", fg="#d97706")

@@ -450,6 +450,55 @@ def sync_ghi_chu_dieu_hanh(tour: dict):
             tour["ghiChuDieuHanh"] = not_open_note
 
 
+def get_operation_note_by_tour_status(status):
+    notes = {
+        "Sắp mở bán": "Tour đang trong giai đoạn chuẩn bị, cần hoàn thiện lịch trình, phân công HDV và kiểm tra thông tin mở bán.",
+        "Đang mở bán": "Tour đang mở bán, cần theo dõi số lượng khách đăng ký, tình trạng thanh toán và hỗ trợ khách đặt tour.",
+        "Đã đủ khách": "Tour đã đủ số lượng khách dự kiến, cần kiểm tra thanh toán, danh sách khách và chuẩn bị điều hành trước ngày khởi hành.",
+        "Đang diễn ra": "Tour đang được triển khai, cần theo dõi lịch trình, hỗ trợ HDV và xử lý kịp thời các phát sinh.",
+        "Đã kết thúc": "Tour đã hoàn tất, cần tổng hợp doanh thu, kiểm tra công nợ, ghi nhận đánh giá khách hàng và lưu hồ sơ điều hành.",
+        "Đã hủy": "Tour đã hủy, cần kiểm tra booking liên quan, xử lý hoàn tiền nếu có và lưu lý do hủy tour.",
+    }
+    return notes.get(status, "")
+
+
+def normalize_all_tour_operation_notes(tours):
+    changed = False
+    for tour in tours:
+        if not isinstance(tour, dict):
+            continue
+        status = tour.get("trangThai", "")
+        note = tour.get("ghiChuDieuHanh", "")
+        if note is None:
+            note = ""
+        note = str(note).strip()
+        note_lower = note.lower()
+
+        should_update = False
+        default_note = get_operation_note_by_tour_status(status)
+
+        # Rule 1: ghiChuDieuHanh rỗng
+        if not note:
+            should_update = True
+        # Rule 2: Tour đang mở bán nhưng ghi chú chứa nội dung liên quan hoàn tất hoặc kết thúc
+        elif status == "Đang mở bán" and ("hoàn tất" in note_lower or "hoàn thành" in note_lower or "kết thúc" in note_lower):
+            should_update = True
+        # Rule 3: Tour đã kết thúc nhưng ghi chú chứa nội dung liên quan đang mở bán
+        elif status == "Đã kết thúc" and "mở bán" in note_lower:
+            should_update = True
+        # Rule 4: Tour đã hủy nhưng ghi chú không nhắc đến hủy/booking/hoàn tiền
+        elif status == "Đã hủy" and not any(k in note_lower for k in ("hủy", "booking", "hoàn tiền")):
+            should_update = True
+        # Rule 5: Sai lệch rõ ràng khác
+        elif status == "Sắp mở bán" and ("đang diễn ra" in note_lower or "hoàn tất" in note_lower or "kết thúc" in note_lower):
+            should_update = True
+        elif status == "Đang diễn ra" and ("mở bán" in note_lower or "hoàn tất" in note_lower or "kết thúc" in note_lower):
+            should_update = True
+
+        if should_update and default_note:
+            tour["ghiChuDieuHanh"] = default_note
+            changed = True
+    return changed
 
 
 def parse_duration_days(value, default: int = 1) -> int:
@@ -3064,6 +3113,23 @@ def is_review_hidden(review) -> bool:
     return bool(review.get("hidden", False)) or str(review.get("trangThai", "")).strip() == "Đã ẩn"
 
 
+def get_review_rating(review: dict) -> int:
+    """
+    Trả về số sao đánh giá hợp lệ từ 1 đến 5 từ đối tượng đánh giá.
+    """
+    if not isinstance(review, dict):
+        return 0
+    for key in ("rating", "soSao", "diem", "ratingTour", "ratingHDV"):
+        value = review.get(key)
+        try:
+            rating = int(float(value))
+            if 1 <= rating <= 5:
+                return rating
+        except (TypeError, ValueError):
+            pass
+    return 0
+
+
 def normalize_review_for_display(review, datastore=None):
     normalized = normalize_review_item(review or {}, include_rating=True, include_ma_hdv=True)
     
@@ -3617,6 +3683,15 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
                 "hinhThucThanhToan": str(booking.get("hinhThucThanhToan", "Chuyển Khoản")).strip(),
             }
         )
+
+    # Explicitly calculate Doanh thu thực nhận = Đã thu - Đã hoàn for overview and rows
+    overview["doanhThuThuan"] = overview["daThu"] - overview["tongHoanTien"]
+    for row in by_tour.values():
+        row["doanhThuThucNhan"] = row["daThu"] - row["daHoan"]
+    for row in by_month.values():
+        row["doanhThuThucNhan"] = row["daThu"] - row["daHoan"]
+    for row in by_quarter.values():
+        row["doanhThuThucNhan"] = row["daThu"] - row["daHoan"]
 
     by_month_processed = []
     for k, row in by_month.items():
