@@ -3033,6 +3033,12 @@ def find_review_by_id(datastore, ma_review):
     return None
 
 
+def is_review_hidden(review) -> bool:
+    if not review:
+        return False
+    return bool(review.get("hidden", False)) or str(review.get("trangThai", "")).strip() == "Đã ẩn"
+
+
 def normalize_review_for_display(review, datastore=None):
     normalized = normalize_review_item(review or {}, include_rating=True, include_ma_hdv=True)
     ma_tour = str(normalized.get("maTour", "")).strip()
@@ -3046,10 +3052,31 @@ def normalize_review_for_display(review, datastore=None):
             guide = datastore.find_hdv(ma_hdv)
             if isinstance(guide, dict):
                 normalized["tenHDV"] = str(guide.get("tenHDV", "")).strip()
+    
+    # Resolve customer name if missing or blank
+    username = normalized.get("username", "")
+    if not normalized.get("fullname") and datastore is not None and username:
+        user_info = datastore.find_user(username) if hasattr(datastore, "find_user") else None
+        if not user_info and hasattr(datastore, "data"):
+            users_list = datastore.data.get("users", [])
+            user_info = next((u for u in users_list if str(u.get("username", "")).strip().lower() == str(username).strip().lower()), None)
+        if user_info:
+            normalized["fullname"] = str(user_info.get("fullname", user_info.get("name", ""))).strip()
+            
     normalized["adminReply"] = str((review or {}).get("adminReply", "")).strip()
     normalized["adminReplyDate"] = str((review or {}).get("adminReplyDate", "")).strip()
     normalized["adminReplyBy"] = str((review or {}).get("adminReplyBy", "")).strip()
-    normalized["trangThai"] = str((review or {}).get("trangThai", "")).strip()
+    
+    # Hidden details fallback
+    normalized["hiddenReason"] = str((review or {}).get("hiddenReason", "")).strip()
+    normalized["hiddenDate"] = str((review or {}).get("hiddenDate", "")).strip()
+    normalized["hiddenBy"] = str((review or {}).get("hiddenBy", "")).strip()
+    
+    # Status
+    trang_thai = str((review or {}).get("trangThai", "")).strip()
+    if not trang_thai:
+        trang_thai = "Đã ẩn" if bool((review or {}).get("hidden", False)) else "Hiển thị"
+    normalized["trangThai"] = trang_thai
     return normalized
 
 
@@ -3370,19 +3397,14 @@ def _quarter_key(month_key):
     return f"{year_text}-Q{quarter}"
 
 
-def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `build_revenue_report` (build revenue report).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
+def _find_tour_name_with_booking(datastore, ma_tour, booking=None):
+    if booking and booking.get("tenTour"):
+        return str(booking.get("tenTour")).strip()
+    name = _find_tour_name(datastore, ma_tour)
+    return name if name else "Tour đã xóa"
+
+
+def build_revenue_report(datastore, actor: str = "", role: str = "admin", month: str = None, year: str = None, query: str = None) -> dict:
     if not _is_admin_role(role):
         return {
             "overview": {
@@ -3423,13 +3445,38 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dic
     }
     booking_details = []
 
-    tours = getattr(datastore, "list_tours", [])
-    active_tour_codes = {str(t.get("ma", "")).strip().upper() for t in tours if t.get("ma")}
-
     for booking in _iter_bookings(datastore):
         ma_tour = str(booking.get("maTour", "")).strip()
-        if ma_tour.upper() not in active_tour_codes:
-            continue
+
+        # 1. Lọc theo mã hoặc tên tour (query)
+        if query:
+            q = str(query).strip().lower()
+            tour_name_lower = _find_tour_name_with_booking(datastore, ma_tour, booking).lower()
+            if q not in ma_tour.lower() and q not in tour_name_lower:
+                continue
+
+        # 2. Trích xuất tháng và năm từ ngayDat
+        ngay_dat = str(booking.get("ngayDat", "")).strip()
+        month_val = ""
+        year_val = ""
+        if ngay_dat:
+            try:
+                parts = ngay_dat.split("/")
+                if len(parts) >= 3:
+                    month_val = parts[1].zfill(2)
+                    year_val = parts[2].split()[0]
+            except Exception:
+                pass
+
+        # Lọc theo tháng
+        if month and month != "Tất cả":
+            if month_val != month.zfill(2):
+                continue
+
+        # Lọc theo năm
+        if year and year != "Tất cả":
+            if year_val != year:
+                continue
 
         overview["tongBooking"] += 1
 
@@ -3448,21 +3495,20 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dic
             overview["dangChoHoan"] += 1
             overview["soTienChoHoan"] += max(safe_int(booking.get("soTienHoan", 0)), paid)
 
+        tour_id = ma_tour or "Không rõ"
         tour_row = by_tour.setdefault(
-            ma_tour or "Không rõ",
+            tour_id,
             {
-                "maTour": ma_tour or "Không rõ",
-                "tenTour": _find_tour_name(datastore, ma_tour),
+                "maTour": tour_id,
+                "tenTour": _find_tour_name_with_booking(datastore, ma_tour, booking),
                 "tongBooking": 0,
                 "bookingHieuLuc": 0,
-                "tongNguoi": 0,
+                "tongKhach": 0,
                 "tongPhaiThu": 0,
-                "doanhThuDuKien": 0,
                 "daThu": 0,
+                "daHoan": 0,
                 "conNo": 0,
-                "doanhThuGop": 0,
-                "hoanTien": 0,
-                "doanhThuThuan": 0,
+                "doanhThuThucNhan": 0,
             },
         )
         month_row = by_month.setdefault(
@@ -3471,14 +3517,12 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dic
                 "ky": month_key,
                 "tongBooking": 0,
                 "bookingHieuLuc": 0,
-                "tongNguoi": 0,
+                "tongKhach": 0,
                 "tongPhaiThu": 0,
-                "doanhThuDuKien": 0,
                 "daThu": 0,
+                "daHoan": 0,
                 "conNo": 0,
-                "doanhThuGop": 0,
-                "hoanTien": 0,
-                "doanhThuThuan": 0,
+                "doanhThuThucNhan": 0,
             },
         )
         quarter_row = by_quarter.setdefault(
@@ -3487,14 +3531,12 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dic
                 "ky": quarter_key,
                 "tongBooking": 0,
                 "bookingHieuLuc": 0,
-                "tongNguoi": 0,
+                "tongKhach": 0,
                 "tongPhaiThu": 0,
-                "doanhThuDuKien": 0,
                 "daThu": 0,
+                "daHoan": 0,
                 "conNo": 0,
-                "doanhThuGop": 0,
-                "hoanTien": 0,
-                "doanhThuThuan": 0,
+                "doanhThuThucNhan": 0,
             },
         )
 
@@ -3510,11 +3552,9 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dic
             for row in (tour_row, month_row, quarter_row):
                 row["bookingHieuLuc"] += 1
                 row["tongPhaiThu"] += total
-                row["doanhThuDuKien"] += total
                 row["daThu"] += paid
                 row["conNo"] += debt
-                row["doanhThuGop"] += paid
-                row["doanhThuThuan"] += paid
+                row["doanhThuThucNhan"] += paid
         else:
             overview["daThu"] += paid
             overview["tongHoanTien"] += refunded
@@ -3522,19 +3562,21 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dic
             
             for row in (tour_row, month_row, quarter_row):
                 row["daThu"] += paid
-                row["hoanTien"] += refunded
-                row["doanhThuThuan"] += (paid - refunded)
+                row["daHoan"] += refunded
+                row["doanhThuThucNhan"] += (paid - refunded)
 
         for row in (tour_row, month_row, quarter_row):
             row["tongBooking"] += 1
-            row["tongNguoi"] += people
+            row["tongKhach"] += people
 
         booking_details.append(
             {
                 "maBooking": str(booking.get("maBooking", "")).strip(),
                 "maTour": ma_tour or "Không rõ",
-                "tenTour": _find_tour_name(datastore, ma_tour),
+                "tenTour": _find_tour_name_with_booking(datastore, ma_tour, booking),
                 "username": str(booking.get("usernameDat", booking.get("username", ""))).strip(),
+                "tenKhach": str(booking.get("tenKhach", "")).strip(),
+                "date": ngay_dat,
                 "trangThai": status,
                 "hieuLuc": is_active,
                 "tongPhaiThu": total if is_active else 0,
@@ -3542,13 +3584,40 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin") -> dic
                 "daHoan": refunded,
                 "conNo": debt,
                 "doanhThuThucNhan": paid - refunded,
+                "hinhThucThanhToan": str(booking.get("hinhThucThanhToan", "Chuyển Khoản")).strip(),
             }
         )
 
+    by_month_processed = []
+    for k, row in by_month.items():
+        if k == "Không rõ":
+            row["month"] = ""
+            row["year"] = ""
+            row["label"] = "Không rõ thời gian"
+        else:
+            try:
+                y, m = k.split("-")
+                row["month"] = m
+                row["year"] = y
+                row["label"] = f"{m}/{y}"
+            except Exception:
+                row["month"] = ""
+                row["year"] = ""
+                row["label"] = "Không rõ thời gian"
+        by_month_processed.append(row)
+
+    def month_sort_key(row):
+        ky = row["ky"]
+        if ky == "Không rõ":
+            return ("", "")
+        return tuple(ky.split("-"))
+
+    by_month_sorted = sorted(by_month_processed, key=month_sort_key, reverse=True)
+
     return {
         "overview": overview,
-        "by_tour": sorted(by_tour.values(), key=lambda row: (row["maTour"], row["tenTour"])),
-        "by_month": sorted(by_month.values(), key=lambda row: row["ky"]),
+        "by_tour": sorted(by_tour.values(), key=lambda row: row["maTour"]),
+        "by_month": by_month_sorted,
         "by_quarter": sorted(by_quarter.values(), key=lambda row: row["ky"]),
         "booking_details": booking_details,
     }

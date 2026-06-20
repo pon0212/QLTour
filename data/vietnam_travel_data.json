@@ -1,4 +1,9 @@
 {
+  "admin": {
+    "username": "admin",
+    "fullname": "Nguyễn Thị Phương Nhung",
+    "password": "$2b$12$omvQUJQX2IiAh4NXgt.KreaCu0lk0gejPIwOixpRPWt6dNs0o7Ux6"
+  },
   "hdv": [
     {
       "maHDV": "HDV01",
@@ -451,9 +456,8 @@
       "diemDi": "Tp.hcm",
       "diemDen": "Cần Thơ",
       "ghiChuDieuHanh": "Tour sắp mở bán, đang chuẩn bị chương trình và lịch trình chi tiết.",
-      "trangThai": "Sắp mở bán",
+      "trangThai": "Đang mở bán",
       "hdvPhuTrach": "HDV08",
-      "tourState": "draft",
       "lichTrinh": [
         {
           "ngay": "Ngày 1",
@@ -483,7 +487,8 @@
         }
       ],
       "soLuotDaDat": 0,
-      "soLuotMoBan": 50
+      "soLuotMoBan": 50,
+      "tourState": "open"
     },
     {
       "ma": "T03",
@@ -1247,11 +1252,6 @@
       "trangThai": "Đang hoạt động"
     }
   ],
-  "admin": {
-    "username": "admin",
-    "fullname": "Nguyễn Thị Phương Nhung",
-    "password": "$2b$12$omvQUJQX2IiAh4NXgt.KreaCu0lk0gejPIwOixpRPWt6dNs0o7Ux6"
-  },
   "maVoucher": [
     {
       "maVoucher": "NEW50",

@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Module tích hợp API thật cho geocoding và thời tiết.
-Không dùng fallback tọa độ thủ công.
-"""
+
 
 import json
 import time
