@@ -217,10 +217,10 @@ def _render_matplotlib_charts(parent, report):
                 autotext.set_color('white')
                 autotext.set_fontsize(9)
                 autotext.set_weight('bold')
-            ax_pie.set_title("Cơ cấu tài chính toàn hệ thống", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"], pad=15)
+            ax_pie.set_title("Cơ cấu dòng tiền booking", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"], pad=15)
         else:
             ax_pie.text(0.5, 0.5, "Không có dữ liệu tài chính", ha="center", va="center", fontname="Times New Roman", color=THEME["muted"])
-            ax_pie.set_title("Cơ cấu tài chính hệ thống", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"])
+            ax_pie.set_title("Cơ cấu dòng tiền booking", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"])
             ax_pie.axis('off')
 
         # 2. Biểu đồ cột: Cơ cấu tài chính Đã thu, Còn nợ, Đã hoàn theo từng tour
@@ -251,7 +251,7 @@ def _render_matplotlib_charts(parent, report):
             ax_bar.bar(x_con_no, con_no_vals, bar_width, label='Còn nợ', color=THEME["warning"])
             ax_bar.bar(x_da_hoan, da_hoan_vals, bar_width, label='Đã hoàn', color=THEME["danger"])
 
-            ax_bar.set_title("Doanh thu & Công nợ theo tour", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"], pad=15)
+            ax_bar.set_title("Doanh thu thực nhận theo tour", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"], pad=15)
             ax_bar.set_ylabel("Số tiền (VND)", fontname="Times New Roman", fontsize=10, color=THEME["text"])
             ax_bar.set_xticks(x_indices)
             ax_bar.set_xticklabels(tour_labels, fontname="Times New Roman", fontsize=9, color=THEME["text"], rotation=15)
@@ -266,7 +266,7 @@ def _render_matplotlib_charts(parent, report):
             ax_bar.legend(prop={"family": "Times New Roman", "size": 9})
         else:
             ax_bar.text(0.5, 0.5, "Không có dữ liệu các tour", ha="center", va="center", fontname="Times New Roman", color=THEME["muted"])
-            ax_bar.set_title("Doanh thu & Công nợ theo tour", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"])
+            ax_bar.set_title("Doanh thu thực nhận theo tour", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"])
             ax_bar.axis('off')
 
         fig.tight_layout()
@@ -339,16 +339,7 @@ def _render_report_tab(app):
 
     # 2. Tiêu đề và Mô tả báo cáo (Header)
     header_frame = tk.Frame(content_frame, bg=THEME["bg"])
-    header_frame.pack(fill="x", pady=(0, 15))
-    
-    title_label = tk.Label(
-        header_frame, 
-        text="📊 BÁO CÁO TỔNG HỢP HỆ THỐNG", 
-        font=("Times New Roman", 16, "bold"), 
-        bg=THEME["bg"], 
-        fg=THEME["primary"]
-    )
-    title_label.pack(anchor="w")
+    header_frame.pack(fill="x", pady=(0, 10))
     
     desc_label = tk.Label(
         header_frame, 
@@ -422,16 +413,6 @@ def _render_report_tab(app):
 
     # 6. Khu vực tóm tắt nhanh (Quick summary)
     by_tour_data = report.get("by_tour", [])
-    if by_tour_data:
-        top_rev_tour = max(by_tour_data, key=lambda x: safe_int(x.get("doanhThuThuan", 0)))
-        top_rev_text = f"{top_rev_tour.get('maTour')} - {top_rev_tour.get('tenTour')} ({format_currency(top_rev_tour.get('doanhThuThuan', 0))})"
-        
-        top_bk_tour = max(by_tour_data, key=lambda x: safe_int(x.get("tongBooking", 0)))
-        top_bk_text = f"{top_bk_tour.get('maTour')} - {top_bk_tour.get('tenTour')} ({top_bk_tour.get('tongBooking', 0)} BK)"
-    else:
-        top_rev_text = "Chưa có dữ liệu"
-        top_bk_text = "Chưa có dữ liệu"
-
     active_hdvs = [h for h in hdvs if h.get("trangThaiTaiKhoan") == "Đang hoạt động" or h.get("trangThai") in {"Sẵn sàng", "Đã phân công", "Đang dẫn tour"}]
     active_hdv_count = len(active_hdvs)
     total_customers = len(users)
@@ -444,33 +425,72 @@ def _render_report_tab(app):
         text="📌 Tóm tắt nhanh hoạt động hệ thống", 
         bg=THEME["surface"], 
         fg=THEME["text"], 
-        font=("Times New Roman", 12, "bold")
-    ).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 10))
+        font=("Times New Roman", 13, "bold")
+    ).pack(anchor="w", pady=(0, 12))
 
-    summary_frame.columnconfigure(0, weight=1)
-    summary_frame.columnconfigure(1, weight=1)
-    
-    # Hàng 1
-    f_rev = tk.Frame(summary_frame, bg=THEME["surface"])
-    f_rev.grid(row=1, column=0, sticky="ew", padx=10, pady=8)
-    tk.Label(f_rev, text="🏆 Tour doanh thu cao nhất:", font=("Times New Roman", 11, "bold"), fg=THEME["text"], bg=THEME["surface"]).pack(anchor="w")
-    tk.Label(f_rev, text=top_rev_text, font=("Times New Roman", 11), fg=THEME["primary"], bg=THEME["surface"], wraplength=450, justify="left").pack(anchor="w", pady=(2, 0))
+    grid_container = tk.Frame(summary_frame, bg=THEME["surface"])
+    grid_container.pack(fill="x")
+    for i in range(3):
+        grid_container.columnconfigure(i, weight=1, uniform="equal")
 
-    f_bk = tk.Frame(summary_frame, bg=THEME["surface"])
-    f_bk.grid(row=1, column=1, sticky="ew", padx=10, pady=8)
-    tk.Label(f_bk, text="📈 Tour nhiều lượt đặt nhất:", font=("Times New Roman", 11, "bold"), fg=THEME["text"], bg=THEME["surface"]).pack(anchor="w")
-    tk.Label(f_bk, text=top_bk_text, font=("Times New Roman", 11), fg=THEME["primary"], bg=THEME["surface"], wraplength=450, justify="left").pack(anchor="w", pady=(2, 0))
+    def create_summary_card(parent, title, value, desc, color):
+        card = tk.Frame(parent, bg="#ffffff", highlightbackground="#e2e8f0", highlightthickness=1, padx=12, pady=10)
+        
+        accent = tk.Frame(card, bg=color, width=4)
+        accent.pack(side="left", fill="y")
+        
+        info_f = tk.Frame(card, bg="#ffffff", padx=8)
+        info_f.pack(side="left", fill="both", expand=True)
+        
+        tk.Label(info_f, text=title, bg="#ffffff", fg=THEME["muted"], font=("Times New Roman", 9.5, "bold"), anchor="w").pack(fill="x")
+        tk.Label(info_f, text=value, bg="#ffffff", fg=color, font=("Times New Roman", 13, "bold"), anchor="w", wraplength=220, justify="left").pack(fill="x", pady=2)
+        tk.Label(info_f, text=desc, bg="#ffffff", fg=THEME["muted"], font=("Times New Roman", 9, "italic"), anchor="w", wraplength=220, justify="left").pack(fill="x")
+        return card
 
-    # Hàng 2
-    f_hdv = tk.Frame(summary_frame, bg=THEME["surface"])
-    f_hdv.grid(row=2, column=0, sticky="ew", padx=10, pady=8)
-    tk.Label(f_hdv, text="🧭 Hướng dẫn viên hoạt động:", font=("Times New Roman", 11, "bold"), fg=THEME["text"], bg=THEME["surface"]).pack(anchor="w")
-    tk.Label(f_hdv, text=f"{active_hdv_count} hướng dẫn viên đang sẵn sàng/được phân công", font=("Times New Roman", 11), fg=THEME["muted"], bg=THEME["surface"]).pack(anchor="w", pady=(2, 0))
+    # Get average rating
+    reviews_list = getattr(app["ql"], "list_reviews", [])
+    if reviews_list:
+        ratings = []
+        for r in reviews_list:
+            r_val = r.get("rating")
+            if r_val is not None:
+                try:
+                    ratings.append(float(r_val))
+                except (ValueError, TypeError):
+                    pass
+        avg_rating = sum(ratings) / len(ratings) if ratings else 0.0
+    else:
+        avg_rating = 0.0
+    avg_rating_text = f"{avg_rating:.1f} / 5.0" if avg_rating > 0 else "Chưa có đánh giá"
 
-    f_cust = tk.Frame(summary_frame, bg=THEME["surface"])
-    f_cust.grid(row=2, column=1, sticky="ew", padx=10, pady=8)
-    tk.Label(f_cust, text="👥 Khách hàng đăng ký:", font=("Times New Roman", 11, "bold"), fg=THEME["text"], bg=THEME["surface"]).pack(anchor="w")
-    tk.Label(f_cust, text=f"{total_customers} tài khoản khách hàng đã đăng ký", font=("Times New Roman", 11), fg=THEME["muted"], bg=THEME["surface"]).pack(anchor="w", pady=(2, 0))
+    if by_tour_data:
+        top_rev_tour = max(by_tour_data, key=lambda x: safe_int(x.get("doanhThuThuan", 0)))
+        top_rev_val = top_rev_tour.get("maTour") or "N/A"
+        top_rev_desc = f"{top_rev_tour.get('tenTour', '')} ({format_currency(top_rev_tour.get('doanhThuThuan', 0))})"
+        
+        top_bk_tour = max(by_tour_data, key=lambda x: safe_int(x.get("tongBooking", 0)))
+        top_bk_val = top_bk_tour.get("maTour") or "N/A"
+        top_bk_desc = f"{top_bk_tour.get('tenTour', '')} ({top_bk_tour.get('tongBooking', 0)} lượt đặt)"
+    else:
+        top_rev_val = "Chưa có dữ liệu"
+        top_rev_desc = "Chưa có tour phát sinh"
+        top_bk_val = "Chưa có dữ liệu"
+        top_bk_desc = "Chưa có lượt đặt tour"
+
+    cards = [
+        ("Tour nổi bật (Doanh thu)", top_rev_val, top_rev_desc, THEME["primary"], 0, 0),
+        ("Tour nổi bật (Lượt đặt)", top_bk_val, top_bk_desc, "#0ea5e9", 0, 1),
+        ("Doanh thu thực nhận", format_currency(real_revenue), "Tổng tiền thực thu từ các booking hiệu lực", THEME["success"], 0, 2),
+        ("Booking hiệu lực", f"{active_bookings} booking", "Các booking đang hoạt động, không bị hủy", THEME["success"], 1, 0),
+        ("Số khách đã đặt", f"{total_guests} khách", "Tổng số khách tham gia các tour hiệu lực", "#7c3aed", 1, 1),
+        ("HDV đang hoạt động", f"{active_hdv_count} HDV", "Hướng dẫn viên sẵn sàng hoặc đang dẫn tour", "#d97706", 1, 2),
+        ("Đánh giá trung bình", avg_rating_text, "Điểm đánh giá trung bình từ phản hồi của khách", "#eab308", 2, 0),
+        ("Khách hàng đăng ký", f"{total_customers} tài khoản", "Tổng số tài khoản khách hàng đã đăng ký", "#dc2626", 2, 1),
+    ]
+
+    for title, val, desc, color, row, col in cards:
+        c_card = create_summary_card(grid_container, title, val, desc, color)
+        c_card.grid(row=row, column=col, sticky="nsew", padx=6, pady=6)
 
     update_admin_status_card(app, "report", "Đang xem Báo cáo tổng hợp trực quan", THEME["primary"])
 
@@ -1217,7 +1237,11 @@ def _notification_type_label(notification: dict) -> str:
         "tour_cancelled": "Tour bị hủy",
         "tour_completed": "Tour đã kết thúc",
         "guide_assigned": "Phân công hướng dẫn viên",
-        "guide_broadcast": "Thông báo từ hướng dẫn viên",
+        "guide_broadcast": "Thông báo HDV",
+        "broadcast": "Thông báo chung",
+        "user_broadcast": "Thông báo Khách hàng",
+        "user_direct": "Gửi khách hàng riêng lẻ",
+        "guide_direct": "Gửi HDV riêng lẻ",
     }
     normalized = str(event_type).strip().lower()
     return lookup.get(normalized, "")
@@ -1904,7 +1928,7 @@ def validate_hdv(app, form_data, old_ma=None):
         return False, "Kinh nghiệm phải là số từ 0 đến 50."
 
     if form_data.get("gioiTinh") not in {"Nam", "Nữ"}:
-        return False, "Giới tính chỉ hỗ trợ Nam hoặc Nữ."
+        return False, "Giới tính chỉ được chọn Nam hoặc Nữ."
     if form_data["cccd"]:
         if not form_data["cccd"].isdigit():
             return False, "CCCD chỉ được chứa chữ số."
@@ -5210,7 +5234,7 @@ def open_booking_summary_window(app):
         ("Tổng booking", str(total_booking), THEME["primary"]),
         ("Khách hiệu lực", str(total_active_guest), THEME["success"]),
         ("Chờ hoàn tiền", str(total_pending_refund), "#7c3aed"),
-        ("Doanh thu dự kiến", format_currency(total_revenue), THEME["warning"]),
+        ("Doanh thu tạm tính", format_currency(total_revenue), THEME["warning"]),
     ]
     for title, value, color in stat_items:
         card = tk.Frame(stats, bg=THEME["surface"], bd=1, relief="solid")
@@ -5277,12 +5301,12 @@ def open_revenue_report_window(app):
     top.title("Báo cáo doanh thu chi tiết")
     screen_w = top.winfo_screenwidth()
     screen_h = top.winfo_screenheight()
-    width = max(1150, min(1400, screen_w - 60))
-    height = max(720, min(920, screen_h - 100))
+    width = 1100
+    height = 640
     pos_x = max((screen_w - width) // 2, 0)
     pos_y = max((screen_h - height) // 2, 0)
     top.geometry(f"{width}x{height}+{pos_x}+{pos_y}")
-    top.minsize(1100, 700)
+    top.minsize(1100, 600)
     top.configure(bg=THEME["bg"])
     top.transient(app["root"])
     top.grab_set()
@@ -5364,26 +5388,26 @@ def open_revenue_report_window(app):
     tab_month = tk.Frame(notebook, bg=THEME["surface"])
     tab_booking = tk.Frame(notebook, bg=THEME["surface"])
 
-    notebook.add(tab_tour, text="Chi tiết theo Tour")
-    notebook.add(tab_month, text="Chi tiết theo Tháng")
-    notebook.add(tab_booking, text="Chi tiết Booking")
+    notebook.add(tab_tour, text="Theo tour")
+    notebook.add(tab_month, text="Theo tháng")
+    notebook.add(tab_booking, text="Chi tiết booking")
 
     # Treeview tour setup
     wrapper_tour = tk.Frame(tab_tour, bg=THEME["surface"], bd=1, relief="solid")
-    wrapper_tour.pack(fill="both", expand=True, padx=10, pady=10)
+    wrapper_tour.pack(fill="both", expand=True, padx=5, pady=5)
     cols_tour = ("maTour", "tenTour", "tongBooking", "bookingHieuLuc", "tongKhach", "tongPhaiThu", "daThu", "daHoan", "conNo", "thucNhan")
-    tv_tour = ttk.Treeview(wrapper_tour, columns=cols_tour, show="headings", height=10)
+    tv_tour = ttk.Treeview(wrapper_tour, columns=cols_tour, show="headings", height=6)
     headers_tour = [
         ("maTour", "Mã tour", 80), 
-        ("tenTour", "Tên tour du lịch", 220), 
-        ("tongBooking", "Tổng BK", 80), 
-        ("bookingHieuLuc", "BK hiệu lực", 95), 
+        ("tenTour", "Tên tour", 220), 
+        ("tongBooking", "Tổng booking", 90), 
+        ("bookingHieuLuc", "Booking hiệu lực", 100), 
         ("tongKhach", "Tổng khách", 95),
         ("tongPhaiThu", "Tổng phải thu", 125),
         ("daThu", "Đã thu", 115), 
         ("daHoan", "Đã hoàn", 115), 
         ("conNo", "Còn nợ", 115),
-        ("thucNhan", "Thực nhận", 125)
+        ("thucNhan", "Doanh thu thực nhận", 130)
     ]
     for c, t, w in headers_tour:
         tv_tour.heading(c, text=t)
@@ -5400,18 +5424,18 @@ def open_revenue_report_window(app):
 
     # Treeview month setup
     wrapper_month = tk.Frame(tab_month, bg=THEME["surface"], bd=1, relief="solid")
-    wrapper_month.pack(fill="both", expand=True, padx=10, pady=10)
+    wrapper_month.pack(fill="both", expand=True, padx=5, pady=5)
     cols_month = ("label", "tongBooking", "bookingHieuLuc", "tongPhaiThu", "daThu", "daHoan", "conNo", "thucNhan")
-    tv_month = ttk.Treeview(wrapper_month, columns=cols_month, show="headings", height=10)
+    tv_month = ttk.Treeview(wrapper_month, columns=cols_month, show="headings", height=6)
     headers_month = [
-        ("label", "Tháng / Năm", 130), 
-        ("tongBooking", "Tổng BK", 90), 
-        ("bookingHieuLuc", "BK hiệu lực", 100), 
+        ("label", "Tháng/Năm", 120), 
+        ("tongBooking", "Tổng booking", 90), 
+        ("bookingHieuLuc", "Booking hiệu lực", 100), 
         ("tongPhaiThu", "Tổng phải thu", 130),
         ("daThu", "Đã thu", 120), 
         ("daHoan", "Đã hoàn", 120), 
         ("conNo", "Còn nợ", 120),
-        ("thucNhan", "Thực nhận", 130)
+        ("thucNhan", "Doanh thu thực nhận", 135)
     ]
     for c, t, w in headers_month:
         tv_month.heading(c, text=t)
@@ -5428,22 +5452,22 @@ def open_revenue_report_window(app):
 
     # Treeview booking setup
     wrapper_booking = tk.Frame(tab_booking, bg=THEME["surface"], bd=1, relief="solid")
-    wrapper_booking.pack(fill="both", expand=True, padx=10, pady=10)
+    wrapper_booking.pack(fill="both", expand=True, padx=5, pady=5)
     cols_booking = ("maBooking", "username", "tenKhach", "maTour", "tenTour", "date", "trangThai", "tongTien", "daThanhToan", "conNo", "daHoan", "hinhThuc")
-    tv_booking = ttk.Treeview(wrapper_booking, columns=cols_booking, show="headings", height=10)
+    tv_booking = ttk.Treeview(wrapper_booking, columns=cols_booking, show="headings", height=6)
     headers_booking = [
         ("maBooking", "Mã booking", 90),
-        ("username", "Username", 90),
-        ("tenKhach", "Tên khách hàng", 140),
+        ("username", "Username khách", 90),
+        ("tenKhach", "Tên khách", 130),
         ("maTour", "Mã tour", 80),
-        ("tenTour", "Tên tour du lịch", 180),
-        ("date", "Ngày đặt", 110),
-        ("trangThai", "Trạng thái", 100),
+        ("tenTour", "Tên tour", 170),
+        ("date", "Ngày đặt hoặc ngày thanh toán", 110),
+        ("trangThai", "Trạng thái booking", 100),
         ("tongTien", "Tổng tiền", 110),
         ("daThanhToan", "Đã thanh toán", 110),
         ("conNo", "Còn nợ", 110),
         ("daHoan", "Hoàn tiền", 110),
-        ("hinhThuc", "PT thanh toán", 110),
+        ("hinhThuc", "Phương thức thanh toán", 110),
     ]
     for c, t, w in headers_booking:
         tv_booking.heading(c, text=t)
@@ -7084,15 +7108,183 @@ def admin_reviews_tab(app):
 def admin_notifications_tab(app):
     """
     Mục đích:
-        Thực hiện xử lý cho hàm `admin_notifications_tab` (admin notifications tab).
+        Gửi thông báo (tách làm 2 cột: form gửi và lịch sử gửi).
     Tham số:
         app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
     """
     clear_container(app)
 
+    # Vùng chứa chia làm 2 cột bằng Grid
+    split_fr = tk.Frame(app["container"], bg=THEME["bg"])
+    split_fr.pack(fill="both", expand=True, padx=10, pady=10)
+    split_fr.columnconfigure(0, weight=2, minsize=400) # Cột trái: Form
+    split_fr.columnconfigure(1, weight=3, minsize=550) # Cột phải: Lịch sử
 
-    toolbar = tk.Frame(app["container"], bg=THEME["bg"])
-    toolbar.pack(fill="x", pady=(0, 10))
+    left_col = tk.Frame(split_fr, bg=THEME["bg"])
+    left_col.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
+
+    right_col = tk.Frame(split_fr, bg=THEME["bg"])
+    right_col.grid(row=0, column=1, sticky="nsew", padx=(10, 0))
+
+    # ==========================================
+    # CỘT TRÁI: FORM SOẠN THẢO VÀ GỬI THÔNG BÁO
+    # ==========================================
+    form_card = tk.Frame(left_col, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1, padx=15, pady=15)
+    form_card.pack(fill="both", expand=True)
+
+    tk.Label(
+        form_card, 
+        text="🔔 GỬI THÔNG BÁO", 
+        font=("Times New Roman", 15, "bold"), 
+        bg=THEME["surface"], 
+        fg=THEME["primary"]
+    ).pack(anchor="w", pady=(0, 2))
+
+    tk.Label(
+        form_card, 
+        text="Soạn thảo và gửi thông báo chung hoặc riêng lẻ đến Khách hàng/HDV.", 
+        font=("Times New Roman", 10, "italic"), 
+        bg=THEME["surface"], 
+        fg=THEME["muted"]
+    ).pack(anchor="w", pady=(0, 15))
+
+    # Trường 1: Nhóm người nhận
+    tk.Label(form_card, text="Người nhận / nhóm người nhận:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(4, 2))
+    category_var = tk.StringVar(value="Tất cả")
+    category_cb = ttk.Combobox(
+        form_card, 
+        textvariable=category_var, 
+        values=["Tất cả", "Khách hàng", "Hướng dẫn viên", "Tài khoản cụ thể"], 
+        state="readonly", 
+        font=("Times New Roman", 11)
+    )
+    category_cb.pack(fill="x", pady=(0, 8))
+
+    # Trường 2: Người nhận cụ thể (ẩn/hiện/disable)
+    specific_lbl = tk.Label(form_card, text="Tên đăng nhập / Mã HDV cụ thể:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"])
+    specific_lbl.pack(anchor="w", pady=(4, 2))
+    recipient_ent = tk.Entry(form_card, font=("Times New Roman", 11), relief="solid", bd=1, state="disabled")
+    recipient_ent.pack(fill="x", pady=(0, 8))
+
+    def on_category_changed(_event=None):
+        if category_var.get() == "Tài khoản cụ thể":
+            recipient_ent.config(state="normal")
+            recipient_ent.focus()
+        else:
+            recipient_ent.delete(0, tk.END)
+            recipient_ent.config(state="disabled")
+
+    category_cb.bind("<<ComboboxSelected>>", on_category_changed)
+
+    # Trường 3: Tiêu đề thông báo
+    tk.Label(form_card, text="Tiêu đề thông báo:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(4, 2))
+    title_ent = tk.Entry(form_card, font=("Times New Roman", 11), relief="solid", bd=1)
+    title_ent.pack(fill="x", pady=(0, 8))
+
+    # Trường 4: Loại thông báo & Độ ưu tiên (xếp ngang)
+    row_meta = tk.Frame(form_card, bg=THEME["surface"])
+    row_meta.pack(fill="x", pady=(4, 8))
+    row_meta.columnconfigure(0, weight=1)
+    row_meta.columnconfigure(1, weight=1)
+
+    f_type = tk.Frame(row_meta, bg=THEME["surface"])
+    f_type.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+    tk.Label(f_type, text="Loại thông báo:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(0, 2))
+    type_var = tk.StringVar(value="Hệ thống")
+    type_cb = ttk.Combobox(f_type, textvariable=type_var, values=["Hệ thống", "Khẩn cấp", "Điều hành", "Khác"], state="readonly", font=("Times New Roman", 11))
+    type_cb.pack(fill="x")
+
+    f_prio = tk.Frame(row_meta, bg=THEME["surface"])
+    f_prio.grid(row=0, column=1, sticky="ew", padx=(5, 0))
+    tk.Label(f_prio, text="Mức độ ưu tiên:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(0, 2))
+    priority_var = tk.StringVar(value="Trung bình")
+    priority_cb = ttk.Combobox(f_prio, textvariable=priority_var, values=["Thấp", "Trung bình", "Cao"], state="readonly", font=("Times New Roman", 11))
+    priority_cb.pack(fill="x")
+
+    # Trường 5: Nội dung thông báo
+    tk.Label(form_card, text="Nội dung thông báo:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(4, 2))
+    txt_frame = tk.Frame(form_card, bg=THEME["surface"], bd=1, relief="solid")
+    txt_frame.pack(fill="both", expand=True, pady=(0, 15))
+    txt = tk.Text(txt_frame, height=6, font=("Times New Roman", 11), wrap="word", bd=0, highlightthickness=0)
+    txt.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+    txt_sb = ttk.Scrollbar(txt_frame, orient="vertical", command=txt.yview)
+    txt.configure(yscrollcommand=txt_sb.set)
+    txt_sb.pack(side="right", fill="y")
+
+    # Nút bấm hành động
+    btn_frame = tk.Frame(form_card, bg=THEME["surface"])
+    btn_frame.pack(fill="x")
+
+    def xoa_noi_dung():
+        title_ent.delete(0, tk.END)
+        recipient_ent.delete(0, tk.END)
+        txt.delete("1.0", tk.END)
+        category_var.set("Tất cả")
+        on_category_changed()
+        type_var.set("Hệ thống")
+        priority_var.set("Trung bình")
+
+    def gui_thong_bao():
+        title_val = title_ent.get().strip()
+        content_val = txt.get("1.0", "end").strip()
+        category = category_var.get()
+        type_val = type_var.get()
+        priority_val = priority_var.get()
+        recipient_val = recipient_ent.get().strip()
+
+        if not title_val:
+            return messagebox.showwarning("Lỗi", "Vui lòng nhập tiêu đề thông báo!")
+        if not content_val:
+            return messagebox.showwarning("Lỗi", "Vui lòng nhập nội dung thông báo!")
+
+        new_notif = {
+            "title": title_val,
+            "content": content_val,
+            "category": type_val,
+            "priority": priority_val,
+            "date": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        }
+
+        if category == "Tất cả":
+            new_notif["eventType"] = "broadcast"
+        elif category == "Khách hàng":
+            new_notif["eventType"] = "user_broadcast"
+        elif category == "Hướng dẫn viên":
+            new_notif["eventType"] = "guide_broadcast"
+        elif category == "Tài khoản cụ thể":
+            if not recipient_val:
+                return messagebox.showwarning("Lỗi", "Vui lòng nhập tài khoản người nhận cụ thể!")
+            
+            # Kiểm tra tài khoản
+            user_found = next((u for u in app["ql"].list_users if str(u.get("username", "")).strip().lower() == recipient_val.lower()), None)
+            guide_found = next((g for g in app["ql"].list_hdv if str(g.get("maHDV", "")).strip().lower() == recipient_val.lower() or str(g.get("username", "")).strip().lower() == recipient_val.lower()), None)
+            
+            if not user_found and not guide_found:
+                return messagebox.showwarning("Lỗi", f"Không tìm thấy tài khoản '{recipient_val}' trên hệ thống!")
+
+            if user_found:
+                new_notif["eventType"] = "user_direct"
+                new_notif["username"] = user_found.get("username")
+            elif guide_found:
+                new_notif["eventType"] = "guide_direct"
+                new_notif["maHDV"] = guide_found.get("maHDV")
+                new_notif["tenHDV"] = guide_found.get("tenHDV")
+
+        app["ql"].notifications.append(new_notif)
+        app["ql"].save()
+        
+        messagebox.showinfo("Thành công", "Đã gửi thông báo thành công!")
+        xoa_noi_dung()
+        reload_admin_current_tab(app)
+
+    style_button(btn_frame, " Gửi thông báo", THEME["success"], gui_thong_bao).pack(side="left", padx=(0, 10))
+    style_button(btn_frame, " Xóa nội dung", THEME["muted"], xoa_noi_dung).pack(side="left")
+
+    # ==========================================
+    # CỘT PHẢI: LỊCH SỬ THÔNG BÁO ĐÃ GỬI
+    # ==========================================
+    toolbar = tk.Frame(right_col, bg=THEME["bg"])
+    toolbar.pack(fill="x", pady=(0, 8))
     style_button(toolbar, "Tải lại", "#0ea5e9", lambda: reload_admin_current_tab(app)).pack(side="left")
     
     notif_rows = []
@@ -7116,27 +7308,29 @@ def admin_notifications_tab(app):
         lambda: open_selected_notif_detail(),
     ).pack(side="left", padx=(8, 0))
 
-    notif_wrapper = tk.Frame(app["container"], bg=THEME["surface"], bd=1, relief="solid")
-    notif_wrapper.pack(fill="x", expand=False, pady=(0, 6))
+    notif_wrapper = tk.Frame(right_col, bg=THEME["surface"], bd=1, relief="solid")
+    notif_wrapper.pack(fill="both", expand=True)
 
-    notif_tv = ttk.Treeview(notif_wrapper, columns=("ma", "ten", "matour", "tentour", "date"), show="headings", height=11)
-    notif_tv.heading("ma", text="Mã HDV")
-    notif_tv.heading("ten", text="Tên HDV")
+    # treeview
+    notif_tv = ttk.Treeview(notif_wrapper, columns=("ma", "ten", "matour", "tentour", "date"), show="headings", height=15)
+    notif_tv.heading("ma", text="Người nhận")
+    notif_tv.heading("ten", text="Loại thông báo")
     notif_tv.heading("matour", text="Mã tour")
-    notif_tv.heading("tentour", text="Tên tour")
+    notif_tv.heading("tentour", text="Nội dung rút gọn")
     notif_tv.heading("date", text="Ngày gửi")
 
-    notif_tv.column("ma", width=90, minwidth=80, anchor="center", stretch=False)
-    notif_tv.column("ten", width=190, minwidth=130, anchor="w", stretch=True)
-    notif_tv.column("matour", width=100, minwidth=80, anchor="center", stretch=False)
-    notif_tv.column("tentour", width=260, minwidth=160, anchor="w", stretch=True)
-    notif_tv.column("date", width=160, minwidth=130, anchor="center", stretch=False)
+    notif_tv.column("ma", width=120, minwidth=100, anchor="center", stretch=False)
+    notif_tv.column("ten", width=140, minwidth=120, anchor="w", stretch=False)
+    notif_tv.column("matour", width=80, minwidth=75, anchor="center", stretch=False)
+    notif_tv.column("tentour", width=200, minwidth=150, anchor="w", stretch=True)
+    notif_tv.column("date", width=140, minwidth=120, anchor="center", stretch=False)
 
     notif_sy = ttk.Scrollbar(notif_wrapper, orient="vertical", command=notif_tv.yview)
     notif_sx = ttk.Scrollbar(notif_wrapper, orient="horizontal", command=notif_tv.xview)
     bind_autohide_scrollbar(notif_tv, notif_sy, "vertical")
     bind_autohide_scrollbar(notif_tv, notif_sx, "horizontal")
     notif_tv.configure(yscrollcommand=notif_sy.set, xscrollcommand=notif_sx.set)
+    
     notif_tv.pack(side="left", fill="both", expand=True)
     notif_sy.pack(side="right", fill="y")
     notif_sx.pack(side="bottom", fill="x")
@@ -7145,12 +7339,30 @@ def admin_notifications_tab(app):
     for n in app["ql"].list_notifications:
         notif_popup = build_admin_notification_popup_data(app, n)
         notif_rows.append(notif_popup)
+        
+        evt_type = n.get("eventType", "")
+        recipient = "Tất cả"
+        if evt_type == "broadcast":
+            recipient = "Tất cả"
+        elif evt_type == "user_broadcast":
+            recipient = "Tất cả Khách"
+        elif evt_type == "guide_broadcast":
+            recipient = "Tất cả HDV"
+        elif n.get("username"):
+            recipient = f"User: {n.get('username')}"
+        elif n.get("maHDV"):
+            recipient = f"HDV: {n.get('maHDV')}"
+        else:
+            recipient = "Hệ thống"
+            
+        type_label = _notification_type_label(n) or n.get("category") or "Hệ thống"
+        
         notif_tv.insert("", "end", values=(
-            shorten_text(notif_popup.get("Mã HDV", ""), 18),
-            shorten_text(notif_popup.get("Tên HDV", ""), 24),
-            shorten_text(notif_popup.get("Mã tour", ""), 18),
-            shorten_text(notif_popup.get("Tên tour", ""), 28),
-            shorten_text(notif_popup.get("Ngày gửi", ""), 16),
+            shorten_text(recipient, 18),
+            shorten_text(type_label, 24),
+            shorten_text(n.get("maTour", ""), 18),
+            shorten_text(n.get("content", n.get("noiDung", "")), 40),
+            shorten_text(n.get("date", n.get("ngayGui", "")), 16),
         ))
 
     def on_double_click_notif(_event):
@@ -7159,9 +7371,8 @@ def admin_notifications_tab(app):
     notif_tv.bind("<Double-1>", on_double_click_notif)
     apply_zebra(notif_tv)
 
-    # Cập nhật status card với số lượng thông báo thực tế
     notif_count = len(notif_rows)
-    status_text = f"Đang ở Thông báo HDV - Hiển thị {notif_count} thông báo"
+    status_text = f"Đang ở Gửi thông báo - Hiển thị {notif_count} thông báo đã gửi"
     update_admin_status_card(app, "notification", status_text, THEME["primary"])
 
 

@@ -1,9 +1,4 @@
 {
-  "admin": {
-    "username": "admin",
-    "fullname": "Nguyễn Thị Phương Nhung",
-    "password": "$2b$12$omvQUJQX2IiAh4NXgt.KreaCu0lk0gejPIwOixpRPWt6dNs0o7Ux6"
-  },
   "hdv": [
     {
       "maHDV": "HDV01",
@@ -411,9 +406,9 @@
       "diemDi": "Hà Nội",
       "diemDen": "Mộc Châu",
       "ghiChuDieuHanh": "Tour đang mở bán, còn nhận thêm khách và ưu tiên nhóm gia đình.",
-      "trangThai": "Đã đủ khách",
+      "trangThai": "Đang mở bán",
       "hdvPhuTrach": "HDV05",
-      "tourState": "full",
+      "tourState": "open",
       "lichTrinh": [
         {
           "ngay": "Ngày 1",
@@ -442,7 +437,7 @@
           "moTa": "Mua sắm đặc sản tại chợ, trở về Hà Nội."
         }
       ],
-      "soLuotDaDat": 40,
+      "soLuotDaDat": 22,
       "soLuotMoBan": 40
     },
     {
@@ -513,7 +508,7 @@
           "moTa": "Lịch trình đang được cập nhật chi tiết."
         }
       ],
-      "soLuotDaDat": 25,
+      "soLuotDaDat": 40,
       "soLuotMoBan": 45,
       "tourState": "open"
     }
@@ -970,11 +965,11 @@
       "tenKhach": "Trần Nguyễn Ngọc Tuyền",
       "sdt": "0321316760",
       "soNguoi": "18",
-      "trangThai": "Đã thanh toán",
+      "trangThai": "Chờ hoàn tiền",
       "ngayDat": "18/06/2026",
       "tongTienGoc": 39420000,
       "giamGiaDoiTuong": 3613500,
-      "tongTien": 35756500,
+      "tongTien": 35806500,
       "tienCoc": 35756500,
       "daThanhToan": 35756500,
       "conNo": 0,
@@ -989,12 +984,12 @@
         "trungNien": 12,
         "nguoiCaoTuoi": 3
       },
-      "maVoucher": "NEW50",
-      "tenVoucher": "Khách mới 50K",
-      "giamGiaVoucher": 50000,
-      "trangThaiHoanTien": "",
-      "soTienHoan": 0,
-      "ngayYeuCauHoanTien": "",
+      "maVoucher": "",
+      "tenVoucher": "",
+      "giamGiaVoucher": 0,
+      "trangThaiHoanTien": "Chờ duyệt",
+      "soTienHoan": 35756500,
+      "ngayYeuCauHoanTien": "20/06/2026 17:26",
       "ngayXuLyHoanTien": "",
       "nguoiXuLyHoanTien": "",
       "ghiChuHoanTien": "",
@@ -1008,10 +1003,13 @@
         }
       ],
       "username": "ngoctuyen",
-      "refundStatus": "",
-      "bookingState": "paid",
+      "refundStatus": "pending",
+      "bookingState": "cancelled",
       "lastPaymentAt": "18/06/2026 19:28",
-      "paidBy": "ngoctuyen"
+      "paidBy": "ngoctuyen",
+      "cancelledAt": "20/06/2026 17:26",
+      "cancelledBy": "ngoctuyen",
+      "cancelReason": ""
     },
     {
       "maBooking": "BK15",
@@ -1148,8 +1146,8 @@
       "giamGiaDoiTuong": 1800000,
       "tongTien": 29700000,
       "tienCoc": 8910000,
-      "daThanhToan": 19305000,
-      "conNo": 10395000,
+      "daThanhToan": 24502500,
+      "conNo": 5197500,
       "hinhThucThanhToan": "Chuyển khoản",
       "nguonKhach": "Khách lẻ",
       "ghiChu": "",
@@ -1173,9 +1171,47 @@
       "username": "ngoctuyen",
       "refundStatus": "",
       "bookingState": "confirmed",
-      "paidAmount": 19305000,
-      "lastPaymentAt": "19/06/2026 15:34",
+      "paidAmount": 24502500,
+      "lastPaymentAt": "20/06/2026 17:27",
       "paidBy": "ngoctuyen"
+    },
+    {
+      "maBooking": "BK19",
+      "maTour": "T03",
+      "tenKhach": "Trần Nguyễn Ngọc Tuyền",
+      "sdt": "0321316760",
+      "soNguoi": "15",
+      "trangThai": "Đã cọc",
+      "ngayDat": "20/06/2026",
+      "tongTienGoc": 67500000,
+      "giamGiaDoiTuong": 7650000,
+      "tongTien": 59850000,
+      "tienCoc": 17955000,
+      "daThanhToan": 17955000,
+      "conNo": 41895000,
+      "hinhThucThanhToan": "Chuyển khoản",
+      "nguonKhach": "Khách lẻ",
+      "ghiChu": "",
+      "usernameDat": "ngoctuyen",
+      "user": "ngoctuyen",
+      "danhSachKhach": [],
+      "coCauDoTuoi": {
+        "treEm": 5,
+        "trungNien": 8,
+        "nguoiCaoTuoi": 2
+      },
+      "maVoucher": "",
+      "tenVoucher": "",
+      "giamGiaVoucher": 0,
+      "trangThaiHoanTien": "",
+      "soTienHoan": 0,
+      "ngayYeuCauHoanTien": "",
+      "ngayXuLyHoanTien": "",
+      "nguoiXuLyHoanTien": "",
+      "ghiChuHoanTien": "",
+      "username": "ngoctuyen",
+      "refundStatus": "",
+      "bookingState": "confirmed"
     }
   ],
   "users": [
@@ -1252,6 +1288,11 @@
       "trangThai": "Đang hoạt động"
     }
   ],
+  "admin": {
+    "username": "admin",
+    "fullname": "Nguyễn Thị Phương Nhung",
+    "password": "$2b$12$omvQUJQX2IiAh4NXgt.KreaCu0lk0gejPIwOixpRPWt6dNs0o7Ux6"
+  },
   "maVoucher": [
     {
       "maVoucher": "NEW50",
@@ -1260,7 +1301,7 @@
       "giamGiaVoucher": "50000",
       "donToiThieu": "1000000",
       "soLuong": "10",
-      "daSuDung": "2",
+      "daSuDung": "1",
       "gioiHanMoiUser": "1",
       "tourApDung": "",
       "ngayBatDau": "01/05/2026",

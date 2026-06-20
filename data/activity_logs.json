@@ -2102,5 +2102,85 @@
     "action": "LOGIN",
     "status": "SUCCESS",
     "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T17:17:47",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T17:21:42",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T17:25:04",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T17:26:20",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "CREATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK19 | Tạo booking cho tour T03 | Số người: 15 | Voucher: Không"
+  },
+  {
+    "timestamp": "2026-06-20T17:26:46",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "UPDATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK14 | Hủy booking | Trạng thái mới: Chờ hoàn tiền"
+  },
+  {
+    "timestamp": "2026-06-20T17:27:14",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "UPDATE_BOOKING",
+    "status": "SUCCESS",
+    "detail": "Mã đối tượng: BK18 | Thanh toán thêm 5.197.500đ bằng Chuyển khoản"
+  },
+  {
+    "timestamp": "2026-06-20T21:02:22",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T21:04:53",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Mật khẩu không hợp lệ."
+  },
+  {
+    "timestamp": "2026-06-20T21:04:57",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T21:05:40",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
   }
 ]

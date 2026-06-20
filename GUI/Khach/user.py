@@ -2014,7 +2014,8 @@ def khoi_tao_khach(root, user_data=None):
             norm = normalize_notification_item(n, datastore=app["ql"])
             ma_tour = str(norm.get("maTour", "")).strip()
             notif_user = str(norm.get("username", "")).strip().lower()
-            if ma_tour in my_tour_codes or (notif_user and notif_user == my_username):
+            e_type = str(norm.get("eventType", "")).strip()
+            if ma_tour in my_tour_codes or (notif_user and notif_user == my_username) or e_type in {"broadcast", "user_broadcast"}:
                 sig = (ma_tour, notif_user, str(norm.get("content", "")).strip(), str(norm.get("date", "")).strip())
                 if sig not in seen_notifs:
                     seen_notifs.add(sig); relevant_notifs.append(norm)

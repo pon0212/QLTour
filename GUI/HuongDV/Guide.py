@@ -1114,91 +1114,39 @@ def khoi_tao_hdv(root, user_data=None):
         stats_container = tk.Frame(top_body, bg=THEME["surface"])
         stats_container.pack(fill="x", pady=(0, 15))
         
+        my_tours = get_my_tours()
+        total_assigned_tours = len(my_tours)
+        completed_tours_count = sum(1 for t in my_tours if t.get("trangThai") in {"Đã kết thúc", "Đã hoàn thành", "Completed"})
+        satisfaction_rate = f"{avg_rating * 20:.0f}%" if total_reviews > 0 else "0%"
+        
         stats_data = [
-            {
-                "title": "Hướng dẫn viên",
-                "value": f"{ten_hdv}",
-                "subtitle": ma_hdv,
-                "color": THEME["primary"],
-                "note": "Tài khoản đang đăng nhập"
-            },
-            {
-                "title": "Điểm trung bình",
-                "value": f"{avg_rating:.1f}",
-                "subtitle": "/ 5.0",
-                "color": THEME["warning"],
-                "note": f"Từ {total_reviews} đánh giá"
-            },
-            {
-                "title": "Mức độ hài lòng",
-                "value": f"{avg_rating * 20:.0f}%",
-                "subtitle": "",
-                "color": THEME["success"],
-                "note": "Tỷ lệ phần trăm"
-            },
-            {
-                "title": "Lượt đánh giá",
-                "value": str(total_reviews),
-                "subtitle": "lượt",
-                "color": "#7c3aed",
-                "note": "Tổng số phản hồi"
-            },
+            ("Tổng tour đã dẫn", f"{total_assigned_tours} tour", "Tổng số tour được phân công phụ trách", THEME["primary"], 0, 0),
+            ("Tour đã hoàn thành", f"{completed_tours_count} tour", "Tour đã kết thúc tốt đẹp", THEME["success"], 0, 1),
+            ("Tổng số đánh giá", f"{total_reviews} lượt", "Số phản hồi thực tế nhận được", "#7c3aed", 0, 2),
+            ("Điểm trung bình", f"{avg_rating:.1f} / 5.0 ⭐", "Đánh giá chất lượng trung bình", THEME["warning"], 1, 0),
+            ("Tỷ lệ hài lòng", satisfaction_rate, "Mức độ hài lòng của khách hàng", "#0ea5e9", 1, 1),
+            ("Cập nhật mới nhất", datetime.now().strftime("%d/%m/%Y %H:%M"), "Thời gian thống kê tự động", THEME["muted"], 1, 2),
         ]
         
-        for idx, stat in enumerate(stats_data):
-            row_idx = idx // 2
-            col_idx = idx % 2
+        for c in range(3):
+            stats_container.grid_columnconfigure(c, weight=1)
             
-            card = tk.Frame(
-                stats_container,
-                bg="#ffffff",
-                highlightbackground=stat["color"],
-                highlightthickness=2,
-                padx=15,
-                pady=12
-            )
-            card.grid(row=row_idx, column=col_idx, sticky="ew", padx=6, pady=6)
-            stats_container.grid_columnconfigure(col_idx, weight=1)
+        for title, value, subtitle, color, row, col in stats_data:
+            card = tk.Frame(stats_container, bg="#ffffff", highlightbackground="#cbd5e1", highlightthickness=1)
+            card.grid(row=row, column=col, sticky="nsew", padx=6, pady=6)
             
-            tk.Label(
-                card,
-                text=stat["title"],
-                font=("Times New Roman", 10, "bold"),
-                bg="#ffffff",
-                fg=THEME["muted"],
-                anchor="w"
-            ).pack(anchor="w", pady=(0, 8))
+            accent = tk.Frame(card, bg=color, width=4)
+            accent.pack(side="left", fill="y")
             
-            value_frame = tk.Frame(card, bg="#ffffff")
-            value_frame.pack(fill="x", pady=(0, 5))
+            info_frame = tk.Frame(card, bg="#ffffff", padx=12, pady=10)
+            info_frame.pack(side="left", fill="both", expand=True)
             
-            tk.Label(
-                value_frame,
-                text=stat["value"],
-                font=("Times New Roman", 20, "bold"),
-                bg="#ffffff",
-                fg=stat["color"],
-                anchor="w"
-            ).pack(side="left")
+            tk.Label(info_frame, text=title, font=("Times New Roman", 10, "bold"), bg="#ffffff", fg=THEME["muted"], anchor="w").pack(fill="x")
             
-            if stat["subtitle"]:
-                tk.Label(
-                    value_frame,
-                    text=stat["subtitle"],
-                    font=("Times New Roman", 12),
-                    bg="#ffffff",
-                    fg=THEME["muted"],
-                    anchor="w"
-                ).pack(side="left", padx=(5, 0))
+            val_lbl = tk.Label(info_frame, text=value, font=("Times New Roman", 14, "bold"), bg="#ffffff", fg=color, anchor="w")
+            val_lbl.pack(fill="x", pady=(2, 2))
             
-            tk.Label(
-                card,
-                text=stat["note"],
-                font=("Times New Roman", 9, "italic"),
-                bg="#ffffff",
-                fg=THEME["muted"],
-                anchor="w"
-            ).pack(anchor="w")
+            tk.Label(info_frame, text=subtitle, font=("Times New Roman", 9, "italic"), bg="#ffffff", fg=THEME["muted"], anchor="w").pack(fill="x")
 
         _, chart_body = make_section(
             content_area,
@@ -1274,107 +1222,44 @@ def khoi_tao_hdv(root, user_data=None):
         _, review_body = make_section(
             content_area,
             "Đánh giá từ khách hàng",
-            "Danh sách phản hồi khách hàng dành cho hướng dẫn viên trong các tour đã hoàn tất. Double-click để xem chi tiết.",
+            "Danh sách phản hồi khách hàng dành cho hướng dẫn viên trong các tour đã hoàn tất.",
             accent="#7c3aed",
         )
 
         if not my_reviews:
-            tk.Label(review_body, text="Hiện chưa có đánh giá nào từ khách hàng.", font=("Times New Roman", 13, "italic"), bg=THEME["surface"], fg=THEME["muted"]).pack(pady=40)
+            tk.Label(review_body, text="Chưa có đánh giá nào.", font=("Times New Roman", 13, "italic"), bg=THEME["surface"], fg=THEME["muted"]).pack(pady=40)
             set_status("Đang ở Đánh giá khách hàng - Hiển thị 0 đánh giá", THEME["primary"])
             return
 
-        review_wrapper = tk.Frame(review_body, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
-        review_wrapper.pack(fill="both", expand=True)
+        review_canvas_frame = tk.Frame(review_body, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
+        review_canvas_frame.pack(fill="both", expand=True)
 
-        review_cols = ("khach", "booking", "tour", "rating", "date", "content")
-        review_tv = ttk.Treeview(review_wrapper, columns=review_cols, show="headings", height=8)
+        canvas = tk.Canvas(review_canvas_frame, bg=THEME["bg"], highlightthickness=0)
+        scrollbar = tk.Scrollbar(review_canvas_frame, orient="vertical", command=canvas.yview)
+        scrollbar.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
 
-        review_tv.heading("khach", text="Khách hàng")
-        review_tv.heading("booking", text="Mã booking")
-        review_tv.heading("tour", text="Tour")
-        review_tv.heading("rating", text="Rating")
-        review_tv.heading("date", text="Ngày gửi")
-        review_tv.heading("content", text="Nội dung rút gọn")
+        scrollable_frame = tk.Frame(canvas, bg=THEME["bg"])
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
+        
+        # Hỗ trợ cuộn chuột
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        
+        def _unbind_mousewheel(event):
+            canvas.unbind_all("<MouseWheel>")
+        review_canvas_frame.bind("<Destroy>", _unbind_mousewheel)
 
-        review_tv.column("khach", width=220, anchor="w", stretch=False)
-        review_tv.column("booking", width=110, anchor="center", stretch=False)
-        review_tv.column("tour", width=240, anchor="w", stretch=False)
-        review_tv.column("rating", width=85, anchor="center", stretch=False)
-        review_tv.column("date", width=135, anchor="center", stretch=False)
-        review_tv.column("content", width=300, anchor="w", stretch=True)
-
-        review_sy = ttk.Scrollbar(review_wrapper, orient="vertical", command=review_tv.yview)
-        review_sx = ttk.Scrollbar(review_wrapper, orient="horizontal", command=review_tv.xview)
-        review_tv.configure(yscrollcommand=review_sy.set, xscrollcommand=review_sx.set)
-        review_sx.pack(side="bottom", fill="x")
-        review_sy.pack(side="right", fill="y")
-        review_tv.pack(side="left", fill="both", expand=True)
-
-        for r in my_reviews:
-            fullname = str(r.get("fullname") or r.get("tenKhach") or r.get("hoTen") or r.get("tenNguoiDanhGia") or "").strip()
-            username = str(r.get("username") or r.get("user") or "").strip()
-            if fullname and username:
-                customer_text = f"{fullname} ({username})"
-            elif fullname:
-                customer_text = fullname
-            elif username:
-                customer_text = username
-            else:
-                customer_text = "Ẩn danh"
-
-            ma_tour = str(r.get("maTour") or "").strip()
-            tour = app["ql"].find_tour(ma_tour)
-            ten_tour = str(tour.get("ten", "")).strip() if tour else ""
-            tour_text = f"{ma_tour} - {ten_tour}" if ten_tour else ma_tour
-
-            ma_booking = str(r.get("maBooking") or r.get("soBooking") or "").strip()
-
-            rating_value = r.get("rating", "")
-            if rating_value == "":
-                skill = safe_int(r.get("skill", 0))
-                attitude = safe_int(r.get("attitude", 0))
-                problem = safe_int(r.get("problem", r.get("problem_solving", 0)))
-                scores_temp = [x for x in [skill, attitude, problem] if x > 0]
-                rating_value = round(sum(scores_temp) / len(scores_temp) / 20, 1) if scores_temp else 5.0
-            else:
-                try:
-                    rating_value = float(rating_value)
-                except ValueError:
-                    rating_value = 5.0
-
-            review_content = str(r.get("content") or r.get("comment") or r.get("noiDung") or r.get("danhGia") or "").strip()
-            short_content = review_content[:55] + "..." if len(review_content) > 55 else review_content
-            
-            review_date = str(r.get("date") or r.get("ngayGui") or r.get("thoiGian") or r.get("ngay") or "").strip()
-
-            review_tv.insert(
-                "",
-                "end",
-                values=(
-                    customer_text,
-                    ma_booking,
-                    tour_text,
-                    f"{rating_value:.1f} / 5.0",
-                    review_date,
-                    short_content
-                ),
-                tags=(r.get("maReview", ""),)
-            )
-
-        apply_zebra(review_tv)
-
-        style_button(review_body, "↻ LÀM MỚI ĐÁNH GIÁ", THEME["primary"], tab_thong_ke).pack(anchor="w", pady=(10, 0))
-
-        # 4. Popup chi tiết khi double click
-        def on_review_double_click(event):
-            sel = review_tv.selection()
-            if not sel:
-                return
-            ma_review_sel = review_tv.item(sel[0])["tags"][0]
-            r = next((rev for rev in my_reviews if rev.get("maReview", "") == ma_review_sel), None)
-            if not r:
-                return
-
+        def show_review_detail(r):
             fullname_d = str(r.get("fullname") or r.get("tenKhach") or r.get("hoTen") or r.get("tenNguoiDanhGia") or "").strip()
             username_d = str(r.get("username") or r.get("user") or "").strip()
             ma_booking_d = str(r.get("maBooking") or r.get("soBooking") or "").strip()
@@ -1455,7 +1340,91 @@ def khoi_tao_hdv(root, user_data=None):
 
             style_button(pop_body, "Đóng cửa sổ", THEME["primary"], popup.destroy).pack(anchor="center")
 
-        review_tv.bind("<Double-1>", on_review_double_click)
+        def bind_double_click(widget, callback):
+            widget.bind("<Double-1>", callback)
+            for child in widget.winfo_children():
+                bind_double_click(child, callback)
+
+        for r in my_reviews:
+            fullname = str(r.get("fullname") or r.get("tenKhach") or r.get("hoTen") or r.get("tenNguoiDanhGia") or "").strip()
+            username = str(r.get("username") or r.get("user") or "").strip()
+            if fullname and username:
+                customer_text = f"{fullname} ({username})"
+            elif fullname:
+                customer_text = fullname
+            elif username:
+                customer_text = username
+            else:
+                customer_text = "Ẩn danh"
+
+            ma_tour = str(r.get("maTour") or "").strip()
+            tour = app["ql"].find_tour(ma_tour)
+            ten_tour = str(tour.get("ten", "")).strip() if tour else ""
+            tour_text = f"{ma_tour} - {ten_tour}" if ten_tour else ma_tour
+            if not tour_text:
+                tour_text = "Không xác định"
+
+            rating_value = r.get("rating", "")
+            if rating_value == "":
+                skill = safe_int(r.get("skill", 0))
+                attitude = safe_int(r.get("attitude", 0))
+                problem = safe_int(r.get("problem", r.get("problem_solving", 0)))
+                scores_temp = [x for x in [skill, attitude, problem] if x > 0]
+                rating_value = round(sum(scores_temp) / len(scores_temp) / 20, 1) if scores_temp else 5.0
+            else:
+                try:
+                    rating_value = float(rating_value)
+                except ValueError:
+                    rating_value = 5.0
+
+            stars = "⭐" * int(round(rating_value))
+            rating_text = f"{stars}  {rating_value:.1f} / 5.0"
+            review_date = str(r.get("date") or r.get("ngayGui") or r.get("thoiGian") or r.get("ngay") or "Chưa rõ").strip()
+            review_content = str(r.get("content") or r.get("comment") or r.get("noiDung") or r.get("danhGia") or "").strip()
+
+            # Card
+            card = tk.Frame(scrollable_frame, bg="#ffffff", highlightbackground="#e2e8f0", highlightthickness=1, padx=14, pady=12)
+            card.pack(fill="x", padx=10, pady=6)
+
+            # Hàng 1: Tên khách hàng & Rating
+            row1 = tk.Frame(card, bg="#ffffff")
+            row1.pack(fill="x", pady=(0, 4))
+            tk.Label(row1, text=customer_text, font=("Times New Roman", 11, "bold"), fg=THEME["text"], bg="#ffffff").pack(side="left")
+            tk.Label(row1, text=rating_text, font=("Times New Roman", 11, "bold"), fg="#eab308", bg="#ffffff").pack(side="right")
+
+            # Hàng 2: Tên tour & Ngày
+            row2 = tk.Frame(card, bg="#ffffff")
+            row2.pack(fill="x", pady=(0, 8))
+            tour_lbl_text = f"Tour: {tour_text}   |   Ngày gửi: {review_date}"
+            tk.Label(row2, text=tour_lbl_text, font=("Times New Roman", 9.5, "italic"), fg=THEME["muted"], bg="#ffffff").pack(side="left")
+
+            # Hàng 3: Nội dung đánh giá
+            content_lbl = tk.Label(card, text=review_content, font=("Times New Roman", 11), fg=THEME["text"], bg="#ffffff", justify="left", anchor="w", wraplength=700)
+            content_lbl.pack(fill="x", pady=(0, 6))
+
+            # Hàng 4: Phản hồi từ Admin (nếu có)
+            admin_reply = r.get("adminReply", "").strip()
+            if admin_reply:
+                reply_frame = tk.Frame(card, bg="#f8fafc", highlightbackground="#e2e8f0", highlightthickness=1, padx=12, pady=10)
+                reply_frame.pack(fill="x", pady=(6, 0))
+
+                accent_bar = tk.Frame(reply_frame, bg="#0ea5e9", width=3)
+                accent_bar.pack(side="left", fill="y")
+
+                reply_text_frame = tk.Frame(reply_frame, bg="#f8fafc")
+                reply_text_frame.pack(side="left", fill="both", expand=True, padx=(8, 0))
+
+                reply_title = f"Phản hồi từ Admin ({r.get('adminReplyBy', 'Quản trị viên')} - {r.get('adminReplyDate', '')}):"
+                tk.Label(reply_text_frame, text=reply_title, font=("Times New Roman", 9.5, "bold"), fg="#0ea5e9", bg="#f8fafc", anchor="w").pack(fill="x")
+                tk.Label(reply_text_frame, text=admin_reply, font=("Times New Roman", 10.5, "italic"), fg=THEME["text"], bg="#f8fafc", justify="left", anchor="w", wraplength=650).pack(fill="x", pady=(2, 0))
+
+            bind_double_click(card, lambda event, r_item=r: show_review_detail(r_item))
+
+        # Thêm nút làm mới
+        style_button(review_body, "↻ LÀM MỚI ĐÁNH GIÁ", THEME["primary"], tab_thong_ke).pack(anchor="w", pady=(10, 0))
+
+        # 4. Popup chi tiết khi double click
+        # Được xử lý bằng bind_double_click trên các card đánh giá phía trên
         set_status(f"Đang ở Đánh giá khách hàng - Hiển thị {total_reviews} đánh giá", THEME["primary"])
 
     def tab_thong_bao():
@@ -1540,11 +1509,11 @@ def khoi_tao_hdv(root, user_data=None):
             notif_hdv = str(normalized_notif.get("maHDV", "")).strip().upper()
             notif_user = str(normalized_notif.get("username", "")).strip().upper()
             target_ids = {my_ma_hdv, str(user_data.get("email", "")).strip().upper(), str(user_data.get("sdt", "")).strip().upper()}
+            evt_type = str(normalized_notif.get("eventType", "")).strip()
 
-            if (notif_hdv and notif_hdv == my_ma_hdv) or (notif_user and notif_user in target_ids):
+            if (notif_hdv and notif_hdv == my_ma_hdv) or (notif_user and notif_user in target_ids) or evt_type in {"broadcast", "guide_broadcast"}:
                 content_val = str(normalized_notif.get("content", "")).strip()
                 date_val = str(normalized_notif.get("date", "")).strip()
-                evt_type = str(normalized_notif.get("eventType", "")).strip()
                 m_tour = str(normalized_notif.get("maTour", "")).strip()
                 sig = (evt_type, m_tour, content_val, date_val)
                 if sig not in seen_notifs:
@@ -1784,8 +1753,11 @@ def khoi_tao_hdv(root, user_data=None):
                     ).grid(row=row_idx, column=col_offset + 1, sticky="w", pady=10)
                 else:
                     if kind == "gender":
-                        widget = ttk.Combobox(grid_frame, values=["Nam", "Nữ", "Khác"], state="readonly", font=("Times New Roman", 12))
-                        widget.set(str(hdv_data.get(key, "") or "Nam"))
+                        gender_val = str(hdv_data.get(key, "") or "Nam")
+                        if gender_val not in ["Nam", "Nữ"]:
+                            gender_val = "Nam"
+                        widget = ttk.Combobox(grid_frame, values=["Nam", "Nữ"], state="readonly", font=("Times New Roman", 12))
+                        widget.set(gender_val)
                     else:
                         show_char = "*" if kind == "password" else ""
                         widget = tk.Entry(grid_frame, font=("Times New Roman", 12), relief="solid", bd=1, show=show_char)
@@ -1875,6 +1847,8 @@ def khoi_tao_hdv(root, user_data=None):
                     return messagebox.showwarning("Lỗi", "Ngày sinh phải đúng định dạng dd/mm/yyyy.")
             if new_pass and not is_valid_password(new_pass):
                 return messagebox.showwarning("Lỗi", "Mật khẩu quá ngắn (tối thiểu 3 ký tự).")
+            if values["gioiTinh"] not in ["Nam", "Nữ"]:
+                return messagebox.showwarning("Lỗi", "Giới tính chỉ được chọn Nam hoặc Nữ.")
 
             for h in app["ql"].list_hdv:
                 if h.get("maHDV") == ma_hdv:
