@@ -2070,5 +2070,37 @@
     "action": "LOGIN",
     "status": "SUCCESS",
     "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T13:06:03",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T13:08:21",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T13:15:57",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-20T13:20:59",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
   }
 ]

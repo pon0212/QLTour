@@ -1851,11 +1851,12 @@ def khoi_tao_khach(root, user_data=None):
             if not my_reviews:
                 tree.insert("", "end", values=("Chưa có đánh giá", "", "", "", "", "", "", ""))
 
-            sy, sx = ttk.Scrollbar(wrapper, orient="vertical", command=tree.yview), ttk.Scrollbar(wrapper, orient="horizontal", command=tree.xview)
-            bind_autohide_scrollbar(tree, sy, "vertical"); bind_autohide_scrollbar(tree, sx, "horizontal")
+            sy = ttk.Scrollbar(wrapper, orient="vertical", command=tree.yview)
+            sx = ttk.Scrollbar(wrapper, orient="horizontal", command=tree.xview)
             tree.configure(yscrollcommand=sy.set, xscrollcommand=sx.set)
+            sx.pack(side="bottom", fill="x")
+            sy.pack(side="right", fill="y")
             tree.pack(side="left", fill="both", expand=True)
-            sy.pack(side="right", fill="y"); sx.pack(side="bottom", fill="x")
             apply_zebra(tree)
 
             def show_review_detail(_event=None):

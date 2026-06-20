@@ -1721,7 +1721,8 @@ def dashboard_tab(app):
     stats = tk.Frame(content_frame, bg=THEME["bg"])
     stats.grid(row=0, column=0, sticky="ew", pady=(0, stats_gap))
 
-    revenue = sum(safe_int(t.get("gia", 0)) * ql.get_occupied_seats(t["ma"]) for t in ql.list_tours)
+    revenue_report = build_revenue_report(ql)
+    revenue = revenue_report.get("overview", {}).get("tongPhaiThu", 0)
     stat_items = [
         ("Doanh thu tạm tính", f"{revenue:,}đ".replace(",", "."), THEME["primary"]),
         ("Tổng tour", str(len(ql.list_tours)), THEME["warning"]),
@@ -5313,7 +5314,7 @@ def open_revenue_report_window(app):
 
     card_value_labels = []
     stat_items = [
-        ("Tổng phải thu", format_currency(overview.get("tongPhaiThu", 0)), "#7c3aed"),
+        ("Doanh thu tạm tính", format_currency(overview.get("tongPhaiThu", 0)), "#7c3aed"),
         ("Số tiền đã thu", format_currency(overview.get("daThu", 0)), THEME["success"]),
         ("Đã hoàn tiền", format_currency(overview.get("tongHoanTien", 0)), THEME["danger"]),
         ("Số tiền còn nợ", format_currency(overview.get("conNo", 0)), THEME["warning"]),
@@ -7006,18 +7007,15 @@ def admin_reviews_tab(app):
     rev_wrapper = tk.Frame(app["container"], bg=THEME["surface"], bd=1, relief="solid")
     rev_wrapper.pack(fill="both", expand=True, pady=(0, 6))
 
-    columns = ("maReview", "username", "fullname", "target", "maBooking", "maTour", "tenTour", "maHDV", "tenHDV", "rating", "content", "date", "trangThai", "hasReply", "replyDate")
+    columns = ("maReview", "username", "target", "maBooking", "maTour", "maHDV", "rating", "content", "date", "trangThai", "hasReply", "replyDate")
     rev_tv = ttk.Treeview(rev_wrapper, columns=columns, show="headings", height=15)
     headings = {
         "maReview": "Mã Review",
         "username": "Username",
-        "fullname": "Tên khách",
         "target": "Loại ĐG",
         "maBooking": "Mã BK",
         "maTour": "Mã tour",
-        "tenTour": "Tên tour",
         "maHDV": "Mã HDV",
-        "tenHDV": "Tên HDV",
         "rating": "Điểm",
         "content": "Nội dung",
         "date": "Ngày gửi",
@@ -7028,13 +7026,10 @@ def admin_reviews_tab(app):
     widths = {
         "maReview": 90,
         "username": 110,
-        "fullname": 140,
         "target": 80,
         "maBooking": 80,
         "maTour": 80,
-        "tenTour": 180,
         "maHDV": 85,
-        "tenHDV": 130,
         "rating": 60,
         "content": 220,
         "date": 130,
@@ -7044,17 +7039,15 @@ def admin_reviews_tab(app):
     }
     for col in columns:
         rev_tv.heading(col, text=headings[col])
-        anchor_val = "w" if col in ("fullname", "tenTour", "content") else "center"
-        rev_tv.column(col, width=widths[col], minwidth=60, anchor=anchor_val, stretch=(col in ("tenTour", "content")))
+        anchor_val = "w" if col in ("content",) else "center"
+        rev_tv.column(col, width=widths[col], minwidth=60, anchor=anchor_val, stretch=(col in ("content",)))
 
     rev_sy = ttk.Scrollbar(rev_wrapper, orient="vertical", command=rev_tv.yview)
     rev_sx = ttk.Scrollbar(rev_wrapper, orient="horizontal", command=rev_tv.xview)
-    bind_autohide_scrollbar(rev_tv, rev_sy, "vertical")
-    bind_autohide_scrollbar(rev_tv, rev_sx, "horizontal")
     rev_tv.configure(yscrollcommand=rev_sy.set, xscrollcommand=rev_sx.set)
-    rev_tv.pack(side="left", fill="both", expand=True)
-    rev_sy.pack(side="right", fill="y")
     rev_sx.pack(side="bottom", fill="x")
+    rev_sy.pack(side="right", fill="y")
+    rev_tv.pack(side="left", fill="both", expand=True)
 
     for idx, r in enumerate(app["ql"].list_reviews, start=1):
         if not str(r.get("maReview", "")).strip():
@@ -7068,13 +7061,10 @@ def admin_reviews_tab(app):
         rev_tv.insert("", "end", values=(
             ma_review,
             normalized.get("username", ""),
-            normalized.get("fullname", ""),
             normalized.get("target", ""),
             normalized.get("maBooking", ""),
             normalized.get("maTour", ""),
-            normalized.get("tenTour", ""),
             normalized.get("maHDV", ""),
-            normalized.get("tenHDV", ""),
             normalized.get("rating", ""),
             normalized.get("content", ""),
             normalized.get("date", ""),

@@ -1305,8 +1305,9 @@ def khoi_tao_hdv(root, user_data=None):
 
         review_sy = ttk.Scrollbar(review_wrapper, orient="vertical", command=review_tv.yview)
         review_sx = ttk.Scrollbar(review_wrapper, orient="horizontal", command=review_tv.xview)
-        bind_autohide_scrollbar(review_tv, review_sy, "vertical")
-        bind_autohide_scrollbar(review_tv, review_sx, "horizontal")
+        review_tv.configure(yscrollcommand=review_sy.set, xscrollcommand=review_sx.set)
+        review_sx.pack(side="bottom", fill="x")
+        review_sy.pack(side="right", fill="y")
         review_tv.pack(side="left", fill="both", expand=True)
 
         for r in my_reviews:
