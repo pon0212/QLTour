@@ -490,10 +490,7 @@ def khoi_tao_khach(root, user_data=None):
     logout_btn = RoundedButton(util, text="  \uE7E8  Đăng xuất", bg="#b91c1c", fg="white", activebackground="#dc2626", activeforeground="white", relief="flat", bd=0, cursor="hand2", anchor="w", font=("Times New Roman", 13, "bold"), padx=14, pady=12, command=lambda: logout_user(root))
     logout_btn.pack(fill="x")
 
-    menu_scroll = ttk.Scrollbar(sidebar_outer, orient="vertical")
-    menu_canvas = tk.Canvas(sidebar_outer, bg=SIDEBAR_BG, highlightthickness=0, bd=0, yscrollcommand=menu_scroll.set)
-    menu_scroll.configure(command=menu_canvas.yview)
-    bind_autohide_scrollbar(menu_canvas, menu_scroll, "vertical")
+    menu_canvas = tk.Canvas(sidebar_outer, bg=SIDEBAR_BG, highlightthickness=0, bd=0)
     menu_canvas.pack(side="left", fill="both", expand=True)
 
     menu_inner = tk.Frame(menu_canvas, bg=SIDEBAR_BG)

@@ -7520,12 +7520,6 @@ def main(root=None):
         highlightthickness=0,
         bd=0
     )
-    menu_scroll = ttk.Scrollbar(
-        menu_shell,
-        orient="vertical",
-        command=menu_canvas.yview,
-    )
-    bind_autohide_scrollbar(menu_canvas, menu_scroll, "vertical")
     menu_canvas.pack(side="left", fill="both", expand=True)
 
     menu = tk.Frame(menu_canvas, bg=SIDEBAR_BG)
