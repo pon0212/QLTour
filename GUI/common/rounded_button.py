@@ -5,8 +5,8 @@ from tkinter import font as tkfont
 
 class RoundedButton(tk.Canvas):
     """
-    Điều chỉnh các nút buttton mặc định của Tkinter để có hình dạng tròn hơn 
-    và hỗ trợ nhiều tùy chọn hơn như màu nền, màu chữ, font chữ, padding, v.v. 
+    Điều chỉnh các nút buttton mặc định của Tkinter để có hình dạng tròn hơn
+    và hỗ trợ nhiều tùy chọn hơn như màu nền, màu chữ, font chữ, padding, v.v.
     Nút này cũng hỗ trợ trạng thái "disabled" và hiệu ứng khi nhấn hoặc hover chuột.
     """
 
@@ -119,8 +119,8 @@ class RoundedButton(tk.Canvas):
     def _text_layout(self, width, height):
         anchor = str(self._anchor or "center").strip().lower()
 
-        # Map only valid Tk anchor values to avoid substring bugs
-        # (e.g. "center" contains "e" and was incorrectly treated as east).
+
+
         if anchor in {"w", "nw", "sw"}:
             x = self._padx
             h = "w"

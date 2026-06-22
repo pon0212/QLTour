@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -328,19 +329,19 @@ def normalize_all_tour_operation_notes(tours):
         should_update = False
         default_note = get_operation_note_by_tour_status(status)
 
-        # Rule 1: ghiChuDieuHanh rỗng
+
         if not note:
             should_update = True
-        # Rule 2: Tour đang mở bán nhưng ghi chú chứa nội dung liên quan hoàn tất hoặc kết thúc
+
         elif status == "Đang mở bán" and ("hoàn tất" in note_lower or "hoàn thành" in note_lower or "kết thúc" in note_lower):
             should_update = True
-        # Rule 3: Tour đã kết thúc nhưng ghi chú chứa nội dung liên quan đang mở bán
+
         elif status == "Đã kết thúc" and "mở bán" in note_lower:
             should_update = True
-        # Rule 4: Tour đã hủy nhưng ghi chú không nhắc đến hủy/booking/hoàn tiền
+
         elif status == "Đã hủy" and not any(k in note_lower for k in ("hủy", "booking", "hoàn tiền")):
             should_update = True
-        # Rule 5: Sai lệch rõ ràng khác
+
         elif status == "Sắp mở bán" and ("đang diễn ra" in note_lower or "hoàn tất" in note_lower or "kết thúc" in note_lower):
             should_update = True
         elif status == "Đang diễn ra" and ("mở bán" in note_lower or "hoàn tất" in note_lower or "kết thúc" in note_lower):
@@ -509,10 +510,6 @@ def is_upcoming_or_ongoing(start_date: date | None, end_date: date | None, today
     now = today or date.today()
     normalized_end = end_date if end_date and end_date >= start_date else start_date
     return start_date >= now or (start_date <= now <= normalized_end)
-
-# ===== BEGIN core/state_machine.py =====
-
-
 
 TOUR_STATE_DRAFT = "draft"
 TOUR_STATE_OPEN = "open"
@@ -737,7 +734,7 @@ def calculate_remaining_amount(booking: dict) -> int:
 
 def show_wrapped_message(title: str, message: str, kind: str = "info", parent=None) -> bool | None:
     """
-    Hiển thị thông báo qua tkinter messagebox với nội dung được tự động ngắt dòng 
+    Hiển thị thông báo qua tkinter messagebox với nội dung được tự động ngắt dòng
     ở độ rộng tối đa 65 ký tự trên mỗi dòng.
     """
     import textwrap
@@ -781,7 +778,7 @@ def show_detailed_notification_popup(parent, notif_data: dict, datastore=None):
     popup.transient(parent)
     popup.grab_set()
 
-    # Căn giữa popup
+
     popup.update_idletasks()
     w = popup.winfo_width()
     h = popup.winfo_height()
@@ -789,7 +786,7 @@ def show_detailed_notification_popup(parent, notif_data: dict, datastore=None):
     y = (popup.winfo_screenheight() // 2) - (h // 2)
     popup.geometry(f"+{x}+{y}")
 
-    # Lấy thông tin an toàn
+
     def safe_get(keys, default="Không có"):
         for k in keys:
             if k in notif_data:
@@ -941,26 +938,26 @@ def cleanup_deleted_tour_references(datastore, tour_code: str) -> None:
 
     tour_code_upper = str(tour_code).strip().upper()
 
-    # 1. Dọn dẹp bookings
+
     if hasattr(datastore, "data") and isinstance(datastore.data, dict):
         bookings = datastore.data.get("bookings", [])
         if isinstance(bookings, list):
             datastore.data["bookings"] = [
-                b for b in bookings 
+                b for b in bookings
                 if str(b.get("maTour", "")).strip().upper() != tour_code_upper
             ]
 
-    # 2. Dọn dẹp reviews
+
     if hasattr(datastore, "reviews") and isinstance(datastore.reviews, list):
         datastore.reviews = [
-            r for r in datastore.reviews 
+            r for r in datastore.reviews
             if str(r.get("maTour", "")).strip().upper() != tour_code_upper
         ]
 
-    # 3. Dọn dẹp notifications
+
     if hasattr(datastore, "notifications") and isinstance(datastore.notifications, list):
         datastore.notifications = [
-            n for n in datastore.notifications 
+            n for n in datastore.notifications
             if str(n.get("maTour", "")).strip().upper() != tour_code_upper
         ]
 
@@ -979,10 +976,6 @@ def can_booking_transition(state_from: str, state_to: str) -> bool:
 
 def can_guide_transition(state_from: str, state_to: str) -> bool:
     return TransitionRule(state_from, state_to) in GUIDE_TRANSITIONS or state_from == state_to
-
-
-# ===== BEGIN core/security.py =====
-
 
 
 SHA256_PATTERN = re.compile(r"[a-fA-F0-9]{64}")
@@ -1056,7 +1049,7 @@ def upgrade_password_hash(stored_password: str, input_password: str) -> str:
 def mask_password(_: str) -> str:
     return MASKED_PASSWORD
 
-# ===== BEGIN core/normalizers.py =====
+
 
 
 def _first_text(data: dict, keys: tuple[str, ...], default: str = "") -> str:
@@ -1156,7 +1149,7 @@ def normalize_notification_item(
         res["maBooking"] = ma_booking
     return res
 
-# ===== BEGIN core/crud_logging.py =====
+
 
 
 
@@ -1204,7 +1197,7 @@ def write_crud_log(
         datastore=datastore,
     )
 
-# ===== BEGIN core/business_rules.py =====
+
 
 
 def _safe_int(value, default: int = 0) -> int:
@@ -1303,7 +1296,7 @@ def normalize_business_state(data: dict) -> dict:
 
     return data
 
-# ===== BEGIN core/booking_pricing.py =====
+
 
 
 def safe_int(value, default=0):
@@ -1346,23 +1339,13 @@ def calculate_age_discount(price_per_person, breakdown):
         round(price * child * 0.20) + round(price * senior * 0.35),
     )
 
-# ===== BEGIN core/voucher_service.py =====
 
 
 
 
-def safe_int(value, default=0):
-    try:
-        return int(str(value).strip())
-    except (TypeError, ValueError):
-        return default
 
 
-def parse_ddmmyyyy(value):
-    try:
-        return datetime.strptime(str(value or "").strip(), "%d/%m/%Y").date()
-    except ValueError:
-        return None
+
 
 
 def normalize_tour_scope(value) -> str:
@@ -1394,7 +1377,7 @@ def normalize_tour_scope(value) -> str:
         if not token:
             continue
         if _scope_key(token) in global_scope_tokens:
-            # Bất kỳ biến thể "tất cả" nào đều quy về phạm vi toàn bộ tour.
+
             return ""
         normalized = token.upper()
         if normalized and normalized not in items:
@@ -1708,7 +1691,7 @@ def build_voucher_quote(datastore, voucher_code, gross_total, username="", ma_to
         "allowed_tours": allowed_tours,
     }
 
-# ===== BEGIN core/notification_service.py =====
+
 
 
 
@@ -1899,7 +1882,7 @@ def sync_completed_tour_bookings(datastore) -> bool:
         ma_tour = str(booking.get("maTour", "")).strip().upper()
         if not ma_tour:
             continue
-        
+
         tour = datastore.find_tour(ma_tour)
         if not tour or not isinstance(tour, dict):
             continue
@@ -1907,26 +1890,26 @@ def sync_completed_tour_bookings(datastore) -> bool:
         tour_status = str(tour.get("trangThai", "")).strip()
         tour_state = str(tour.get("tourState", "")).strip()
 
-        # Kiểm tra xem tour có kết thúc hay không
+
         if tour_status == "Đã kết thúc" or tour_state == "completed":
             booking_status = str(booking.get("trangThai", "")).strip()
-            
-            # Chỉ chuyển booking sang "Đã hoàn thành" nếu trạng thái hiện tại là "Đã cọc" hoặc "Đã thanh toán"
+
+
             if booking_status in {"Đã cọc", "Đã thanh toán"}:
                 booking["trangThai"] = "Đã hoàn thành"
                 booking["bookingState"] = "completed"
                 has_changed = True
 
-            # Tạo notification hoàn thành tour cho user nếu booking ở trạng thái "Đã hoàn thành"
+
             if booking.get("trangThai") == "Đã hoàn thành":
                 username = str(booking.get("username", booking.get("usernameDat", ""))).strip()
                 ma_booking = str(booking.get("maBooking", "")).strip()
                 ten_tour = str(tour.get("ten", "")).strip()
 
-                # Kiểm tra xem đã tạo notification chưa
+
                 already_notified = booking.get("completedNotified") == True
                 if not already_notified:
-                    # Chống trùng bằng cách quét danh sách notifications hiện tại
+
                     for n in notifications:
                         if (
                             str(n.get("eventType", "")).strip() == "tour_completed"
@@ -1940,7 +1923,7 @@ def sync_completed_tour_bookings(datastore) -> bool:
                             break
 
                 if not already_notified:
-                    # Tạo nội dung thông báo
+
                     content = f"Tour {ten_tour} của booking {ma_booking} đã hoàn thành. Cảm ơn bạn đã sử dụng dịch vụ. Bạn có thể đánh giá tour/HDV ngay bây giờ."
                     emit_notification(
                         datastore,
@@ -2157,7 +2140,7 @@ def update_tour_operational_note(
     return {"success": True, "message": "Đã cập nhật ghi chú vận hành.", "tour": tour}
 
 
-# ===== BEGIN core/review_service.py =====
+
 
 
 
@@ -2221,7 +2204,7 @@ def _normalize_review_rating(rating_value):
     if 0 < numeric < 1:
         numeric = round(numeric * 5.0, 1)
     elif numeric > 5:
-        # Backward-compatibility: support legacy 1-20 and 1-60 scales.
+
         if numeric <= 20:
             numeric = round((numeric / 20.0) * 5.0, 1)
         else:
@@ -2281,27 +2264,12 @@ def is_review_hidden(review) -> bool:
     return bool(review.get("hidden", False)) or str(review.get("trangThai", "")).strip() == "Đã ẩn"
 
 
-def get_review_rating(review: dict) -> int:
-    """
-    Trả về số sao đánh giá hợp lệ từ 1 đến 5 từ đối tượng đánh giá.
-    """
-    if not isinstance(review, dict):
-        return 0
-    for key in ("rating", "soSao", "diem", "ratingTour", "ratingHDV"):
-        value = review.get(key)
-        try:
-            rating = int(float(value))
-            if 1 <= rating <= 5:
-                return rating
-        except (TypeError, ValueError):
-            pass
-    return 0
 
 
 def normalize_review_for_display(review, datastore=None):
     normalized = normalize_review_item(review or {}, include_rating=True, include_ma_hdv=True)
-    
-    # Ensure rating is properly normalized for display using get_review_rating
+
+
     rating_val = get_review_rating(review)
     normalized["rating"] = rating_val if rating_val > 0 else ""
 
@@ -2316,8 +2284,8 @@ def normalize_review_for_display(review, datastore=None):
             guide = datastore.find_hdv(ma_hdv)
             if isinstance(guide, dict):
                 normalized["tenHDV"] = str(guide.get("tenHDV", "")).strip()
-    
-    # Resolve customer name if missing or blank
+
+
     username = normalized.get("username", "")
     if not normalized.get("fullname") and datastore is not None and username:
         user_info = datastore.find_user(username) if hasattr(datastore, "find_user") else None
@@ -2326,17 +2294,17 @@ def normalize_review_for_display(review, datastore=None):
             user_info = next((u for u in users_list if str(u.get("username", "")).strip().lower() == str(username).strip().lower()), None)
         if user_info:
             normalized["fullname"] = str(user_info.get("fullname", user_info.get("name", ""))).strip()
-            
+
     normalized["adminReply"] = str((review or {}).get("adminReply", "")).strip()
     normalized["adminReplyDate"] = str((review or {}).get("adminReplyDate", "")).strip()
     normalized["adminReplyBy"] = str((review or {}).get("adminReplyBy", "")).strip()
-    
-    # Hidden details fallback
+
+
     normalized["hiddenReason"] = str((review or {}).get("hiddenReason", "")).strip()
     normalized["hiddenDate"] = str((review or {}).get("hiddenDate", "")).strip()
     normalized["hiddenBy"] = str((review or {}).get("hiddenBy", "")).strip()
-    
-    # Status
+
+
     trang_thai = str((review or {}).get("trangThai", "")).strip()
     if not trang_thai:
         trang_thai = "Đã ẩn" if bool((review or {}).get("hidden", False)) else "Hiển thị"
@@ -2508,7 +2476,7 @@ def create_review(
     return ReviewResult(True, "Đã ghi nhận đánh giá thành công.", review=review)
 
 
-# ===== BEGIN core/reporting.py =====
+
 
 
 
@@ -2624,14 +2592,14 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
     for booking in _iter_bookings(datastore):
         ma_tour = str(booking.get("maTour", "")).strip()
 
-        # 1. Lọc theo mã hoặc tên tour (query)
+
         if query:
             q = str(query).strip().lower()
             tour_name_lower = _find_tour_name_with_booking(datastore, ma_tour, booking).lower()
             if q not in ma_tour.lower() and q not in tour_name_lower:
                 continue
 
-        # 2. Trích xuất tháng và năm từ ngayDat
+
         ngay_dat = str(booking.get("ngayDat", "")).strip()
         month_val = ""
         year_val = ""
@@ -2644,12 +2612,12 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
             except Exception:
                 pass
 
-        # Lọc theo tháng
+
         if month and month != "Tất cả":
             if month_val != month.zfill(2):
                 continue
 
-        # Lọc theo năm
+
         if year and year != "Tất cả":
             if year_val != year:
                 continue
@@ -2724,7 +2692,7 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
             overview["conNo"] += debt
             overview["doanhThuGop"] += paid
             overview["doanhThuThuan"] += paid
-            
+
             for row in (tour_row, month_row, quarter_row):
                 row["bookingHieuLuc"] += 1
                 row["tongPhaiThu"] += total
@@ -2735,7 +2703,7 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
             overview["daThu"] += paid
             overview["tongHoanTien"] += refunded
             overview["doanhThuThuan"] += (paid - refunded)
-            
+
             for row in (tour_row, month_row, quarter_row):
                 row["daThu"] += paid
                 row["daHoan"] += refunded
@@ -2764,7 +2732,7 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
             }
         )
 
-    # Explicitly calculate Doanh thu thực nhận = Đã thu - Đã hoàn for overview and rows
+
     overview["doanhThuThuan"] = overview["daThu"] - overview["tongHoanTien"]
     for row in by_tour.values():
         row["doanhThuThucNhan"] = row["daThu"] - row["daHoan"]
@@ -2807,7 +2775,7 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
         "booking_details": booking_details,
     }
 
-# ===== BEGIN core/booking_service.py =====
+
 
 
 
@@ -3091,15 +3059,6 @@ def _find_tour(datastore, ma_tour):
     )
 
 
-def _find_booking(datastore, ma_booking):
-    return next(
-        (
-            booking
-            for booking in _get_bookings(datastore)
-            if str(booking.get("maBooking", "")).strip() == str(ma_booking or "").strip()
-        ),
-        None,
-    )
 
 
 def can_hard_delete_booking(datastore, booking: dict | None) -> tuple[bool, str]:
@@ -3321,7 +3280,7 @@ def apply_payment(datastore, ma_booking, pay_more, method, actor="", role="user"
         if isinstance(user_record, dict) and not is_user_active(user_record):
             return BookingResult(False, "Tài khoản của bạn đang bị khóa hoặc tạm ngừng hoạt động.", level="warning")
 
-    # Kiểm tra trạng thái của tour liên kết
+
     tour_code = booking.get("maTour", "")
     if tour_code:
         tour = datastore.find_tour(tour_code) if hasattr(datastore, "find_tour") else None
@@ -3482,7 +3441,7 @@ def approve_refund(datastore, ma_booking, actor="", note="", role=""):
     if str(booking.get("trangThai", "")).strip() != "Chờ hoàn tiền":
         return BookingResult(False, "Booking này không ở trạng thái chờ hoàn tiền.", level="warning")
 
-    # Kiểm tra chặn duyệt hoàn nếu ngày hiện tại đến khởi hành < 7 ngày
+
     tour = _find_tour(datastore, booking.get("maTour"))
     start_date = parse_ddmmyyyy((tour or {}).get("ngay"))
     today_local = datetime.now().date()
@@ -3637,9 +3596,6 @@ def summarize_bookings_by_tour(datastore, actor: str = "", role: str = "admin") 
 
     return sorted(rows, key=lambda row: (row["maTour"], row["tenTour"]))
 
-# ===== BEGIN core/tour_service.py =====
-
-
 
 @dataclass(slots=True)
 class TourResult:
@@ -3647,14 +3603,6 @@ class TourResult:
     message: str
     tour: dict | None = None
     level: str = "info"
-
-
-def _safe_int(value, default: int = 0) -> int:
-    try:
-        return int(str(value).strip())
-    except (TypeError, ValueError):
-        return default
-
 
 def _parse_ddmmyyyy(value: str | None):
     text = str(value or "").strip()
@@ -3875,8 +3823,8 @@ def complete_tour(datastore, ma_tour: str, actor: str = "guide", note: str = "")
     )
     return TourResult(True, f"Đã kết thúc tour {tour.get('ma', '')}.", tour=tour)
 
-# ===== BEGIN core/system_rules.py =====
-# -*- coding: utf-8 -*-
+
+
 
 
 
@@ -3887,25 +3835,12 @@ TERMINAL_TOUR_STATUSES = {TOUR_STATUS_COMPLETED, TOUR_STATUS_CANCELLED}
 AUTO_CANCEL_UNPAID_DAYS = 15
 
 
-def _safe_int(value, default=0):
-    try:
-        return int(str(value).strip())
-    except (TypeError, ValueError):
-        return default
 
 
 def _non_negative_int(value, default=0):
     return max(0, _safe_int(value, default))
 
 
-def _parse_ddmmyyyy(value: str | None):
-    text = str(value or "").strip()
-    if not text:
-        return None
-    try:
-        return datetime.strptime(text, "%d/%m/%Y").date()
-    except ValueError:
-        return None
 
 
 def _normalize_voucher_scope(raw_value) -> str:
@@ -4350,7 +4285,7 @@ def apply_system_rules(data: dict, today: date | None = None) -> dict:
     for booking in data["bookings"]:
         _normalize_booking(booking, tours_by_code, today)
 
-    # Soft revalidation to drop stale voucher assignments after booking edits.
+
     _soft_revalidate_booking_vouchers(data, today)
 
     occupied_by_tour = {}
@@ -4416,7 +4351,7 @@ def sync_tour_booking_counts(datastore):
     tours = getattr(datastore, "list_tours", [])
     active_tour_codes = {str(t.get("ma", "")).strip().upper() for t in tours if t.get("ma")}
 
-    # 1. Xóa booking của tour đã bị xóa
+
     bookings = getattr(datastore, "list_bookings", [])
     valid_bookings = []
     for b in bookings:
@@ -4425,24 +4360,24 @@ def sync_tour_booking_counts(datastore):
             valid_bookings.append(b)
     datastore.data["bookings"] = valid_bookings
 
-    # 2. Xóa review/notification của tour đã bị xóa
+
     if hasattr(datastore, "reviews") and datastore.reviews:
         datastore.reviews = [r for r in datastore.reviews if str(r.get("maTour", "")).strip().upper() in active_tour_codes]
     if hasattr(datastore, "notifications") and datastore.notifications:
         datastore.notifications = [n for n in datastore.notifications if not n.get("maTour") or str(n.get("maTour", "")).strip().upper() in active_tour_codes]
 
-    # 3. Tính toán lại số khách đã đặt (soLuotDaDat) và sức chứa (soLuotMoBan)
+
     for tour in tours:
         ma_tour = tour.get("ma", "")
         occupied = datastore.get_occupied_seats(ma_tour)
         tour["soLuotDaDat"] = occupied
         tour["soLuotMoBan"] = max(0, _safe_int(tour.get("khach", 0)))
-        # Xóa bỏ hoàn toàn chi phí dự kiến & thực tế khi đồng bộ
+
         tour.pop("chiPhiDuKien", None)
         tour.pop("chiPhiThucTe", None)
 
 
-# ===== BEGIN core/datastore.py =====
+
 
 
 
@@ -4871,7 +4806,7 @@ class JSONDataStore(SQLiteDataStore):
         self.notifications = self._normalize_collection(self.notifications, self._normalize_notification_item)
         self._sync_legacy_json_files()
 
-# ===== BEGIN core/auth.py =====
+
 
 
 
@@ -5122,7 +5057,7 @@ class AuthService:
             return record.get("fullname", fallback)
         return fallback
 
-# ===== BEGIN core/tk_text.py =====
+
 
 
 
@@ -5151,8 +5086,8 @@ _MARKERS = (
     "\u02dc",
     "\u20ac",
 )
-# Chỉ tách whitespace chuẩn để giữ nguyên NBSP (\u00A0) trong token mojibake
-# kiểu "Ã ", từ đó _fix_token có thể phục hồi đúng thành "à".
+
+
 _TOKEN_SPLIT_RE = re.compile(r"([ \t\r\n]+)")
 _SECOND_ORDER_REPLACEMENTS = (
     ("\u0102\u0192", "\u00c3"),
@@ -5252,7 +5187,7 @@ def _fix_token(token: str) -> str:
 
 def fix_mojibake(value):
     if isinstance(value, str):
-        # Bảo vệ chữ Việt hợp lệ: chỉ cố sửa khi có dấu hiệu mojibake rõ ràng.
+
         suspicious_markers = ("\u00c3", "\u00c4", "\u00c2", "\u00ca", "\u00d4", "\u00c6", "\ufffd")
         if not any(marker in value for marker in suspicious_markers):
             return value
@@ -5260,8 +5195,8 @@ def fix_mojibake(value):
         text = value.strip()
         if not text or not any(marker in text for marker in _MARKERS):
             return value
-        # Xử lý theo các đoạn ký tự <= 255 để không bị lỗi khi token trộn giữa
-        # mojibake (cp1252) và ký tự Unicode tiếng Việt hợp lệ (>255).
+
+
         buffer: list[str] = []
         normalized_parts: list[str] = []
         for ch in value:
@@ -5377,5 +5312,3 @@ def enable_tk_text_autofix():
     messagebox.showwarning = wrap_messagebox(original_showwarning)
     messagebox.showerror = wrap_messagebox(original_showerror)
     messagebox.askyesno = wrap_messagebox(original_askyesno)
-
-

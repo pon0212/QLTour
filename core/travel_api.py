@@ -59,8 +59,8 @@ def normalize_vietnam_location_name(text):
     if not text:
         return ""
     text = str(text).strip()
-    
-    # Check các địa danh phổ biến
+
+
     lower_text = text.lower()
     common_mappings = {
         "đà lạt": "Đà Lạt, Lâm Đồng, Việt Nam",
@@ -74,13 +74,13 @@ def normalize_vietnam_location_name(text):
         "nha trang": "Nha Trang, Khánh Hòa, Việt Nam",
         "cần thơ": "Cần Thơ, Việt Nam"
     }
-    
+
     if lower_text in common_mappings:
         return common_mappings[lower_text]
-        
+
     if not (lower_text.endswith("việt nam") or lower_text.endswith("vietnam")):
         text = f"{text}, Việt Nam"
-        
+
     return text
 
 
@@ -98,8 +98,8 @@ def normalize_location_query(value):
 def build_weather_location_query(tour, place_name):
     place = " ".join(str(place_name or "").strip().split())
     destination = " ".join(str((tour or {}).get("diemDen", "")).strip().split())
-    
-    # Remove existing "Việt Nam" or "Vietnam" suffixes to build clean format
+
+
     for suffix in [", Việt Nam", " Việt Nam", ", Vietnam", " Vietnam"]:
         if place.endswith(suffix):
             place = place[:-len(suffix)].strip()
@@ -174,7 +174,7 @@ def is_vietnam_result(item):
         try:
             lat_f = float(lat)
             lon_f = float(lon)
-            # Tọa độ Việt Nam nằm trong khoảng vĩ độ 8.0 - 24.0 và kinh độ 102.0 - 110.0
+
             if not (8.0 <= lat_f <= 24.0 and 102.0 <= lon_f <= 110.0):
                 return False
         except (ValueError, TypeError):
@@ -424,7 +424,7 @@ def extract_google_address_components(address_components):
     admin1 = ""
     admin2 = ""
     admin3 = ""
-    
+
     for comp in address_components:
         types = comp.get("types", [])
         if "country" in types:
@@ -436,7 +436,7 @@ def extract_google_address_components(address_components):
             admin2 = comp.get("long_name", "")
         elif "administrative_area_level_3" in types:
             admin3 = comp.get("long_name", "")
-            
+
     return country, country_code, admin1, admin2, admin3
 
 
@@ -447,7 +447,7 @@ def geocode_with_google_maps(query, expected_destination="", api_key=""):
         "language": "vi"
     })
     url = f"https://maps.googleapis.com/maps/api/geocode/json?{params}"
-    
+
     try:
         req = Request(
             url,
@@ -455,13 +455,13 @@ def geocode_with_google_maps(query, expected_destination="", api_key=""):
         )
         with urlopen(req, timeout=10) as response:
             data = json.loads(response.read().decode("utf-8"))
-            
+
         status = data.get("status")
         if status == "OK":
             results = data.get("results", [])
             if not results:
                 return {"ok": False, "error": "Google Maps không trả về kết quả."}
-                
+
             candidates = []
             for row in results:
                 geo = row.get("geometry", {}).get("location", {})
@@ -469,7 +469,7 @@ def geocode_with_google_maps(query, expected_destination="", api_key=""):
                 lng = geo.get("lng")
                 addr_comps = row.get("address_components", [])
                 country, country_code, admin1, admin2, admin3 = extract_google_address_components(addr_comps)
-                
+
                 item = {
                     "display_name": row.get("formatted_address", ""),
                     "resolved_name": row.get("formatted_address", ""),
@@ -482,16 +482,16 @@ def geocode_with_google_maps(query, expected_destination="", api_key=""):
                     "longitude": lng,
                     "address": row.get("formatted_address", "")
                 }
-                
+
                 if not is_vietnam_result(item):
                     continue
                 if not is_location_match_expected_destination(item, expected_destination):
                     continue
                 candidates.append(item)
-                
+
             if not candidates:
                 return {"ok": False, "error": "Không tìm thấy địa điểm tương ứng."}
-                
+
             selected = candidates[0]
             return {
                 "ok": True,
@@ -517,7 +517,7 @@ def geocode_with_google_maps(query, expected_destination="", api_key=""):
             return {"ok": False, "error": "Hết hạn ngạch (quota) cuộc gọi Google Maps API."}
         else:
             return {"ok": False, "error": f"Lỗi Google Maps API status: {status}"}
-            
+
     except HTTPError as exc:
         if exc.code == 403:
             return {"ok": False, "error": "Lỗi xác thực API Key Google Maps."}
@@ -531,7 +531,7 @@ def geocode_with_google_maps(query, expected_destination="", api_key=""):
 
 
 def geocode_location(location_name, expected_destination=""):
-    # Chuẩn hóa địa danh trước khi truy vấn API
+
     location_name = normalize_vietnam_location_name(location_name)
     expected_destination = normalize_vietnam_location_name(expected_destination)
 
@@ -545,7 +545,7 @@ def geocode_location(location_name, expected_destination=""):
     variants = build_query_variants(query, expected_destination)
     expected_key = normalize_location_key(expected_destination)
 
-    # Thử Google Maps Geocoding API trước nếu có API key
+
     import os
     api_key = os.environ.get("GOOGLE_MAPS_API_KEY", "").strip()
     if api_key:
@@ -561,7 +561,7 @@ def geocode_location(location_name, expected_destination=""):
                     return {"ok": False, "error": f"API key sai: {err_msg}"}
                 print(f"[travel_api] Google Maps thất bại: {err_msg}")
 
-    # Fallback mechanism (Nominatim / Open-Meteo)
+
     print("[travel_api] Đang sử dụng cơ chế fallback...")
     prefer_nominatim_first = should_prefer_nominatim(query) or expected_key in ("an giang", "chau doc")
 

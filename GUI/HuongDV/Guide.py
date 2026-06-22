@@ -1,8 +1,9 @@
 
 
-# =========================
-# VALIDATION
-# =========================
+
+
+
+
 from GUI.common.rounded_button import RoundedButton
 from GUI.common.weather_popup import open_tour_weather_popup
 from core.app import (
@@ -37,9 +38,9 @@ def is_valid_password(pwd):
 def safe_int(value):
     return feature_safe_int(value)
 
-# =========================
-# THEME
-# =========================
+
+
+
 THEME = {
     "bg": "#f1f5f9",
     "surface": "#ffffff",
@@ -66,9 +67,9 @@ HDV_STATUSES = ["Sẵn sàng", "Đã phân công", "Đang dẫn tour", "Tạm ng
 TOUR_FINISHED_STATUSES = ["Đã kết thúc", "Đã hủy"]
 BOOKING_CANCEL_STATUSES = ["Đã hủy", "Chờ hoàn tiền", "Hoàn tiền"]
 
-# =========================
-# PATH DỮ LIỆU
-# =========================
+
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 RAW_DATA_DIR = os.getenv("TRAVEL_DATA_DIR", os.path.join(PROJECT_DIR, "data"))
@@ -103,9 +104,9 @@ DEFAULT_DATA = {
 }
 
 
-# =========================
-# DATA STORE
-# =========================
+
+
+
 def normalize_review_item(r, datastore=None):
     normalized = core_normalize_review_item(
         r,
@@ -129,7 +130,7 @@ def normalize_review_item(r, datastore=None):
         if tour:
             ma_hdv = str(tour.get("hdvPhuTrach", "")).strip()
             normalized["maHDV"] = ma_hdv
-            
+
     if not ma_hdv and datastore is not None and normalized.get("maBooking"):
         bookings_list = getattr(datastore, "list_bookings", getattr(datastore, "data", {}).get("bookings", []))
         booking = next((b for b in bookings_list if str(b.get("maBooking", b.get("ma", ""))).strip().upper() == str(normalized.get("maBooking", "")).strip().upper()), None)
@@ -138,7 +139,7 @@ def normalize_review_item(r, datastore=None):
             if b_tour:
                 ma_hdv = str(b_tour.get("hdvPhuTrach", "")).strip()
                 normalized["maHDV"] = ma_hdv
-                
+
     if ma_hdv and not ten_hdv and datastore is not None:
         hdv = datastore.find_hdv(ma_hdv)
         if hdv:
@@ -188,9 +189,9 @@ class DataStore(JSONDataStore):
         )
 
 
-# =========================
-# UI HELPER
-# =========================
+
+
+
 def apply_zebra(tree):
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
@@ -305,9 +306,9 @@ def responsive_wraplength(widget, offset=80, min_width=260, fallback=760):
     return max(min_width, width - offset)
 
 
-# =========================
-# GUIDE UI
-# =========================
+
+
+
 def khoi_tao_hdv(root, user_data=None):
     if not user_data:
         user_data = {"maHDV": "HDV01", "tenHDV": "Hướng Dẫn Viên"}
@@ -851,10 +852,10 @@ def khoi_tao_hdv(root, user_data=None):
                     itinerary_lines.append(f"  {mo_ta}")
             if itinerary_lines:
                 _, itinerary_body = make_section(app["detail_frame"], "Lịch trình tour", "Chi tiết các điểm tham quan theo từng ngày.", accent="#7c3aed")
-                
+
                 itinerary_wrapper = tk.Frame(itinerary_body, bg=THEME["surface"])
                 itinerary_wrapper.pack(fill="x", pady=(0, 8))
-                
+
                 itinerary_text = tk.Text(
                     itinerary_wrapper,
                     height=9,
@@ -866,9 +867,9 @@ def khoi_tao_hdv(root, user_data=None):
                 )
                 itinerary_sb = ttk.Scrollbar(itinerary_wrapper, orient="vertical", command=itinerary_text.yview)
                 itinerary_text.configure(yscrollcommand=itinerary_sb.set)
-                
+
                 bind_autohide_scrollbar(itinerary_text, itinerary_sb, "vertical")
-                
+
                 itinerary_text.pack(side="left", fill="both", expand=True)
                 itinerary_text.insert("1.0", "\n".join(itinerary_lines))
                 itinerary_text.configure(state="disabled")
@@ -1010,7 +1011,7 @@ def khoi_tao_hdv(root, user_data=None):
         fit_tour_columns()
 
         tv.bind("<<TreeviewSelect>>", hien_thi_chi_tiet)
-        
+
         def on_tour_double_click(event):
             """Double-click vào tour để xem thời tiết."""
             sel = tv.selection()
@@ -1020,7 +1021,7 @@ def khoi_tao_hdv(root, user_data=None):
             tour = app["ql"].find_tour(ma)
             if tour:
                 open_tour_weather_popup(app["root"], tour, app["ql"])
-        
+
         tv.bind("<Double-1>", on_tour_double_click)
 
         app["detail_frame"] = tk.Frame(content_area, bg=THEME["bg"])
@@ -1047,7 +1048,7 @@ def khoi_tao_hdv(root, user_data=None):
         app["current_tab"] = "stats"
         app["ql"].load()
 
-        # 1. Lọc đánh giá đúng HDV đăng nhập (3 bước ưu tiên)
+
         from core.app import get_review_rating
         my_reviews = []
         ma_hdv_upper = str(ma_hdv).strip().upper()
@@ -1060,15 +1061,15 @@ def khoi_tao_hdv(root, user_data=None):
             ma_booking_r = str(r.get("maBooking", "")).strip().upper()
 
             matched = False
-            # Buoc 1: maHDV trung truc tiep
+
             if ma_hdv_r and ma_hdv_r == ma_hdv_upper:
                 matched = True
-            # Buoc 2: Thieu maHDV, doi chieu qua maTour -> hdvPhuTrach
+
             elif not ma_hdv_r and ma_tour_r:
                 tour = app["ql"].find_tour(ma_tour_r)
                 if tour and str(tour.get("hdvPhuTrach", "")).strip().upper() == ma_hdv_upper:
                     matched = True
-            # Buoc 3: Thieu ca maHDV lan maTour, tim qua maBooking -> maTour -> hdvPhuTrach
+
             elif not ma_hdv_r and not ma_tour_r and ma_booking_r:
                 found_booking = None
                 for bk in app["ql"].data.get("bookings", []):
@@ -1085,22 +1086,22 @@ def khoi_tao_hdv(root, user_data=None):
             if matched:
                 my_reviews.append(r)
 
-        # Đánh số REVxxx tự động nếu thiếu
+
         for idx, r in enumerate(my_reviews, 1):
             if not r.get("maReview"):
                 r["maReview"] = f"REV{idx:03d}"
 
-        # Tính toán thống kê chi tiết từ review thực tế
+
         valid_ratings = []
         for r in my_reviews:
             rating_num = get_review_rating(r)
             if rating_num == 0:
-                # Fallback: tính từ điểm thành phần (skill/attitude/problem)
+
                 skill = safe_int(r.get("skill", 0))
                 attitude = safe_int(r.get("attitude", 0))
                 problem = safe_int(r.get("problem", r.get("problem_solving", 0)))
                 scores_temp = [x for x in [skill, attitude, problem] if x > 0]
-                # Chỉ nhận nếu tính được hợp lệ
+
                 if scores_temp:
                     rating_num = round(sum(scores_temp) / len(scores_temp) / 20, 1)
             if 1 <= rating_num <= 5:
@@ -1109,7 +1110,7 @@ def khoi_tao_hdv(root, user_data=None):
         total_reviews = len(my_reviews)
         avg_rating = round(sum(valid_ratings) / len(valid_ratings), 1) if valid_ratings else 0.0
 
-        # Đồng bộ thống kê HDV và lưu file
+
         h = app["ql"].find_hdv(ma_hdv)
         if h:
             h["total_reviews"] = total_reviews
@@ -1126,7 +1127,7 @@ def khoi_tao_hdv(root, user_data=None):
                 "maHDV": ma_hdv
             }
 
-        # 2. Tiêu đề & Thống kê nhanh - Phiên bản cải tiến
+
         _, top_body = make_section(
             content_area,
             "Hiệu suất & đánh giá của khách hàng",
@@ -1136,12 +1137,12 @@ def khoi_tao_hdv(root, user_data=None):
 
         stats_container = tk.Frame(top_body, bg=THEME["surface"])
         stats_container.pack(fill="x", pady=(0, 15))
-        
+
         my_tours = get_my_tours()
         total_assigned_tours = len(my_tours)
         completed_tours_count = sum(1 for t in my_tours if t.get("trangThai") in {"Đã kết thúc", "Đã hoàn thành", "Completed"})
         satisfaction_rate = f"{avg_rating * 20:.0f}%" if total_reviews > 0 else "0%"
-        
+
         stats_data = [
             ("Tổng tour đã dẫn", f"{total_assigned_tours} tour", "Tổng số tour được phân công phụ trách", THEME["primary"], 0, 0),
             ("Tour đã hoàn thành", f"{completed_tours_count} tour", "Tour đã kết thúc tốt đẹp", THEME["success"], 0, 1),
@@ -1150,25 +1151,25 @@ def khoi_tao_hdv(root, user_data=None):
             ("Tỷ lệ hài lòng", satisfaction_rate, "Mức độ hài lòng của khách hàng", "#0ea5e9", 1, 1),
             ("Cập nhật mới nhất", datetime.now().strftime("%d/%m/%Y %H:%M"), "Thời gian thống kê tự động", THEME["muted"], 1, 2),
         ]
-        
+
         for c in range(3):
             stats_container.grid_columnconfigure(c, weight=1)
-            
+
         for title, value, subtitle, color, row, col in stats_data:
             card = tk.Frame(stats_container, bg="#ffffff", highlightbackground="#cbd5e1", highlightthickness=1)
             card.grid(row=row, column=col, sticky="nsew", padx=6, pady=6)
-            
+
             accent = tk.Frame(card, bg=color, width=4)
             accent.pack(side="left", fill="y")
-            
+
             info_frame = tk.Frame(card, bg="#ffffff", padx=12, pady=10)
             info_frame.pack(side="left", fill="both", expand=True)
-            
+
             tk.Label(info_frame, text=title, font=("Times New Roman", 10, "bold"), bg="#ffffff", fg=THEME["muted"], anchor="w").pack(fill="x")
-            
+
             val_lbl = tk.Label(info_frame, text=value, font=("Times New Roman", 14, "bold"), bg="#ffffff", fg=color, anchor="w")
             val_lbl.pack(fill="x", pady=(2, 2))
-            
+
             tk.Label(info_frame, text=subtitle, font=("Times New Roman", 9, "italic"), bg="#ffffff", fg=THEME["muted"], anchor="w").pack(fill="x")
 
         _, chart_body = make_section(
@@ -1190,19 +1191,19 @@ def khoi_tao_hdv(root, user_data=None):
         for icon, name, val, color in [(c[3], c[0], c[1], c[2]) for c in criteria]:
             criteria_frame = tk.Frame(progress_container, bg=THEME["surface"])
             criteria_frame.pack(fill="x", pady=8)
-            
+
             header_frame = tk.Frame(criteria_frame, bg=THEME["surface"])
             header_frame.pack(fill="x", pady=(0, 6))
-            
+
             tk.Label(
-                header_frame, 
-                text=f"{icon} {name}", 
-                font=("Times New Roman", 12, "bold"), 
-                anchor="w", 
-                bg=THEME["surface"], 
+                header_frame,
+                text=f"{icon} {name}",
+                font=("Times New Roman", 12, "bold"),
+                anchor="w",
+                bg=THEME["surface"],
                 fg=THEME["text"]
             ).pack(side="left")
-            
+
             tk.Label(
                 header_frame,
                 text=f"{float(val):.1f}%",
@@ -1210,16 +1211,16 @@ def khoi_tao_hdv(root, user_data=None):
                 bg=THEME["surface"],
                 fg=color
             ).pack(side="right")
-            
+
             progress_bg = tk.Frame(criteria_frame, bg="#e2e8f0", height=24, relief="flat", bd=0)
             progress_bg.pack(fill="x")
             progress_bg.pack_propagate(False)
-            
+
             fill_percent = max(0, min(100, float(val)))
             if fill_percent > 0:
                 fill_frame = tk.Frame(progress_bg, bg=color, height=24)
                 fill_frame.place(x=0, y=0, relwidth=fill_percent/100, relheight=1)
-                
+
                 if fill_percent > 15:
                     tk.Label(
                         fill_frame,
@@ -1228,11 +1229,11 @@ def khoi_tao_hdv(root, user_data=None):
                         bg=color,
                         fg="white"
                     ).place(relx=0.95, rely=0.5, anchor="e")
-        
+
         note_frame = tk.Frame(chart_body, bg="#fffbeb", highlightbackground="#fcd34d", highlightthickness=1, padx=12, pady=10)
         note_frame.pack(fill="x", pady=(5, 10))
-        
-        # 3. Giao diện danh sách đánh giá
+
+
         _, review_body = make_section(
             content_area,
             "Đánh giá từ khách hàng",
@@ -1252,7 +1253,7 @@ def khoi_tao_hdv(root, user_data=None):
         scrollbar = tk.Scrollbar(review_canvas_frame, orient="vertical", command=canvas.yview)
         scrollbar.pack(side="right", fill="y")
         canvas.pack(side="left", fill="both", expand=True)
-        
+
         canvas.configure(yscrollcommand=scrollbar.set)
 
         scrollable_frame = tk.Frame(canvas, bg=THEME["bg"])
@@ -1260,15 +1261,15 @@ def khoi_tao_hdv(root, user_data=None):
             "<Configure>",
             lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
-        
+
         canvas_window = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
-        
-        # Hỗ trợ cuộn chuột
+
+
         def _on_mousewheel(event):
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
-        
+
         def _unbind_mousewheel(event):
             canvas.unbind_all("<MouseWheel>")
         review_canvas_frame.bind("<Destroy>", _unbind_mousewheel)
@@ -1280,7 +1281,7 @@ def khoi_tao_hdv(root, user_data=None):
             ma_tour_d = str(r.get("maTour") or "").strip()
             tour_d = app["ql"].find_tour(ma_tour_d)
             ten_tour_d = str(tour_d.get("ten", "")).strip() if tour_d else ""
-            
+
             rating_val_d = get_review_rating(r)
             if rating_val_d == 0:
                 skill = safe_int(r.get("skill", 0))
@@ -1335,14 +1336,14 @@ def khoi_tao_hdv(root, user_data=None):
                 tk.Label(grid_fr, text=val, font=("Times New Roman", 12), bg=THEME["surface"], fg=THEME["text"]).grid(row=row_idx, column=col_idx+1, sticky="w", padx=(0, 20), pady=6)
 
             tk.Label(pop_body, text="Nội dung đánh giá đầy đủ:", font=("Times New Roman", 12, "bold"), bg=THEME["surface"], fg=THEME["primary"]).pack(anchor="w", pady=(10, 5))
-            
+
             txt_fr = tk.Frame(pop_body, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
             txt_fr.pack(fill="both", expand=True, pady=(0, 20))
-            
+
             txt_area = tk.Text(txt_fr, font=("Times New Roman", 12), bg="#f8fafc", wrap="word", bd=0)
             txt_area.insert("1.0", review_content_d)
             txt_area.config(state="disabled")
-            
+
             pop_sy = ttk.Scrollbar(txt_fr, orient="vertical", command=txt_area.yview)
             txt_area.configure(yscrollcommand=pop_sy.set)
             pop_sy.pack(side="right", fill="y")
@@ -1391,27 +1392,27 @@ def khoi_tao_hdv(root, user_data=None):
             review_date = str(r.get("date") or r.get("ngayGui") or r.get("thoiGian") or r.get("ngay") or "Chưa rõ").strip()
             review_content = str(r.get("content") or r.get("comment") or r.get("noiDung") or r.get("danhGia") or "").strip()
 
-            # Card
+
             card = tk.Frame(scrollable_frame, bg="#ffffff", highlightbackground="#e2e8f0", highlightthickness=1, padx=14, pady=12)
             card.pack(fill="x", padx=10, pady=6)
 
-            # Hàng 1: Tên khách hàng & Rating
+
             row1 = tk.Frame(card, bg="#ffffff")
             row1.pack(fill="x", pady=(0, 4))
             tk.Label(row1, text=customer_text, font=("Times New Roman", 11, "bold"), fg=THEME["text"], bg="#ffffff").pack(side="left")
             tk.Label(row1, text=rating_text, font=("Times New Roman", 11, "bold"), fg="#eab308", bg="#ffffff").pack(side="right")
 
-            # Hàng 2: Tên tour & Ngày
+
             row2 = tk.Frame(card, bg="#ffffff")
             row2.pack(fill="x", pady=(0, 8))
             tour_lbl_text = f"Tour: {tour_text}   |   Ngày gửi: {review_date}"
             tk.Label(row2, text=tour_lbl_text, font=("Times New Roman", 10, "italic"), fg=THEME["muted"], bg="#ffffff").pack(side="left")
 
-            # Hàng 3: Nội dung đánh giá
+
             content_lbl = tk.Label(card, text=review_content, font=("Times New Roman", 11), fg=THEME["text"], bg="#ffffff", justify="left", anchor="w", wraplength=700)
             content_lbl.pack(fill="x", pady=(0, 6))
 
-            # Hàng 4: Phản hồi từ Admin (nếu có)
+
             admin_reply = r.get("adminReply", "").strip()
             if admin_reply:
                 reply_frame = tk.Frame(card, bg="#f8fafc", highlightbackground="#e2e8f0", highlightthickness=1, padx=12, pady=10)
@@ -1429,11 +1430,11 @@ def khoi_tao_hdv(root, user_data=None):
 
             bind_double_click(card, lambda event, r_item=r: show_review_detail(r_item))
 
-        # Thêm nút làm mới
+
         style_button(review_body, "↻ LÀM MỚI ĐÁNH GIÁ", THEME["primary"], tab_thong_ke).pack(anchor="w", pady=(10, 0))
 
-        # 4. Popup chi tiết khi double click
-        # Được xử lý bằng bind_double_click trên các card đánh giá phía trên
+
+
         set_status(f"Đang ở Đánh giá khách hàng - Hiển thị {total_reviews} đánh giá", THEME["primary"])
 
     def tab_thong_bao():
@@ -1451,7 +1452,7 @@ def khoi_tao_hdv(root, user_data=None):
         right_col = tk.Frame(split_fr, bg=THEME["bg"])
         right_col.grid(row=0, column=1, sticky="nsew", padx=(10, 0))
 
-        # --- LEFT SIDE: SEND NOTIFICATION ---
+
         _, body = make_section(
             left_col,
             "Gửi thông báo khẩn cấp",
@@ -1501,7 +1502,7 @@ def khoi_tao_hdv(root, user_data=None):
 
         style_button(body, "XÁC NHẬN GỬI THÔNG BÁO", THEME["danger"], gui_thong_bao).pack(anchor="w")
 
-        # --- RIGHT SIDE: RECEIVED NOTIFICATIONS ---
+
         right_section, right_body = make_section(
             right_col,
             "Thông báo nhận được",
@@ -1700,52 +1701,52 @@ def khoi_tao_hdv(root, user_data=None):
             tk.Label(content_area, text="Lỗi: Không tìm thấy thông tin tài khoản!", fg=THEME["danger"], bg=THEME["bg"], font=("Times New Roman", 13, "bold")).pack(anchor="w", pady=20, padx=20)
             return
 
-        # Vùng chứa chính: Gắn trực tiếp vào content_area (Đã bỏ Canvas lồng dư thừa)
+
         main_container = tk.Frame(content_area, bg=THEME["bg"])
         main_container.pack(fill="both", expand=True, padx=5, pady=5)
 
         widgets = {}
 
-        # ==========================================
-        # HELPER: TẠO KHỐI FORM (CARD-STYLE)
-        # ==========================================
+
+
+
         def create_form_card(parent, title, accent_color, fields, readonly=False):
-            # Tạo viền Card
+
             card = tk.Frame(parent, bg="#ffffff", highlightbackground=THEME["border"], highlightthickness=1)
             card.pack(fill="x", pady=(0, 20))
-            
-            # Vạch màu trên cùng (Top accent bar)
+
+
             tk.Frame(card, bg=accent_color, height=3).pack(fill="x")
-            
-            # Header
+
+
             header = tk.Frame(card, bg="#ffffff")
             header.pack(fill="x", padx=25, pady=(15, 5))
             tk.Label(
                 header, text=title, bg="#ffffff", fg=accent_color, font=("Times New Roman", 13, "bold")
             ).pack(side="left")
-            
-            # Lưới chứa nội dung
+
+
             grid_frame = tk.Frame(card, bg="#ffffff", padx=25, pady=10)
             grid_frame.pack(fill="x")
-            
-            # Thiết lập lưới cột (2 cột chính chia đôi màn hình)
+
+
             grid_frame.grid_columnconfigure(0, weight=0, minsize=140)
             grid_frame.grid_columnconfigure(1, weight=1)
-            grid_frame.grid_columnconfigure(2, weight=0, minsize=40) 
+            grid_frame.grid_columnconfigure(2, weight=0, minsize=40)
             grid_frame.grid_columnconfigure(3, weight=0, minsize=140)
             grid_frame.grid_columnconfigure(4, weight=1)
-            
+
             for idx, item in enumerate(fields):
-                # Unpack dữ liệu tùy theo readonly hay editable
+
                 if readonly:
                     label_text, value = item
                 else:
                     label_text, key, kind = item
 
                 row_idx = idx // 2
-                col_offset = (idx % 2) * 3  # Trả về 0 (bên trái) hoặc 3 (bên phải)
-                
-                # Label
+                col_offset = (idx % 2) * 3
+
+
                 tk.Label(
                     grid_frame,
                     text=f"{label_text}:" if readonly else label_text,
@@ -1754,8 +1755,8 @@ def khoi_tao_hdv(root, user_data=None):
                     font=("Times New Roman", 12, "bold" if not readonly else "normal"),
                     fg=THEME["muted"] if readonly else THEME["text"]
                 ).grid(row=row_idx, column=col_offset, sticky="w", pady=10)
-                
-                # Input / Value
+
+
                 if readonly:
                     tk.Label(
                         grid_frame, text=str(value), anchor="w", bg="#ffffff", font=("Times New Roman", 12), fg=THEME["text"]
@@ -1772,11 +1773,11 @@ def khoi_tao_hdv(root, user_data=None):
                         widget = tk.Entry(grid_frame, font=("Times New Roman", 12), relief="solid", bd=1, show=show_char)
                         if kind != "password":
                             widget.insert(0, str(hdv_data.get(key, "") or ""))
-                    
+
                     widget.grid(row=row_idx, column=col_offset + 1, sticky="ew", pady=10, ipady=5)
                     widgets[key] = widget
 
-        # === PHẦN 1: THÔNG TIN HỆ THỐNG (READ-ONLY) ===
+
         readonly_items = [
             ("Mã HDV", hdv_data.get("maHDV", "-")),
             ("Username", hdv_data.get("username", "-")),
@@ -1787,19 +1788,19 @@ def khoi_tao_hdv(root, user_data=None):
         ]
         create_form_card(main_container, "THÔNG TIN HỆ THỐNG", THEME["primary"], readonly_items, readonly=True)
 
-        # === PHẦN 2: THÔNG TIN CHỈNH SỬA ĐƯỢC ===
+
         create_form_card(main_container, "THÔNG TIN CÁ NHÂN", "#2563eb", [
             ("Họ và tên", "tenHDV", "text"),
             ("Ngày sinh", "ngaySinh", "text"),
             ("Giới tính", "gioiTinh", "gender"),
             ("Địa chỉ", "diaChi", "text"),
         ])
-        
+
         create_form_card(main_container, "THÔNG TIN LIÊN HỆ", "#059669", [
             ("Số điện thoại", "sdt", "text"),
             ("Email", "email", "text"),
         ])
-        
+
         create_form_card(main_container, "NGHIỆP VỤ CHUYÊN MÔN", "#7c3aed", [
             ("Khu vực hoạt động", "khuVuc", "text"),
             ("Ngoại ngữ", "ngoaiNgu", "text"),
@@ -1807,33 +1808,33 @@ def khoi_tao_hdv(root, user_data=None):
             ("Chứng chỉ", "chungChi", "text"),
         ])
 
-        # === PHẦN 3: BẢO MẬT (Custom Layout) ===
+
         sec_card = tk.Frame(main_container, bg="#ffffff", highlightbackground=THEME["border"], highlightthickness=1)
         sec_card.pack(fill="x", pady=(0, 20))
         tk.Frame(sec_card, bg="#fb923c", height=3).pack(fill="x")
-        
+
         sec_head = tk.Frame(sec_card, bg="#ffffff")
         sec_head.pack(fill="x", padx=25, pady=(15, 0))
         tk.Label(sec_head, text="BẢO MẬT TÀI KHOẢN", bg="#ffffff", fg="#c2410c", font=("Times New Roman", 13, "bold")).pack(anchor="w")
         tk.Label(sec_head, text="* Lưu ý: Để trống ô mật khẩu nếu bạn không muốn thay đổi mật khẩu hiện tại.", bg="#ffffff", fg="#9a3412", font=("Times New Roman", 11, "italic")).pack(anchor="w", pady=(2, 0))
-        
+
         sec_grid = tk.Frame(sec_card, bg="#ffffff", padx=25, pady=10)
         sec_grid.pack(fill="x")
         sec_grid.grid_columnconfigure(0, weight=0, minsize=140)
         sec_grid.grid_columnconfigure(1, weight=1)
-        sec_grid.grid_columnconfigure(2, weight=1) # Cột trống cân bằng không gian
-        
+        sec_grid.grid_columnconfigure(2, weight=1)
+
         tk.Label(sec_grid, text="Mật khẩu mới", anchor="w", bg="#ffffff", font=("Times New Roman", 12, "bold"), fg=THEME["text"]).grid(row=0, column=0, sticky="w", pady=10)
         pass_widget = tk.Entry(sec_grid, font=("Times New Roman", 12), relief="solid", bd=1, show="*")
         pass_widget.grid(row=0, column=1, sticky="ew", pady=10, ipady=5)
         widgets["password"] = pass_widget
 
-        # === PHẦN 4: NÚT HÀNH ĐỘNG ===
+
         actions_wrapper = tk.Frame(main_container, bg=THEME["bg"])
         actions_wrapper.pack(fill="x", pady=(10, 40))
 
         actions_container = tk.Frame(actions_wrapper, bg=THEME["bg"])
-        actions_container.pack(anchor="center") # Giữ nút căn giữa thanh lịch
+        actions_container.pack(anchor="center")
 
         def save_profile():
             allowed_fields = ["tenHDV", "sdt", "email", "ngaySinh", "gioiTinh", "diaChi", "khuVuc", "ngoaiNgu", "chuyenMon", "chungChi"]

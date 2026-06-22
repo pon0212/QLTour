@@ -1,6 +1,3 @@
-
-
-
 from GUI.common.rounded_button import RoundedButton
 from GUI.common.weather_popup import open_tour_weather_popup
 from core.app import (
@@ -140,7 +137,7 @@ TAB_DEFINITIONS: tuple[AdminTabDef, ...] = (
         icon="📊",
         handler_name="report",
     ),
-    
+
     AdminTabDef(
         key="reviews",
         title="Đánh giá khách hàng",
@@ -182,9 +179,9 @@ def _render_matplotlib_charts(parent, report):
         overview = report.get("overview", {})
         tours_data = report.get("by_tour", [])
 
-        # 1. Biểu đồ tròn: Cơ cấu tài chính hệ thống (Đã thu, Còn nợ, Đã hoàn)
+
         ax_pie = fig.add_subplot(121)
-        
+
         total_da_thu = max(0, safe_int(overview.get("daThu", 0)))
         total_con_no = max(0, safe_int(overview.get("conNo", 0)))
         total_da_hoan = max(0, safe_int(overview.get("tongHoanTien", 0)))
@@ -192,7 +189,7 @@ def _render_matplotlib_charts(parent, report):
         pie_labels = []
         pie_values = []
         pie_colors = []
-        
+
         if total_da_thu > 0:
             pie_labels.append("Đã thu")
             pie_values.append(total_da_thu)
@@ -207,8 +204,8 @@ def _render_matplotlib_charts(parent, report):
             pie_colors.append(THEME["danger"])
 
         if pie_values:
-            # pyrefly: ignore [bad-unpacking]
-            wedges, texts, autotexts = ax_pie.pie(
+
+            pie_result = ax_pie.pie(
                 pie_values,
                 labels=pie_labels,
                 autopct="%1.1f%%",
@@ -216,22 +213,26 @@ def _render_matplotlib_charts(parent, report):
                 colors=pie_colors,
                 textprops=dict(fontname="Times New Roman", color=THEME["text"], fontsize=10)
             )
-            for autotext in autotexts:
-                autotext.set_color('white')
-                autotext.set_fontsize(9)
-                autotext.set_weight('bold')
+            if len(pie_result) == 3:
+                wedges, texts, autotexts = pie_result
+                for autotext in autotexts:
+                    autotext.set_color('white')
+                    autotext.set_fontsize(9)
+                    autotext.set_weight('bold')
+            else:
+                wedges, texts = pie_result
             ax_pie.set_title("Cơ cấu dòng tiền booking", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"], pad=15)
         else:
             ax_pie.text(0.5, 0.5, "Không có dữ liệu tài chính", ha="center", va="center", fontname="Times New Roman", color=THEME["muted"])
             ax_pie.set_title("Cơ cấu dòng tiền booking", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"])
             ax_pie.axis('off')
 
-        # 2. Biểu đồ cột: Doanh thu thực nhận theo tour
+
         ax_bar = fig.add_subplot(122)
-        
-        # Chỉ lấy các tour có doanh thu thực nhận > 0
+
+
         filtered_tours = [r for r in tours_data if safe_int(r.get("doanhThuThucNhan", 0)) > 0]
-        # Sắp xếp các tour theo doanh thu thực nhận giảm dần và lấy tối đa 8 tour
+
         filtered_tours = sorted(filtered_tours, key=lambda x: safe_int(x.get("doanhThuThucNhan", 0)), reverse=True)
         if len(filtered_tours) > 8:
             filtered_tours = filtered_tours[:8]
@@ -242,18 +243,18 @@ def _render_matplotlib_charts(parent, report):
 
             x_indices = list(range(len(tour_labels)))
 
-            # Vẽ các cột đơn
+
             ax_bar.bar(x_indices, thuc_nhan_vals, width=0.5, label='Thực nhận', color=THEME["success"])
 
             ax_bar.set_title("Doanh thu thực nhận theo tour", fontname="Times New Roman", fontsize=12, fontweight="bold", color=THEME["text"], pad=15)
             ax_bar.set_ylabel("Số tiền (VND)", fontname="Times New Roman", fontsize=10, color=THEME["text"])
             ax_bar.set_xticks(x_indices)
             ax_bar.set_xticklabels(tour_labels, fontname="Times New Roman", fontsize=9, color=THEME["text"], rotation=15)
-            
+
             y_formatter = ticker.FuncFormatter(lambda y, pos: f'{int(y/1e6)}M' if y >= 1e6 else (f'{int(y/1e3)}k' if y >= 1e3 else f'{int(y)}'))
             ax_bar.yaxis.set_major_formatter(y_formatter)
             ax_bar.tick_params(axis='y', labelcolor=THEME["text"])
-            
+
             ax_bar.grid(axis='y', linestyle='--', alpha=0.5)
             ax_bar.set_axisbelow(True)
             ax_bar.legend(prop={"family": "Times New Roman", "size": 9})
@@ -284,71 +285,70 @@ def _render_matplotlib_charts(parent, report):
 def _render_report_tab(app):
     clear_container(app)
 
-    # 1. Tạo Canvas và Scrollbar để report có thể scroll khi nội dung dài
+
     canvas_wrapper = tk.Frame(app["container"], bg=THEME["bg"])
     canvas_wrapper.pack(fill="both", expand=True)
-    
+
     canvas = tk.Canvas(canvas_wrapper, bg=THEME["bg"], highlightthickness=0)
     scrollbar = tk.Scrollbar(canvas_wrapper, orient="vertical", command=canvas.yview)
-    
+
     report_body = tk.Frame(canvas, bg=THEME["bg"])
-    
+
     canvas.configure(yscrollcommand=scrollbar.set)
-    
-    # Sử dụng auto-hide scrollbar
+
     bind_autohide_scrollbar(canvas, scrollbar, "vertical")
-    
+
     canvas.pack(side="left", fill="both", expand=True)
-    
+
     canvas_window = canvas.create_window((0, 0), window=report_body, anchor="nw")
-    
+
     def on_frame_configure(event):
         canvas.configure(scrollregion=canvas.bbox("all"))
-    
+
     def on_canvas_configure(event):
         canvas.itemconfig(canvas_window, width=event.width)
-    
+
     report_body.bind("<Configure>", on_frame_configure)
     canvas.bind("<Configure>", on_canvas_configure)
-    
-    # Hỗ trợ scroll bằng chuột
+
+
     def on_mousewheel(event):
         canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-    
+
     canvas.bind_all("<MouseWheel>", on_mousewheel)
-    
-    # Cleanup mousewheel binding khi report bị destroy
+
+
     def cleanup_mousewheel():
         try:
             canvas.unbind_all("<MouseWheel>")
         except:
             pass
-    
+
     canvas_wrapper.bind("<Destroy>", lambda e: cleanup_mousewheel())
-    
-    # Thêm padding cho nội dung
+
+
     content_frame = tk.Frame(report_body, bg=THEME["bg"])
     content_frame.pack(fill="both", expand=True, padx=15, pady=15)
 
-    # 2. Tiêu đề và Mô tả báo cáo (Header)
+
     header_frame = tk.Frame(content_frame, bg=THEME["bg"])
     header_frame.pack(fill="x", pady=(0, 10))
 
 
-    # Lấy dữ liệu báo cáo mới nhất và các đối tượng từ datastore
+
     report = build_revenue_report(app["ql"])
     overview = report.get("overview", {})
     tours = app["ql"].data.get("tours", [])
     hdvs = app["ql"].data.get("hdv", [])
     users = app["ql"].data.get("users", [])
 
-    # 3. Card thống kê tổng quan (Grid 2 hàng x 5 cột)
+
     stats_frame = tk.Frame(content_frame, bg=THEME["bg"])
     stats_frame.pack(fill="x", pady=(0, 15))
-    
+
     for i in range(5):
         stats_frame.columnconfigure(i, weight=1)
-        
+
     def create_stat_card(parent, title, value, color):
         card = tk.Frame(parent, bg="#ffffff", highlightbackground="#cbd5e1", highlightthickness=1)
         tk.Frame(card, bg=color, height=4).pack(fill="x")
@@ -383,20 +383,20 @@ def _render_report_tab(app):
         card = create_stat_card(stats_frame, title, val, color)
         card.grid(row=row, column=col, sticky="nsew", padx=5, pady=5)
 
-    # 4. Thanh nút bấm thao tác (Actions)
+
     actions_frame = tk.Frame(content_frame, bg=THEME["bg"])
     actions_frame.pack(fill="x", pady=(0, 15))
-    
+
     style_button(actions_frame, "Làm mới dữ liệu", THEME["primary"], lambda: reload_admin_current_tab(app)).pack(side="left", padx=(0, 10))
     style_button(actions_frame, "Báo cáo doanh thu chi tiết", "#0f766e", lambda: open_revenue_report_window(app)).pack(side="left", padx=(0, 10))
 
-    # 5. Khung Biểu đồ Trực quan (Matplotlib Charts)
+
     chart_wrapper = tk.Frame(content_frame, bg=THEME["surface"], highlightbackground="#cbd5e1", highlightthickness=1)
     chart_wrapper.pack(fill="x", pady=(0, 15))
-    
+
     _render_matplotlib_charts(chart_wrapper, report)
 
-    # 6. Khu vực tóm tắt nhanh (Quick summary)
+
     by_tour_data = report.get("by_tour", [])
     active_hdvs = [h for h in hdvs if h.get("trangThaiTaiKhoan") == "Đang hoạt động" or h.get("trangThai") in {"Sẵn sàng", "Đã phân công", "Đang dẫn tour"}]
     active_hdv_count = len(active_hdvs)
@@ -406,9 +406,9 @@ def _render_report_tab(app):
 
     update_admin_status_card(app, "report", "Đang xem Báo cáo tổng hợp trực quan", THEME["primary"])
 
-# =========================
-# THEME
-# =========================
+
+
+
 THEME = {
     "bg": "#f1f5f9",
     "surface": "#ffffff",
@@ -453,9 +453,9 @@ def refresh_tour_lifecycle_for_admin(app, show_popup=False):
     return changes
 HDV_STATUSES = ["Sẵn sàng", "Đã phân công", "Đang dẫn tour", "Tạm nghỉ"]
 
-# =========================
-# PATH DỮ LIỆU
-# =========================
+
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 RAW_DATA_DIR = os.getenv("TRAVEL_DATA_DIR", os.path.join(PROJECT_DIR, "data"))
@@ -468,14 +468,14 @@ DEFAULT_DATA = {
     "admin": {"username": "admin", "password": "123"}
 }
 
-# =========================
-# DATA STORE
-# =========================
-# -----------------------------------------------------------------------------
-# Hàm bọc (wrapper) cho bộ chuẩn hóa dữ liệu đánh giá.
-# Mục đích: đồng nhất cấu trúc review trước khi lưu/hiển thị trong hệ thống.
-# Hàm này không tự xử lý logic mới mà ủy quyền sang core.normalizers.
-# -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 def normalize_review_item(r, datastore=None):
     normalized = core_normalize_review_item(
         r,
@@ -490,7 +490,7 @@ def normalize_review_item(r, datastore=None):
         ten_tour = str((tour or {}).get("ten", "")).strip()
     normalized["tenTour"] = ten_tour
 
-    # Tự động truy vết maHDV và tenHDV nếu bị thiếu
+
     ma_hdv = str(normalized.get("maHDV", "")).strip()
     ten_hdv = str(normalized.get("tenHDV", "")).strip()
     if not ma_hdv and ma_tour and datastore is not None:
@@ -515,17 +515,17 @@ def normalize_review_item(r, datastore=None):
     return normalized
 
 
-# -----------------------------------------------------------------------------
-# Hàm bọc để chuẩn hóa một bản ghi thông báo.
-# Có truyền kèm datastore khi cần đối chiếu dữ liệu liên quan trong quá trình chuẩn hóa.
-# -----------------------------------------------------------------------------
+
+
+
+
 def normalize_notification_item(n, datastore=None):
     return core_normalize_notification_item(n, datastore=datastore)
-# =============================================================================
-# Lớp kho dữ liệu chính của màn hình Admin.
-# Kế thừa JSONDataStore để đọc/ghi dữ liệu trực tiếp từ file JSON,
-# đồng thời truyền vào các hàm chuẩn hóa review/thông báo đặc thù của module này.
-# =============================================================================
+
+
+
+
+
 class DataStore(JSONDataStore):
     def __init__(self, path=DATA_FILE, rev_path=REVIEWS_FILE, notif_path=NOTIF_FILE):
         super().__init__(
@@ -538,24 +538,24 @@ class DataStore(JSONDataStore):
         )
 
 
-# =========================
-# HELPERS
-# =========================
-# Xóa toàn bộ widget con trong vùng nội dung trung tâm để chuẩn bị render tab mới.
+
+
+
+
 def clear_container(app):
     for widget in app["container"].winfo_children():
         widget.destroy()
 
-# Cập nhật nội dung thanh trạng thái phía dưới giao diện.
-# Nếu có truyền màu, đồng thời đổi màu chữ để nhấn mạnh trạng thái hiện tại.
+
+
 def set_status(app, text, color=None):
     app["status_var"].set(text)
     if color:
         app["status_label"].config(fg=color)
 
 
-# Tải lại dữ liệu từ datastore, sau đó render lại đúng tab admin đang mở.
-# Dùng khi cần làm mới giao diện sau khi CRUD hoặc sau khi dữ liệu thay đổi từ nơi khác.
+
+
 def reload_admin_current_tab(app, success_message="Đã tải lại dữ liệu"):
     app["ql"].load()
     current_tab = app.get("current_tab", "dashboard")
@@ -563,8 +563,8 @@ def reload_admin_current_tab(app, success_message="Đã tải lại dữ liệu"
     handler(app)
     set_status(app, success_message, THEME["success"])
 
-# Tạo nhanh một nút theo bộ giao diện thống nhất của toàn module admin.
-# Việc gom style vào một hàm giúp các nút đồng nhất màu sắc, font và hành vi.
+
+
 def style_button(parent, text, bg, command, fg="white"):
     return RoundedButton(
         parent,
@@ -586,17 +586,17 @@ def style_button(parent, text, bg, command, fg="white"):
     )
 
 
-# Tạo status card thống nhất cho các tab Admin.
-# Status card hiển thị trạng thái trang và số lượng dữ liệu đang hiển thị.
+
+
 def create_admin_status_card(app, key, default_text):
     """
     Tạo một status card trong trang Admin với style thống nhất.
-    
+
     Args:
         app: Dictionary chứa các thành phần giao diện của ứng dụng
         key: Khóa định danh cho status card (vd: "booking", "tour", "review")
         default_text: Nội dung text mặc định hiển thị trong status card
-    
+
     Returns:
         StringVar: Biến chứa text của status card để cập nhật sau này
     """
@@ -607,10 +607,10 @@ def create_admin_status_card(app, key, default_text):
         highlightthickness=1,
     )
     status_card.pack(fill="x", pady=(8, 0))
-    
+
     var_name = f"{key}_status_text_var"
     label_name = f"{key}_status_card_label"
-    
+
     app[var_name] = tk.StringVar(value=default_text)
     app[label_name] = tk.Label(
         status_card,
@@ -623,15 +623,15 @@ def create_admin_status_card(app, key, default_text):
         pady=6,
     )
     app[label_name].pack(anchor="w")
-    
+
     return app[var_name]
 
 
-# Cập nhật nội dung status card và thanh trạng thái dưới cùng.
+
 def update_admin_status_card(app, key, text, color=None):
     """
     Cập nhật nội dung của status card đã được tạo.
-    
+
     Args:
         app: Dictionary chứa các thành phần giao diện của ứng dụng
         key: Khóa định danh của status card cần cập nhật
@@ -682,7 +682,7 @@ def style_form_text_widget(widget):
     )
 
 
-# Thiết lập font mặc định cho toàn bộ ứng dụng Tkinter và cho các widget ttk.
+
 def configure_ui_fonts(root):
     default_font = ("Times New Roman", 12)
     heading_font = ("Times New Roman", 12, "bold")
@@ -700,18 +700,18 @@ def configure_ui_fonts(root):
     style.configure("TEntry", font=default_font)
     style.configure("TCombobox", font=default_font)
 
-# Tô màu xen kẽ từng dòng của Treeview để bảng dữ liệu dễ nhìn hơn.
+
 def apply_zebra(tree):
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
     for i, item in enumerate(tree.get_children()):
         tree.item(item, tags=(("even" if i % 2 == 0 else "odd"),))
 
-# Hàm chuyển tiếp sang validator lõi để kiểm tra số điện thoại hợp lệ.
+
 def is_valid_phone(phone):
     return core_is_valid_phone(phone)
 
-# Hàm chuyển tiếp sang validator lõi để kiểm tra email hợp lệ.
+
 def is_valid_email(email):
     return core_is_valid_email(email)
 
@@ -772,15 +772,15 @@ def itinerary_to_text(lich_trinh):
     return "\n".join(lines).strip()
 
 
-# Chuyển chuỗi ngày theo định dạng dd/mm/yyyy sang đối tượng datetime; lỗi thì trả về None.
+
 def parse_ddmmyyyy(date_text):
     return parse_tour_ddmmyyyy(date_text)
 
-# Kiểm tra chuỗi ngày có đúng định dạng dd/mm/yyyy hay không.
+
 def is_valid_date(date_text):
     return parse_ddmmyyyy(date_text) is not None
 
-# Ép kiểu sang số nguyên an toàn; nếu lỗi thì trả về 0 để tránh làm hỏng luồng xử lý.
+
 def safe_int(value):
     try:
         return int(value)
@@ -788,7 +788,7 @@ def safe_int(value):
         return 0
 
 
-# Đá»‹nh dạng số tiền theo kiểu hiển thị Việt Nam, ví dụ: 1000000 -> 1.000.000đ.
+
 def format_currency(value):
     return f"{safe_int(value):,}đ".replace(",", ".")
 
@@ -894,13 +894,13 @@ def build_admin_review_popup_data(app, review_data, row_index=None):
     normalized["content"] = _first_non_empty(normalized, ("content", "noiDung", "comment", "danhGia"), "")
     normalized["fullname"] = _first_non_empty(normalized, ("fullname", "tenKhach", "hoTen"), "")
     normalized["username"] = _first_non_empty(normalized, ("username", "user"), "")
-    
-    # Get hidden details
+
+
     normalized["hiddenReason"] = str(review.get("hiddenReason", "")).strip()
     normalized["hiddenDate"] = str(review.get("hiddenDate", "")).strip()
     normalized["hiddenBy"] = str(review.get("hiddenBy", "")).strip()
-    
-    # Status
+
+
     trang_thai = str(review.get("trangThai", "")).strip()
     if not trang_thai:
         trang_thai = "Đã ẩn" if bool(review.get("hidden", False)) else "Hiển thị"
@@ -991,7 +991,7 @@ def build_admin_notification_popup_data(app, notification_data):
     normalized["loaiThongBao"] = _notification_type_label(notification)
     normalized["date"] = _first_non_empty(notification, ("date", "ngayGui", "ngay", "thoiGian"), "")
     normalized["content"] = _first_non_empty(notification, ("content", "noiDung", "thongBao"), "")
-    # Ẩn key kỹ thuật trong popup chi tiết, chỉ giữ thông tin hiển thị thân thiện.
+
     normalized.pop("eventType", None)
     normalized.pop("loai", None)
 
@@ -1129,12 +1129,12 @@ def show_detail_popup(root, title, data_dict, geometry="900x620", minsize=(760, 
     style_button(footer, "Đóng", THEME["danger"], top.destroy).pack(fill="x")
 
 
-# Lấy username admin hiện tại để ghi log thao tác CRUD và các hành động nghiệp vụ.
+
 def get_admin_actor(app):
     return str(app["ql"].data.get("admin", {}).get("username", "admin")).strip() or "admin"
 
 
-# Chuẩn hóa họ tên: bỏ khoảng trắng thừa và viết hoa chữ cái đầu từng từ.
+
 def normalize_name_case(value):
     return normalize_title_case(value)
 
@@ -1160,8 +1160,8 @@ def build_hdv_display_label(datastore, ma_hdv):
     return f"{code} - {name}" if name else code
 
 
-# Chuyển đối tượng được đánh giá (HDV/Tour/Công ty) sang chuỗi hiển thị thân thiện.
-# Nếu có thể, hàm sẽ tra cứu thêm tên thật từ datastore để tránh chỉ hiện mã.
+
+
 def format_review_target(datastore, review, include_code=False):
     target = str(review.get("target", "") or review.get("doiTuong", "") or "Công ty").strip()
     target_id = str(review.get("target_id", "") or review.get("maHDV", "") or review.get("maTour", "")).strip()
@@ -1186,7 +1186,7 @@ def format_review_target(datastore, review, include_code=False):
 
     return target or "Công ty"
 
-# Tự động ẩn thanh cuộn khi nội dung chưa tràn khung hiển thị.
+
 def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
     is_vertical = str(orient).lower().startswith("v")
     pack_side = "right" if is_vertical else "bottom"
@@ -1237,8 +1237,8 @@ def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
     return _refresh
 
 
-# Tạo một form có thể cuộn theo trục dọc.
-# Rất hữu ích cho các cửa sổ nhập liệu dài như HDV, tour, booking, voucher.
+
+
 def create_scrollable_form(parent, bg):
     outer = tk.Frame(parent, bg=bg)
     canvas = tk.Canvas(outer, bg=bg, highlightthickness=0, bd=0)
@@ -1273,11 +1273,11 @@ def create_scrollable_form(parent, bg):
     return outer, content
 
 
-# =========================
-# DASHBOARD
-# =========================
-# Render tab Dashboard của admin.
-# Tab này tổng hợp số liệu nhanh, tác vụ nhanh và các ghi chú điều hành dựa trên dữ liệu hiện tại.
+
+
+
+
+
 def dashboard_tab(app):
     clear_container(app)
     ql = app["ql"]
@@ -1291,49 +1291,49 @@ def dashboard_tab(app):
     side_gap = 6 if compact_mode else 8
     notes_limit = 5 if compact_mode else 7
 
-    # tk.Label(
-    #     app["container"],
-    #     text="HỆ THỐNG VIETNAM TRAVEL",
-    #     font=("Times New Roman", 22, "bold"),
-    #     bg=THEME["bg"],
-    #     fg=THEME["text"],
-    # ).pack(anchor="w", pady=(0, 20))
 
-    # Tạo Canvas và Scrollbar để dashboard có thể scroll khi nội dung dài
+
+
+
+
+
+
+
+
     canvas_wrapper = tk.Frame(app["container"], bg=THEME["bg"])
     canvas_wrapper.pack(fill="both", expand=True)
-    
+
     canvas = tk.Canvas(canvas_wrapper, bg=THEME["bg"], highlightthickness=0)
     scrollbar = tk.Scrollbar(canvas_wrapper, orient="vertical", command=canvas.yview)
-    
+
     dashboard_body = tk.Frame(canvas, bg=THEME["bg"])
-    
+
     canvas.configure(yscrollcommand=scrollbar.set)
-    
-    # Sử dụng auto-hide scrollbar
+
+
     bind_autohide_scrollbar(canvas, scrollbar, "vertical")
-    
+
     canvas.pack(side="left", fill="both", expand=True)
-    
+
     canvas_window = canvas.create_window((0, 0), window=dashboard_body, anchor="nw")
-    
+
     def on_frame_configure(event):
         canvas.configure(scrollregion=canvas.bbox("all"))
-    
+
     def on_canvas_configure(event):
         canvas.itemconfig(canvas_window, width=event.width)
-    
+
     dashboard_body.bind("<Configure>", on_frame_configure)
     canvas.bind("<Configure>", on_canvas_configure)
-    
-    # Hỗ trợ scroll bằng chuột
+
+
     def on_mousewheel(event):
         canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-    
+
     canvas.bind_all("<MouseWheel>", on_mousewheel)
     dashboard_body.grid_columnconfigure(0, weight=1)
 
-    # Thêm padding cho nội dung
+
     content_frame = tk.Frame(dashboard_body, bg=THEME["bg"])
     content_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
     content_frame.grid_columnconfigure(0, weight=1)
@@ -1450,13 +1450,13 @@ def dashboard_tab(app):
         except tk.TclError:
             return
 
-    # Cleanup mousewheel binding khi dashboard bị destroy
+
     def cleanup_mousewheel():
         try:
             canvas.unbind_all("<MouseWheel>")
         except:
             pass
-    
+
     canvas_wrapper.bind("<Destroy>", lambda e: cleanup_mousewheel())
 
     content_frame.bind("<Configure>", arrange_dashboard_boxes)
@@ -1468,12 +1468,12 @@ def dashboard_tab(app):
     set_status(app, f"Đang ở Dashboard - Hiển thị {len(stat_items)} chỉ số", THEME["primary"])
 
 
-# =========================
-# HDV MANAGEMENT
-# =========================
-# Kiểm tra dữ liệu đầu vào của hướng dẫn viên trước khi lưu.
-# Bao gồm: bắt buộc trường, định dạng mã, độ dài tên/mật khẩu, trùng số điện thoại/email,
-# phạm vi năm kinh nghiệm và ràng buộc giới tính.
+
+
+
+
+
+
 def validate_hdv(app, form_data, old_ma=None):
     form_data["maHDV"] = normalize_code(form_data.get("maHDV", ""))
     form_data["tenHDV"] = normalize_name_case(form_data.get("tenHDV", ""))
@@ -1558,7 +1558,7 @@ def refresh_hdv(app, keyword=""):
     apply_zebra(tree)
     update_admin_status_card(app, "hdv", f"Đang ở Quản lý hướng dẫn viên - Hiển thị {len(rows)} HDV", THEME["primary"])
 
-def open_hdv_form(app, data=None):  
+def open_hdv_form(app, data=None):
     top = tk.Toplevel(app["root"])
     top.title("Thông tin hướng dẫn viên")
     top.geometry("620x520")
@@ -1752,7 +1752,7 @@ def open_hdv_form(app, data=None):
     style_button(btns, "Hủy bỏ", THEME["danger"], top.destroy).pack(side="left", fill="x", expand=True)
 
 
-# Lấy dòng HDV đang chọn và mở form chỉnh sửa cho bản ghi đó.
+
 def edit_hdv(app):
     sel = app["tv_hdv"].selection()
     if not sel:
@@ -1764,8 +1764,8 @@ def edit_hdv(app):
         open_hdv_form(app, hdv)
 
 
-# Xóa HDV được chọn sau khi kiểm tra ràng buộc.
-# Không cho xóa nếu HDV vẫn đang được phân công cho tour.
+
+
 def delete_hdv(app):
     sel = app["tv_hdv"].selection()
     if not sel:
@@ -1811,8 +1811,8 @@ def delete_hdv(app):
         refresh_hdv(app, app["search_hdv_var"].get())
         set_status(app, f"Đã xóa HDV {ma}", THEME["danger"])
 
-# Mở cửa sổ xem chi tiết hướng dẫn viên theo kiểu chỉ đọc.
-# Hiển thị cả hồ sơ, điểm đánh giá và các tour HDV đang/đã phụ trách.
+
+
 def open_hdv_detail(app, ma_hdv):
     hdv = app["ql"].find_hdv(ma_hdv)
     if not hdv:
@@ -1892,7 +1892,7 @@ def open_hdv_detail(app, ma_hdv):
     top.bind("<Enter>", _bind_mousewheel)
     top.bind("<Leave>", _unbind_mousewheel)
 
-    # ===== HEADER =====
+
     header = tk.Frame(outer, bg=PASTEL_DETAIL["surface"])
     header.pack(fill="x", padx=24, pady=(22, 14))
 
@@ -1966,7 +1966,7 @@ def open_hdv_detail(app, ma_hdv):
             justify="left"
         ).pack(side="left", fill="x", expand=True)
 
-    # ===== THÔNG TIN TỔNG QUAN =====
+
     info_body = create_section(outer, "Thông tin tổng quan", PASTEL_DETAIL["section_bg"])
 
     left = tk.Frame(info_body, bg=PASTEL_DETAIL["section_bg"])
@@ -2003,7 +2003,7 @@ def open_hdv_detail(app, ma_hdv):
     for label_text, value in info_right:
         create_info_row(right, label_text, value, PASTEL_DETAIL["section_bg"], 320)
 
-    # ===== ĐÁNH GIÁ & HIỆU SUẤT =====
+
     ops_body = create_section(outer, "Đánh giá & hiệu suất", PASTEL_DETAIL["section_bg_2"])
 
     ops_rows = [
@@ -2037,7 +2037,7 @@ def open_hdv_detail(app, ma_hdv):
             justify="left"
         ).pack(side="left", fill="x", expand=True)
 
-    # ===== CÁC TOUR ĐANG / ĐÃ PHỤ TRÁCH =====
+
     tours_body = create_section(outer, "Các tour hướng dẫn viên phụ trách", PASTEL_DETAIL["section_bg_3"])
 
     if assigned_tours:
@@ -2077,7 +2077,7 @@ def open_hdv_detail(app, ma_hdv):
 
     tk.Frame(outer, bg=PASTEL_DETAIL["surface"], height=10).pack(fill="x")
 
-    # ===== FOOTER =====
+
     footer = tk.Frame(
         top,
         bg=PASTEL_DETAIL["surface"],
@@ -2105,17 +2105,17 @@ def open_hdv_detail(app, ma_hdv):
 
     set_status(app, f"Đã mở chi tiết HDV {hdv['maHDV']}", THEME["primary"])
 
-# Render tab quản lý hướng dẫn viên của admin.
+
 def admin_hdv_tab(app):
     clear_container(app)
 
-    # tk.Label(
-    #     app["container"],
-    #     text="QUẢN LÝ NHÂN SỰ HƯỚNG DẪN VIÊN",
-    #     font=("Times New Roman", 20, "bold"),
-    #     bg=THEME["bg"],
-    #     fg=THEME["text"]
-    # ).pack(anchor="w", pady=(0, 10))
+
+
+
+
+
+
+
 
     top = tk.Frame(app["container"], bg=THEME["bg"])
     top.pack(fill="x", pady=(0, 10))
@@ -2142,7 +2142,7 @@ def admin_hdv_tab(app):
 
     wrapper = tk.Frame(app["container"], bg=THEME["surface"], bd=1, relief="solid")
     wrapper.pack(fill="x", expand=False, pady=(0, 6))
-   
+
 
     cols = ("ma", "ten", "sdt", "kv", "kn", "tt")
     tv = ttk.Treeview(wrapper, columns=cols, show="headings", height=10)
@@ -2180,14 +2180,14 @@ def admin_hdv_tab(app):
     sx.pack(side="bottom", fill="x")
     tv.pack(side="left", fill="both", expand=True)
 
-    
+
 
     refresh_hdv(app, app["search_hdv_var"].get())
 
-# =========================
-# USER MANAGEMENT
-# =========================
-# Nạp lại danh sách khách hàng lên bảng, có hỗ trợ lọc theo từ khóa.
+
+
+
+
 def refresh_users(app, keyword=""):
     tree = app.get("tv_users")
     if not tree:
@@ -2223,8 +2223,8 @@ def refresh_users(app, keyword=""):
     apply_zebra(tree)
     update_admin_status_card(app, "user", f"Đang ở Quản lý khách hàng - Hiển thị {len(rows)} khách hàng", THEME["primary"])
 
-# Hàm dựng cửa sổ chi tiết dùng chung theo phong cách pastel.
-# Các tab khác chỉ cần truyền tiêu đề, phụ đề và danh sách section là có thể tái sử dụng.
+
+
 def create_detail_window(app, title_text, subtitle_text, sections):
     PASTEL_DETAIL = {
         "bg": "#edf6f9",
@@ -2383,7 +2383,7 @@ def create_detail_window(app, title_text, subtitle_text, sections):
 
     style_button(footer_inner, "Thoát", THEME["danger"], top.destroy).pack(side="right")
 
-# Mở cửa sổ xem chi tiết khách hàng và thống kê booking liên quan.
+
 def open_user_detail(app, username):
     user = app["ql"].find_user(username)
     if not user:
@@ -2442,8 +2442,8 @@ def open_user_detail(app, username):
     set_status(app, f"Đã mở chi tiết khách hàng {username}", THEME["primary"])
 
 
-# Mở form thêm mới / chỉnh sửa khách hàng.
-# Khi sửa, username bị khóa để tránh làm hỏng khóa liên kết dữ liệu.
+
+
 def open_user_form(app, data=None):
     top = tk.Toplevel(app["root"])
     top.title("Thông tin Khách hàng")
@@ -2592,7 +2592,7 @@ def open_user_form(app, data=None):
     style_button(card, "Lưu thông tin", THEME["success"], save).pack(pady=20)
 
 
-# Mở form chỉnh sửa cho khách hàng đang được chọn trong bảng.
+
 def edit_user(app):
     sel = app["tv_users"].selection()
     if not sel:
@@ -2608,7 +2608,7 @@ def edit_user(app):
     open_user_form(app, user)
 
 
-# Xóa khách hàng được chọn, sau đó lưu dữ liệu và ghi log thao tác.
+
 def delete_user(app):
     sel = app["tv_users"].selection()
     if not sel:
@@ -2616,7 +2616,7 @@ def delete_user(app):
         return
     username = app["tv_users"].item(sel[0])["values"][0]
 
-    # Kiểm tra ràng buộc ngăn chặn xóa khách hàng đang hoạt động
+
     bookings_list = getattr(app["ql"], "list_bookings", getattr(app["ql"], "data", {}).get("bookings", []))
     user_bookings = [
         b for b in bookings_list
@@ -2659,10 +2659,10 @@ def delete_user(app):
         set_status(app, f"Đã xóa khách hàng {username}", THEME["danger"])
 
 
-# Render tab quản lý khách hàng của admin.
+
 def admin_user_tab(app):
     clear_container(app)
-    # tk.Label(app["container"], text="QUẢN LÝ DANH SÁCH KHÁCH HÀNG", font=("Times New Roman", 20, "bold"), bg=THEME["bg"], fg=THEME["text"]).pack(anchor="w", pady=(0, 10))
+
 
     toolbar = tk.Frame(app["container"], bg=THEME["bg"])
     toolbar.pack(fill="x", pady=(0, 10))
@@ -2713,7 +2713,7 @@ def admin_user_tab(app):
     sx.pack(side="bottom", fill="x")
     tv.pack(side="left", fill="both", expand=True)
 
-    
+
 
     refresh_users(app, app["search_user_var"].get())
 
@@ -2726,12 +2726,12 @@ def admin_user_tab(app):
 
     tv.bind("<Double-1>", on_double_click_user)
 
-# =========================
-# TOUR MANAGEMENT
-# =========================
-# Kiểm tra dữ liệu tour trước khi lưu.
-# Bao gồm: định dạng mã tour, ngày đi/ngày về, sức chứa, giá, điểm đi/đến,
-# chi phí, HDV tồn tại hay không và xung đột lịch HDV.
+
+
+
+
+
+
 def validate_tour(app, form_data, old_ma=None):
     form_data["ma"] = normalize_code(form_data.get("ma", ""))
     form_data["ten"] = normalize_tour_name(form_data.get("ten", ""))
@@ -2833,7 +2833,7 @@ def validate_tour(app, form_data, old_ma=None):
     return True, ""
 
 
-# Nạp lại bảng tour; đồng thời tính số chỗ đã đặt / tổng sức chứa để hiển thị.
+
 def refresh_tours(app, keyword="", sync_status=False, show_status_popup=False):
     if sync_status:
         refresh_tour_lifecycle_for_admin(app, show_popup=show_status_popup)
@@ -2872,8 +2872,8 @@ def refresh_tours(app, keyword="", sync_status=False, show_status_popup=False):
     update_admin_status_card(app, "tour", f"Đang ở Quản lý tour - Hiển thị {len(rows)} tour", THEME["primary"])
 
 
-# Mở form thêm mới / chỉnh sửa tour.
-# Khi lưu, hàm còn cập nhật trạng thái HDV phụ trách tương ứng với trạng thái tour.
+
+
 def open_tour_form(app, data=None):
     top = tk.Toplevel(app["root"])
     top.title("Thông tin tour du lịch")
@@ -3153,8 +3153,8 @@ def open_tour_form(app, data=None):
             messagebox.showwarning("Thông báo", msg, parent=top)
             return
 
-        # Chuẩn hóa trạng thái sau khi validate theo quy tắc nghiệp vụ, nhưng vẫn tôn trọng
-        # thao tác chốt đoàn thủ công khi admin chọn "Đã đủ khách".
+
+
         if selected_status == TOUR_STATUS_FULL and capacity > 0 and occupied < capacity:
             form_data["trangThai"] = TOUR_STATUS_FULL
         else:
@@ -3240,8 +3240,8 @@ def open_tour_form(app, data=None):
                         pass
 
         refresh_tours(app, app["search_tour_var"].get(), sync_status=True, show_status_popup=True)
-        
-        # Tự động chọn lại dòng tour vừa chỉnh sửa trên Treeview
+
+
         tree = app.get("tv_tour")
         if tree:
             for item_id in tree.get_children():
@@ -3260,7 +3260,7 @@ def open_tour_form(app, data=None):
     style_button(btns, "Hủy", THEME["danger"], top.destroy).pack(side="left", fill="x", expand=True)
 
 
-# Mở form sửa tour đang chọn.
+
 def edit_tour(app):
     sel = app["tv_tour"].selection()
     if not sel:
@@ -3272,8 +3272,8 @@ def edit_tour(app):
         open_tour_form(app, tour)
 
 
-# Xóa tour nếu thỏa điều kiện nghiệp vụ.
-# Không cho xóa tour đang chạy hoặc tour còn booking hiệu lực.
+
+
 def delete_tour(app):
     sel = app["tv_tour"].selection()
     if not sel:
@@ -3294,13 +3294,13 @@ def delete_tour(app):
     ma_upper = str(ma).strip().upper()
 
     if normalized_status == TOUR_STATUS_CANCELLED:
-        # Kiểm tra xem có booking đang hoạt động không
+
         active_bookings = [b for b in bookings if b.get("trangThai") not in {"Đã hủy", "Hoàn tiền"}]
         if active_bookings:
             messagebox.showwarning("Không thể xóa", "Không thể xóa tour vì còn booking đang hoạt động.")
             return
-        
-        # Nếu không còn booking hoạt động, cho phép xóa cứng trực tiếp
+
+
         if messagebox.askyesno("Xác nhận", f"Bạn có chắc muốn xóa tour {ma} khỏi hệ thống?"):
             app["ql"].data["tours"] = [t for t in app["ql"].list_tours if t["ma"] != ma]
             app["ql"].save()
@@ -3408,38 +3408,38 @@ def delete_tour(app):
         set_status(app, f"Đã xóa tour {ma}", THEME["danger"])
 
 
-# =========================
-# WEATHER & LOCATION
-# =========================
+
+
+
 def open_weather_for_selected_tour(app):
     """Mở popup thời tiết cho tour đang chọn."""
     if not app.get("tv_tour"):
         messagebox.showwarning("Thông báo", "Không tìm thấy bảng tour.")
         return
-    
+
     selection = app["tv_tour"].selection()
     if not selection:
         messagebox.showwarning("Thông báo", "Vui lòng chọn một tour để xem thời tiết.")
         return
-    
+
     ma_tour = app["tv_tour"].item(selection[0])["values"][0]
     tour = app["ql"].find_tour(ma_tour)
-    
+
     if not tour:
         messagebox.showerror("Lỗi", f"Không tìm thấy tour {ma_tour}")
         return
-    
+
     open_tour_weather_popup(app["root"], tour, app["ql"])
 
 
-# =========================
-# TOUR MANAGEMENT
-# =========================
-# Render tab quản lý tour và khai báo thêm cửa sổ xem chi tiết tour bên trong tab này.
+
+
+
+
 def admin_tour_tab(app):
     clear_container(app)
 
-    # tk.Label(app["container"], text="QUẢN LÝ DANH SÁCH TOUR DU LỊCH", font=("Times New Roman", 20, "bold"), bg=THEME["bg"], fg=THEME["text"]).pack(anchor="w", pady=(0, 10))
+
 
     toolbar = tk.Frame(app["container"], bg=THEME["bg"])
     toolbar.pack(fill="x", pady=(0, 10))
@@ -3486,7 +3486,7 @@ def admin_tour_tab(app):
     sx.pack(side="bottom", fill="x")
     tv.pack(side="left", fill="both", expand=True)
 
-   
+
     def open_tour_detail_window(app, ma_tour):
         if "open_tour_details" not in app:
             app["open_tour_details"] = {}
@@ -3521,7 +3521,7 @@ def admin_tour_tab(app):
         ma_tour_upper = str(ma_tour).strip().upper()
         top = tk.Toplevel(app["root"])
         app["open_tour_details"][ma_tour_upper] = top
-        
+
         def on_close():
             try:
                 if "open_tour_details" in app:
@@ -3529,7 +3529,7 @@ def admin_tour_tab(app):
             except Exception:
                 pass
             top.destroy()
-            
+
         top.protocol("WM_DELETE_WINDOW", on_close)
 
         top.title(f"Chi tiết tour - {tour['ma']}")
@@ -3587,7 +3587,7 @@ def admin_tour_tab(app):
         top.bind("<Enter>", _bind_mousewheel)
         top.bind("<Leave>", _unbind_mousewheel)
 
-        # ===== HEADER =====
+
         header = tk.Frame(outer, bg=PASTEL_DETAIL["surface"])
         header.pack(fill="x", padx=24, pady=(22, 14))
 
@@ -3636,7 +3636,7 @@ def admin_tour_tab(app):
             body.pack(fill="both", expand=True, padx=16, pady=(0, 14))
             return body
 
-        # ===== THÔNG TIN TỔNG QUAN =====
+
         info_body = create_section(outer, "Thông tin tổng quan", PASTEL_DETAIL["section_bg"])
 
         left = tk.Frame(info_body, bg=PASTEL_DETAIL["section_bg"])
@@ -3711,7 +3711,7 @@ def admin_tour_tab(app):
                 justify="left"
             ).pack(side="left", fill="x", expand=True)
 
-        # ===== ĐIỀU HÀNH =====
+
         ops_body = create_section(outer, "Điều hành", PASTEL_DETAIL["section_bg_2"])
 
         ops_rows = [
@@ -3743,9 +3743,9 @@ def admin_tour_tab(app):
                 justify="left"
             ).pack(side="left", fill="x", expand=True)
 
-        # ===== LỊCH TRÌNH CHI TIẾT =====
+
         itinerary_body = create_section(outer, "Lịch trình chi tiết", PASTEL_DETAIL["section_bg_3"])
-        
+
         itinerary_wrapper = tk.Frame(itinerary_body, bg=PASTEL_DETAIL["section_bg_3"])
         itinerary_wrapper.pack(fill="x", pady=(0, 8))
 
@@ -3784,7 +3784,7 @@ def admin_tour_tab(app):
 
         tk.Frame(outer, bg=PASTEL_DETAIL["surface"], height=10).pack(fill="x")
 
-        # ===== FOOTER =====
+
         footer = tk.Frame(
             top,
             bg=PASTEL_DETAIL["surface"],
@@ -3822,15 +3822,15 @@ def admin_tour_tab(app):
 
     tv.bind("<Double-1>", on_double_click)
 
-  
+
 
     refresh_tours(app, app["search_tour_var"].get(), sync_status=True, show_status_popup=True)
 
-# =========================
-# BOOKING MANAGEMENT
-# =========================
-# Mở cửa sổ xem chi tiết booking.
-# Hiển thị đầy đủ thông tin khách, tour, thanh toán, hoàn tiền và danh sách khách đi cùng.
+
+
+
+
+
 def open_booking_detail(app, ma_booking):
     booking = next((b for b in app["ql"].list_bookings if b.get("maBooking") == ma_booking), None)
     if not booking:
@@ -3960,7 +3960,7 @@ def open_booking_detail(app, ma_booking):
         body.pack(fill="both", expand=True, padx=16, pady=(0, 14))
         return body
 
-    # ===== THÔNG TIN BOOKING =====
+
     info_body = create_section(outer, "Thông tin booking", PASTEL_DETAIL["section_bg"])
 
     left = tk.Frame(info_body, bg=PASTEL_DETAIL["section_bg"])
@@ -4018,7 +4018,7 @@ def open_booking_detail(app, ma_booking):
             font=("Times New Roman", 12), wraplength=320, justify="left"
         ).pack(side="left", fill="x", expand=True)
 
-    # ===== THANH TOÁN =====
+
     payment_body = create_section(outer, "Thanh toán & ghi chú", PASTEL_DETAIL["section_bg_2"])
 
     age_breakdown = booking.get("coCauDoTuoi", {}) if isinstance(booking.get("coCauDoTuoi"), dict) else {}
@@ -4105,7 +4105,7 @@ def open_booking_detail(app, ma_booking):
     set_status(app, f"Đã mở chi tiết booking {booking.get('maBooking', '')}", THEME["primary"])
 
 
-# Trả về mã booking đang được chọn trong bảng; nếu chưa chọn thì trả về chuỗi rỗng.
+
 def _selected_booking_code(app):
     tree = app.get("tv_booking")
     if not tree:
@@ -4116,7 +4116,7 @@ def _selected_booking_code(app):
     return str(tree.item(selection[0])["values"][0]).strip()
 
 
-# Mở cửa sổ tổng hợp booking theo từng tour để admin theo dõi sức chứa và doanh thu nhanh.
+
 def open_booking_summary_window(app):
     rows = summarize_bookings_by_tour(app["ql"])
 
@@ -4213,7 +4213,7 @@ def open_booking_summary_window(app):
     tv.pack(side="left", fill="both", expand=True)
     apply_zebra(tv)
 
-# Mở báo cáo doanh thu đa góc nhìn: theo tour, theo tháng và theo quý.
+
 def open_revenue_report_window(app):
     report = build_revenue_report(app["ql"])
     overview = report.get("overview", {})
@@ -4232,7 +4232,7 @@ def open_revenue_report_window(app):
     top.transient(app["root"])
     top.grab_set()
 
-    # 1. Header Frame
+
     header = tk.Frame(top, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1, bd=0)
     header.pack(fill="x", padx=18, pady=(16, 10))
     tk.Label(
@@ -4250,10 +4250,10 @@ def open_revenue_report_window(app):
         font=("Times New Roman", 11, "italic"),
     ).pack(anchor="w", padx=16, pady=(0, 12))
 
-    # 2. Card tổng quan (Grid 2 hàng x 4 cột = 8 cards)
+
     stats_frame = tk.Frame(top, bg=THEME["bg"])
     stats_frame.pack(fill="x", padx=18, pady=(0, 10))
-    
+
     for col in range(4):
         stats_frame.grid_columnconfigure(col, weight=1)
 
@@ -4279,12 +4279,12 @@ def open_revenue_report_window(app):
         lbl_val.pack(anchor="w", padx=12, pady=(0, 10))
         card_value_labels.append(lbl_val)
 
-    # 3. Filter Section
+
     filter_frame = tk.Frame(top, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
     filter_frame.pack(fill="x", padx=18, pady=(0, 10), ipady=8)
 
     tk.Label(filter_frame, text=" Bộ lọc dữ liệu:", bg=THEME["surface"], fg=THEME["text"], font=("Times New Roman", 11, "bold")).pack(side="left", padx=(10, 5))
-    
+
     month_var = tk.StringVar(value="Tất cả")
     tk.Label(filter_frame, text="Tháng:", bg=THEME["surface"], fg=THEME["text"], font=("Times New Roman", 11)).pack(side="left", padx=(5, 2))
     months = ["Tất cả"] + [f"{i:02d}" for i in range(1, 13)]
@@ -4302,9 +4302,9 @@ def open_revenue_report_window(app):
     query_ent = tk.Entry(filter_frame, textvariable=query_var, width=18, font=("Times New Roman", 11))
     query_ent.pack(side="left", padx=5)
 
-    # Notebook tabs declarations for use inside apply_filters
+
     notebook = ttk.Notebook(top, style="Report.TNotebook")
-    
+
     tab_tour = tk.Frame(notebook, bg=THEME["surface"])
     tab_month = tk.Frame(notebook, bg=THEME["surface"])
     tab_booking = tk.Frame(notebook, bg=THEME["surface"])
@@ -4313,20 +4313,20 @@ def open_revenue_report_window(app):
     notebook.add(tab_month, text="Theo tháng")
     notebook.add(tab_booking, text="Chi tiết booking")
 
-    # Treeview tour setup
+
     wrapper_tour = tk.Frame(tab_tour, bg=THEME["surface"], bd=1, relief="solid")
     wrapper_tour.pack(fill="both", expand=True, padx=5, pady=5)
     cols_tour = ("maTour", "tenTour", "tongBooking", "bookingHieuLuc", "tongKhach", "tongPhaiThu", "daThu", "daHoan", "conNo", "thucNhan")
     tv_tour = ttk.Treeview(wrapper_tour, columns=cols_tour, show="headings", height=6)
     headers_tour = [
-        ("maTour", "Mã tour", 80), 
-        ("tenTour", "Tên tour", 220), 
-        ("tongBooking", "Tổng booking", 90), 
-        ("bookingHieuLuc", "Booking hiệu lực", 100), 
+        ("maTour", "Mã tour", 80),
+        ("tenTour", "Tên tour", 220),
+        ("tongBooking", "Tổng booking", 90),
+        ("bookingHieuLuc", "Booking hiệu lực", 100),
         ("tongKhach", "Tổng khách", 95),
         ("tongPhaiThu", "Tổng phải thu", 125),
-        ("daThu", "Đã thu", 115), 
-        ("daHoan", "Đã hoàn", 115), 
+        ("daThu", "Đã thu", 115),
+        ("daHoan", "Đã hoàn", 115),
         ("conNo", "Còn nợ", 115),
         ("thucNhan", "Doanh thu thực nhận", 130)
     ]
@@ -4343,18 +4343,18 @@ def open_revenue_report_window(app):
     sx_tour.pack(side="bottom", fill="x")
     tv_tour.pack(side="left", fill="both", expand=True)
 
-    # Treeview month setup
+
     wrapper_month = tk.Frame(tab_month, bg=THEME["surface"], bd=1, relief="solid")
     wrapper_month.pack(fill="both", expand=True, padx=5, pady=5)
     cols_month = ("label", "tongBooking", "bookingHieuLuc", "tongPhaiThu", "daThu", "daHoan", "conNo", "thucNhan")
     tv_month = ttk.Treeview(wrapper_month, columns=cols_month, show="headings", height=6)
     headers_month = [
-        ("label", "Tháng/Năm", 120), 
-        ("tongBooking", "Tổng booking", 90), 
-        ("bookingHieuLuc", "Booking hiệu lực", 100), 
+        ("label", "Tháng/Năm", 120),
+        ("tongBooking", "Tổng booking", 90),
+        ("bookingHieuLuc", "Booking hiệu lực", 100),
         ("tongPhaiThu", "Tổng phải thu", 130),
-        ("daThu", "Đã thu", 120), 
-        ("daHoan", "Đã hoàn", 120), 
+        ("daThu", "Đã thu", 120),
+        ("daHoan", "Đã hoàn", 120),
         ("conNo", "Còn nợ", 120),
         ("thucNhan", "Doanh thu thực nhận", 135)
     ]
@@ -4371,7 +4371,7 @@ def open_revenue_report_window(app):
     sx_month.pack(side="bottom", fill="x")
     tv_month.pack(side="left", fill="both", expand=True)
 
-    # Treeview booking setup
+
     wrapper_booking = tk.Frame(tab_booking, bg=THEME["surface"], bd=1, relief="solid")
     wrapper_booking.pack(fill="both", expand=True, padx=5, pady=5)
     cols_booking = ("maBooking", "username", "tenKhach", "maTour", "tenTour", "date", "trangThai", "tongTien", "daThanhToan", "conNo", "daHoan", "hinhThuc")
@@ -4408,7 +4408,7 @@ def open_revenue_report_window(app):
         y = year_var.get()
         q = query_var.get().strip()
 
-        # Re-fetch filtered report data
+
         rep = build_revenue_report(app["ql"], month=m, year=y, query=q)
         ov = rep.get("overview", {})
         bk_details = rep.get("booking_details", [])
@@ -4427,55 +4427,55 @@ def open_revenue_report_window(app):
         for lbl, val in zip(card_value_labels, stat_vals):
             lbl.config(text=val)
 
-        # Populate Tour
+
         for item in tv_tour.get_children():
             tv_tour.delete(item)
         for row in rep.get("by_tour", []):
             tv_tour.insert(
-                "", 
-                "end", 
+                "",
+                "end",
                 values=(
-                    row.get("maTour", ""), 
-                    row.get("tenTour", ""), 
-                    row.get("tongBooking", 0), 
-                    row.get("bookingHieuLuc", 0), 
+                    row.get("maTour", ""),
+                    row.get("tenTour", ""),
+                    row.get("tongBooking", 0),
+                    row.get("bookingHieuLuc", 0),
                     row.get("tongKhach", 0),
                     format_currency(row.get("tongPhaiThu", 0)),
-                    format_currency(row.get("daThu", 0)), 
-                    format_currency(row.get("daHoan", 0)), 
+                    format_currency(row.get("daThu", 0)),
+                    format_currency(row.get("daHoan", 0)),
                     format_currency(row.get("conNo", 0)),
                     format_currency(row.get("doanhThuThucNhan", 0))
                 )
             )
         apply_zebra(tv_tour)
 
-        # Populate Month
+
         for item in tv_month.get_children():
             tv_month.delete(item)
         for row in rep.get("by_month", []):
             tv_month.insert(
-                "", 
-                "end", 
+                "",
+                "end",
                 values=(
-                    row.get("label", ""), 
-                    row.get("tongBooking", 0), 
-                    row.get("bookingHieuLuc", 0), 
+                    row.get("label", ""),
+                    row.get("tongBooking", 0),
+                    row.get("bookingHieuLuc", 0),
                     format_currency(row.get("tongPhaiThu", 0)),
-                    format_currency(row.get("daThu", 0)), 
-                    format_currency(row.get("daHoan", 0)), 
+                    format_currency(row.get("daThu", 0)),
+                    format_currency(row.get("daHoan", 0)),
                     format_currency(row.get("conNo", 0)),
                     format_currency(row.get("doanhThuThucNhan", 0))
                 )
             )
         apply_zebra(tv_month)
 
-        # Populate Bookings
+
         for item in tv_booking.get_children():
             tv_booking.delete(item)
         for row in bk_details:
             tv_booking.insert(
-                "", 
-                "end", 
+                "",
+                "end",
                 values=(
                     row.get("maBooking", ""),
                     row.get("username", ""),
@@ -4494,7 +4494,7 @@ def open_revenue_report_window(app):
         apply_zebra(tv_booking)
 
     style_button(filter_frame, "Lọc", THEME["primary"], apply_filters).pack(side="left", padx=10)
-    
+
     def reset_filters():
         month_var.set("Tất cả")
         year_var.set("Tất cả")
@@ -4503,10 +4503,10 @@ def open_revenue_report_window(app):
 
     style_button(filter_frame, "Đặt lại", "#64748b", reset_filters).pack(side="left")
 
-    # Render data initially
+
     apply_filters()
 
-    # Style & Pack Notebook
+
     style = ttk.Style(top)
     style.configure("Report.TNotebook", background=THEME["bg"], borderwidth=0)
     style.configure(
@@ -4523,7 +4523,7 @@ def open_revenue_report_window(app):
     )
     notebook.pack(fill="both", expand=True, padx=18, pady=(0, 10))
 
-    # 4. Action buttons ở dưới cùng
+
     actions_frame = tk.Frame(top, bg=THEME["bg"])
     actions_frame.pack(fill="x", padx=18, pady=(5, 15))
 
@@ -4538,7 +4538,7 @@ def open_revenue_report_window(app):
             notebook.select(tab_booking)
             messagebox.showwarning("Thông báo", "Vui lòng chọn một booking từ tab 'Chi tiết Booking' để xem chi tiết.")
             return
-        
+
         item_vals = tv_booking.item(selected_item[0], "values")
         if item_vals:
             ma_booking = item_vals[0]
@@ -4579,9 +4579,9 @@ def handle_refund_decision(app, approve=True, ma_booking=None):
     set_status(app, result.message, THEME["success"] if approve else THEME["warning"])
     messagebox.showinfo("Thành công", result.message)
 
-# Kiểm tra dữ liệu booking trước khi lưu.
-# Ràng buộc chính: mã booking, tour tồn tại, username đặt hợp lệ, đủ chỗ trống,
-# và không cho đặt vào tour đã hủy / tạm hoãn / hoàn tất.
+
+
+
 def validate_booking(app, form_data, old_ma=None):
     form_data["maBooking"] = normalize_code(form_data.get("maBooking", ""))
     form_data["maTour"] = normalize_code(form_data.get("maTour", ""))
@@ -4677,7 +4677,7 @@ def _next_booking_code_ui(app) -> str:
     return f"BK{max_seq + 1:02d}"
 
 
-# Nạp lại danh sách booking lên Treeview, có hỗ trợ lọc theo mã/tên/trạng thái/hoàn tiền.
+
 def refresh_bookings(app, keyword=""):
     tree = app.get("tv_booking")
     if not tree:
@@ -4726,9 +4726,9 @@ def refresh_bookings(app, keyword=""):
     status_text = f"Đang ở Quản lý booking - Hiển thị {len(rows)} booking"
     update_admin_status_card(app, "booking", status_text, THEME["primary"])
 
-# Mở form thêm mới / chỉnh sửa booking.
-# Đây là form có logic phụ trợ khá nhiều: tự tính tổng tiền, tiền cọc, còn nợ,
-# chuẩn hóa cơ cấu độ tuổi và suy ra trạng thái thanh toán.
+
+
+
 def open_booking_form(app, data=None):
     top = tk.Toplevel(app["root"])
     top.title("Thông tin đặt chỗ (Booking)")
@@ -5093,7 +5093,7 @@ def open_booking_form(app, data=None):
     )
 
 
-# Mở form sửa booking đang chọn.
+
 def edit_booking(app):
     sel = app["tv_booking"].selection()
     if not sel:
@@ -5106,7 +5106,7 @@ def edit_booking(app):
         open_booking_form(app, booking)
 
 
-# Hủy booking theo nghiệp vụ, không xóa cứng dữ liệu khỏi JSON.
+
 def delete_booking(app):
     sel = app["tv_booking"].selection()
     if not sel:
@@ -5146,17 +5146,17 @@ def delete_booking(app):
     set_status(app, f"Đã hủy booking {ma} với trạng thái '{result.booking.get('trangThai', '')}'.", THEME["warning"])
 
 
-# Render tab quản lý booking, hoàn tiền và báo cáo liên quan.
+
 def admin_booking_tab(app):
     clear_container(app)
 
-    # tk.Label(
-    #     app["container"],
-    #     text="QUẢN LÝ ĐẶT CHỖ & KHÁCH HÀNG",
-    #     font=("Times New Roman", 20, "bold"),
-    #     bg=THEME["bg"],
-    #     fg=THEME["text"]
-    # ).pack(anchor="w", pady=(0, 10))
+
+
+
+
+
+
+
 
     toolbar = tk.Frame(app["container"], bg=THEME["bg"])
     toolbar.pack(fill="x", pady=(0, 10))
@@ -5221,16 +5221,16 @@ def admin_booking_tab(app):
 
     tv.bind("<Double-1>", on_double_click)
 
-   
+
 
     refresh_bookings(app, app["search_booking_var"].get())
 
-# =========================
-# FEEDBACK / NOTIFICATION
-# =========================
 
 
-# Mở popup xem nhanh chi tiết một phản hồi / thông báo.
+
+
+
+
 def open_feedback_detail(app, mode, data):
     PASTEL_DETAIL = {
         "bg": "#edf6f9",
@@ -5349,7 +5349,7 @@ def open_feedback_detail(app, mode, data):
         fg="white"
     ).pack(padx=20, pady=(8, 16), fill="x")
 
-# Mở phiên bản chi tiết đầy đủ hơn cho phản hồi / thông báo.
+
 def open_feedback_detail_full(app, mode, data):
     PASTEL_DETAIL = {
         "bg": "#edf6f9",
@@ -5689,7 +5689,7 @@ def admin_reviews_tab(app):
         app["ql"].reviews = [r for r in app["ql"].list_reviews if str(r.get("maReview", "")).strip() != ma_review]
         if str(review.get("target", "")).strip().lower() in {"hdv", "guide"} and ma_hdv:
             recalculate_hdv_review_stats(app["ql"], ma_hdv)
-        
+
         create_review_notification(
             app["ql"],
             username,
@@ -5762,7 +5762,7 @@ def admin_reviews_tab(app):
         reply = normalized.get("adminReply", "")
         status = normalized.get("trangThai", "")
         has_reply = "Có" if reply else "Chưa"
-        
+
         rev_tv.insert("", "end", values=(
             ma_review,
             normalized.get("username", ""),
@@ -5796,17 +5796,17 @@ def show_detailed_notification_popup(root, notif, datastore):
     popup.grab_set()
     popup.transient(root)
 
-    # Căn giữa popup
+
     popup.update_idletasks()
     x = (popup.winfo_screenwidth() - popup.winfo_reqwidth()) // 2
     y = (popup.winfo_screenheight() - popup.winfo_reqheight()) // 2
     popup.geometry(f"+{x}+{y}")
 
-    # Frame chính
+
     main_frame = tk.Frame(popup, bg=THEME["bg"])
     main_frame.pack(fill="both", expand=True, padx=16, pady=16)
 
-    # Header
+
     header_frame = tk.Frame(main_frame, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
     header_frame.pack(fill="x", pady=(0, 12))
     tk.Frame(header_frame, bg=THEME["primary"], height=3).pack(fill="x")
@@ -5827,11 +5827,11 @@ def show_detailed_notification_popup(root, notif, datastore):
         fg=THEME["muted"]
     ).pack(anchor="w", padx=14, pady=(0, 10))
 
-    # Dữ liệu chi tiết
+
     content_frame = tk.Frame(main_frame, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1)
     content_frame.pack(fill="both", expand=True)
 
-    # Canvas + Scrollbar cho nội dung
+
     canvas = tk.Canvas(content_frame, bg=THEME["surface"], highlightthickness=0, bd=0)
     scrollbar = ttk.Scrollbar(content_frame, orient="vertical", command=canvas.yview)
     scrollable_frame = tk.Frame(canvas, bg=THEME["surface"])
@@ -5847,7 +5847,7 @@ def show_detailed_notification_popup(root, notif, datastore):
     canvas.pack(side="left", fill="both", expand=True)
     scrollbar.pack(side="right", fill="y")
 
-    # Thông tin chi tiết
+
     def get_val(keys, default="Không có"):
         for k in keys:
             val = notif.get(k)
@@ -5895,7 +5895,7 @@ def show_detailed_notification_popup(root, notif, datastore):
             justify="left"
         ).pack(side="left", fill="x", expand=True)
 
-    # Nội dung chi tiết
+
     tk.Label(
         scrollable_frame,
         text="Nội dung đầy đủ:",
@@ -5925,7 +5925,7 @@ def show_detailed_notification_popup(root, notif, datastore):
     content_text.configure(yscrollcommand=content_sb.set)
     content_sb.pack(side="right", fill="y")
 
-    # Footer
+
     footer_frame = tk.Frame(main_frame, bg=THEME["bg"])
     footer_frame.pack(fill="x", pady=(12, 0))
 
@@ -5935,7 +5935,7 @@ def show_detailed_notification_popup(root, notif, datastore):
 def admin_notifications_tab(app):
     clear_container(app)
 
-    # 1. Tạo Canvas và Scrollbar để tab có thể scroll dọc và ngang khi màn hình nhỏ
+
     canvas_wrapper = tk.Frame(app["container"], bg=THEME["bg"])
     canvas_wrapper.pack(fill="both", expand=True)
 
@@ -5968,11 +5968,11 @@ def admin_notifications_tab(app):
     canvas.bind_all("<MouseWheel>", on_mousewheel)
     canvas_wrapper.bind("<Destroy>", lambda e: canvas.unbind_all("<MouseWheel>"))
 
-    # Vùng chứa chia làm 2 cột bằng Grid
+
     split_fr = tk.Frame(tab_content, bg=THEME["bg"])
     split_fr.pack(fill="both", expand=True, padx=10, pady=10)
-    split_fr.columnconfigure(0, weight=2, minsize=400) # Cột trái: Form
-    split_fr.columnconfigure(1, weight=3, minsize=550) # Cột phải: Lịch sử
+    split_fr.columnconfigure(0, weight=2, minsize=400)
+    split_fr.columnconfigure(1, weight=3, minsize=550)
 
     left_col = tk.Frame(split_fr, bg=THEME["bg"])
     left_col.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
@@ -5980,41 +5980,41 @@ def admin_notifications_tab(app):
     right_col = tk.Frame(split_fr, bg=THEME["bg"])
     right_col.grid(row=0, column=1, sticky="nsew", padx=(10, 0))
 
-    # ==========================================
-    # CỘT TRÁI: FORM SOẠN THẢO VÀ GỬI THÔNG BÁO
-    # ==========================================
+
+
+
     form_card = tk.Frame(left_col, bg=THEME["surface"], highlightbackground=THEME["border"], highlightthickness=1, padx=15, pady=15)
     form_card.pack(fill="both", expand=True)
 
     tk.Label(
-        form_card, 
-        text="🔔 GỬI THÔNG BÁO", 
-        font=("Times New Roman", 15, "bold"), 
-        bg=THEME["surface"], 
+        form_card,
+        text="🔔 GỬI THÔNG BÁO",
+        font=("Times New Roman", 15, "bold"),
+        bg=THEME["surface"],
         fg=THEME["primary"]
     ).pack(anchor="w", pady=(0, 2))
 
     tk.Label(
-        form_card, 
-        text="Soạn thảo và gửi thông báo chung hoặc riêng lẻ đến Khách hàng/HDV.", 
-        font=("Times New Roman", 10, "italic"), 
-        bg=THEME["surface"], 
+        form_card,
+        text="Soạn thảo và gửi thông báo chung hoặc riêng lẻ đến Khách hàng/HDV.",
+        font=("Times New Roman", 10, "italic"),
+        bg=THEME["surface"],
         fg=THEME["muted"]
     ).pack(anchor="w", pady=(0, 15))
 
-    # Trường 1: Nhóm người nhận
+
     tk.Label(form_card, text="Người nhận / nhóm người nhận:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(4, 2))
     category_var = tk.StringVar(value="Tất cả")
     category_cb = ttk.Combobox(
-        form_card, 
-        textvariable=category_var, 
-        values=["Tất cả", "Khách hàng", "Hướng dẫn viên", "Theo Tour", "Tài khoản cụ thể"], 
-        state="readonly", 
+        form_card,
+        textvariable=category_var,
+        values=["Tất cả", "Khách hàng", "Hướng dẫn viên", "Theo Tour", "Tài khoản cụ thể"],
+        state="readonly",
         font=("Times New Roman", 11)
     )
     category_cb.pack(fill="x", pady=(0, 8))
 
-    # Trường 2a: Chọn Tour (chỉ hiện khi chọn "Theo Tour")
+
     tour_selector_lbl = tk.Label(form_card, text="Chọn Tour (gửi cho HDV phụ trách):", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"])
     tour_selector_lbl.pack(anchor="w", pady=(4, 2))
     tour_var = tk.StringVar()
@@ -6034,7 +6034,7 @@ def admin_notifications_tab(app):
         font=("Times New Roman", 11)
     )
     tour_cb.pack(fill="x", pady=(0, 8))
-    # HDV info label (chỉ xuất hiện khi chọn Tour)
+
     hdv_info_var = tk.StringVar(value="")
     hdv_info_lbl = tk.Label(form_card, textvariable=hdv_info_var, font=("Times New Roman", 10, "italic"), bg=THEME["surface"], fg=THEME["success"])
     hdv_info_lbl.pack(anchor="w", pady=(0, 6))
@@ -6042,7 +6042,7 @@ def admin_notifications_tab(app):
     tour_cb.pack_forget()
     hdv_info_lbl.pack_forget()
 
-    # Trường 2b: Người nhận cụ thể (ẩn/hiện/disable)
+
     specific_lbl = tk.Label(form_card, text="Tên đăng nhập / Mã HDV cụ thể:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"])
     specific_lbl.pack(anchor="w", pady=(4, 2))
     recipient_ent = tk.Entry(form_card, font=("Times New Roman", 11), relief="solid", bd=1, state="disabled")
@@ -6055,7 +6055,7 @@ def admin_notifications_tab(app):
         if not sel:
             hdv_info_var.set("")
             return
-        # Lấy mã tour từ display string "MATOUR - TenTour"
+
         ma_t = sel.split(" - ")[0].strip()
         tour_obj = next((t for t in all_tours if str(t.get("maTour", "")).strip() == ma_t), None)
         if not tour_obj:
@@ -6076,7 +6076,7 @@ def admin_notifications_tab(app):
 
     def on_category_changed(_event=None):
         cat = category_var.get()
-        # Reset
+
         tour_selector_lbl.pack_forget()
         tour_cb.pack_forget()
         hdv_info_lbl.pack_forget()
@@ -6100,12 +6100,12 @@ def admin_notifications_tab(app):
 
     category_cb.bind("<<ComboboxSelected>>", on_category_changed)
 
-    # Trường 3: Tiêu đề thông báo
+
     tk.Label(form_card, text="Tiêu đề thông báo:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(4, 2))
     title_ent = tk.Entry(form_card, font=("Times New Roman", 11), relief="solid", bd=1)
     title_ent.pack(fill="x", pady=(0, 8))
 
-    # Trường 4: Loại thông báo & Độ ưu tiên (xếp ngang)
+
     row_meta = tk.Frame(form_card, bg=THEME["surface"])
     row_meta.pack(fill="x", pady=(4, 8))
     row_meta.columnconfigure(0, weight=1)
@@ -6125,7 +6125,7 @@ def admin_notifications_tab(app):
     priority_cb = ttk.Combobox(f_prio, textvariable=priority_var, values=["Thấp", "Trung bình", "Cao"], state="readonly", font=("Times New Roman", 11))
     priority_cb.pack(fill="x")
 
-    # Trường 5: Nội dung thông báo
+
     tk.Label(form_card, text="Nội dung thông báo:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"], fg=THEME["text"]).pack(anchor="w", pady=(4, 2))
     txt_frame = tk.Frame(form_card, bg=THEME["surface"], bd=1, relief="solid")
     txt_frame.pack(fill="both", expand=True, pady=(0, 15))
@@ -6135,7 +6135,7 @@ def admin_notifications_tab(app):
     txt.configure(yscrollcommand=txt_sb.set)
     txt_sb.pack(side="right", fill="y")
 
-    # Nút bấm hành động
+
     btn_frame = tk.Frame(form_card, bg=THEME["surface"])
     btn_frame.pack(fill="x")
 
@@ -6161,10 +6161,10 @@ def admin_notifications_tab(app):
         if not content_val:
             return messagebox.showwarning("Lỗi", "Vui lòng nhập nội dung thông báo!")
 
-        # Create unique notification ID
+
         new_id = f"TB{datetime.now().strftime('%Y%m%d%H%M%S')}{len(app['ql'].notifications) + 1}"
         current_time = datetime.now().strftime("%d/%m/%Y %H:%M")
-        
+
         new_notif = {
             "id": new_id,
             "maThongBao": new_id,
@@ -6198,7 +6198,7 @@ def admin_notifications_tab(app):
             new_notif["role"] = "HDV"
             new_notif["targetRole"] = "HDV"
         elif category == "Theo Tour":
-            # Yêu cầu 2: Gửi thông báo theo Tour → tìm HDV phụ trách
+
             sel_tour = tour_var.get().strip()
             if not sel_tour:
                 return messagebox.showwarning("Lỗi", "Vui lòng chọn tour!")
@@ -6212,7 +6212,7 @@ def admin_notifications_tab(app):
             hdv_obj = app["ql"].find_hdv(ma_hdv_val)
             if not hdv_obj:
                 return messagebox.showwarning("Lỗi", f"Không tìm thấy hồ sơ HDV '{ma_hdv_val}'. Hãy kiểm tra lại!")
-            # Kiểm tra username HDV
+
             username_hdv = hdv_obj.get("username") or ma_hdv_val
             if not username_hdv:
                 return messagebox.showwarning("Lỗi", f"HDV '{ma_hdv_val}' chưa có tên đăng nhập (username)!")
@@ -6232,11 +6232,11 @@ def admin_notifications_tab(app):
         elif category == "Tài khoản cụ thể":
             if not recipient_val:
                 return messagebox.showwarning("Lỗi", "Vui lòng nhập tài khoản người nhận cụ thể!")
-            
-            # Kiểm tra tài khoản
+
+
             user_found = next((u for u in app["ql"].list_users if str(u.get("username", "")).strip().lower() == recipient_val.lower()), None)
             guide_found = next((g for g in app["ql"].list_hdv if str(g.get("maHDV", "")).strip().lower() == recipient_val.lower() or str(g.get("username", "")).strip().lower() == recipient_val.lower()), None)
-            
+
             if not user_found and not guide_found:
                 return messagebox.showwarning("Lỗi", f"Không tìm thấy tài khoản '{recipient_val}' trên hệ thống!")
 
@@ -6265,7 +6265,7 @@ def admin_notifications_tab(app):
 
         app["ql"].notifications.append(new_notif)
         app["ql"].save()
-        
+
         messagebox.showinfo("Thành công", "Đã gửi thông báo thành công!")
         xoa_noi_dung()
         reload_admin_current_tab(app)
@@ -6273,16 +6273,16 @@ def admin_notifications_tab(app):
     style_button(btn_frame, " Gửi thông báo", THEME["success"], gui_thong_bao).pack(side="left", padx=(0, 10))
     style_button(btn_frame, " Xóa nội dung", THEME["muted"], xoa_noi_dung).pack(side="left")
 
-    # ==========================================
-    # CỘT PHẢI: LỊCH SỬ THÔNG BÁO ĐÃ GỬI
-    # ==========================================
+
+
+
     toolbar = tk.Frame(right_col, bg=THEME["bg"])
     toolbar.pack(fill="x", pady=(0, 8))
     style_button(toolbar, "Tải lại", "#0ea5e9", lambda: reload_admin_current_tab(app)).pack(side="left")
-    
+
     notif_rows = []
     notif_tv = None
-    
+
     def open_selected_notif_detail():
         if notif_tv is None:
             return
@@ -6293,7 +6293,7 @@ def admin_notifications_tab(app):
         idx = notif_tv.index(sel[0])
         if 0 <= idx < len(notif_rows):
             show_detailed_notification_popup(app["root"], notif_rows[idx], app["ql"])
-    
+
     style_button(
         toolbar,
         "Chi tiết",
@@ -6304,7 +6304,7 @@ def admin_notifications_tab(app):
     notif_wrapper = tk.Frame(right_col, bg=THEME["surface"], bd=1, relief="solid")
     notif_wrapper.pack(fill="both", expand=True)
 
-    # treeview - Không hiển thị trạng thái đọc/chưa đọc (Yêu cầu 4)
+
     notif_tv = ttk.Treeview(notif_wrapper, columns=("maTB", "nguoinhan", "vaitro", "tieude", "noidung", "loai", "ngay", "matour", "tentour"), show="headings", height=15)
     notif_tv.heading("maTB", text="Mã TB")
     notif_tv.heading("nguoinhan", text="Người nhận")
@@ -6331,22 +6331,22 @@ def admin_notifications_tab(app):
     bind_autohide_scrollbar(notif_tv, notif_sy, "vertical")
     bind_autohide_scrollbar(notif_tv, notif_sx, "horizontal")
     notif_tv.configure(yscrollcommand=notif_sy.set, xscrollcommand=notif_sx.set)
-    
+
     notif_sy.pack(side="right", fill="y")
     notif_sx.pack(side="bottom", fill="x")
     notif_tv.pack(side="left", fill="both", expand=True)
 
     notif_rows.clear()
     for n in app["ql"].list_notifications:
-        # Enriched notification with english keys for popup safety
+
         enriched = dict(n)
-        
-        # Mã thông báo
+
+
         ma_tb = str(n.get("maThongBao", n.get("id", "")))[:15].strip() or f"TB{len(notif_rows)+1:03d}"
         enriched["maThongBao"] = ma_tb
         enriched["id"] = ma_tb
 
-        # Người nhận
+
         evt_type = n.get("eventType", "")
         recipient = "Tất cả"
         if evt_type == "broadcast":
@@ -6361,36 +6361,36 @@ def admin_notifications_tab(app):
             recipient = f"HDV: {n.get('maHDV')}"
         else:
             recipient = "Hệ thống"
-        
+
         enriched["recipient"] = recipient
 
-        # Vai trò nhận
+
         vai_tro = "Hướng dẫn viên" if evt_type in {"guide_broadcast", "guide_direct"} else ("Khách" if evt_type in {"user_broadcast", "user_direct"} else "Tất cả")
         enriched["role"] = vai_tro
 
-        # Tiêu đề
+
         tieude = shorten_text(n.get("title", ""), 25)
         enriched["title"] = n.get("title", "")
 
-        # Nội dung tóm tắt
+
         noidung = shorten_text(n.get("content", n.get("noiDung", "")), 40)
         enriched["content"] = n.get("content", n.get("noiDung", n.get("message", "")))
 
-        # Loại thông báo
+
         type_label = _notification_type_label(n) or n.get("category") or "Hệ thống"
         enriched["eventType"] = evt_type or n.get("category", "Hệ thống")
 
-        # Ngày gửi
+
         ngay = shorten_text(n.get("date", n.get("ngayGui", "")), 16)
         enriched["date"] = n.get("date", n.get("ngayGui", ""))
 
-        # Mã tour
+
         matour = shorten_text(n.get("maTour", ""), 15) or "-"
-        
-        # Tên tour
+
+
         tentour = shorten_text(n.get("tenTour", ""), 20)
 
-        # Enrich tour details
+
         ma_tour = str(n.get("maTour", "")).strip()
         ten_tour = str(n.get("tenTour", "")).strip()
         if ma_tour and not ten_tour:
@@ -6400,7 +6400,7 @@ def admin_notifications_tab(app):
         enriched["maTour"] = ma_tour
         enriched["tenTour"] = ten_tour
 
-        # Enrich HDV details
+
         ma_hdv = str(n.get("maHDV", "")).strip()
         ten_hdv = str(n.get("tenHDV", "")).strip()
         if ma_hdv and not ten_hdv:
@@ -6425,7 +6425,7 @@ def admin_notifications_tab(app):
             tentour,
         ))
 
-        # Thêm mã thông báo vào object để có thể xem chi tiết
+
         if "maThongBao" not in n:
             n["maThongBao"] = ma_tb
 
@@ -6443,11 +6443,11 @@ def admin_notifications_tab(app):
 def admin_feedback_tab(app):
     """Backward compatibility: chuyển về tab đánh giá."""
     admin_reviews_tab(app)
-# =========================
-# Voucher 
-# =========================
 
-# Kiểm tra tính hợp lệ của dữ liệu voucher trước khi lưu.
+
+
+
+
 def validate_voucher(app, data, old_code=None):
     normalized = copy.deepcopy(data)
     normalized["maVoucher"] = normalize_code(normalized.get("maVoucher", ""))
@@ -6458,7 +6458,7 @@ def validate_voucher(app, data, old_code=None):
     return validate_voucher_payload(app["ql"], normalized, old_code=normalize_code(old_code or ""))
 
 
-# Mở form thêm mới / chỉnh sửa voucher và kiểm tra dữ liệu trước khi lưu.
+
 def open_voucher_form(app, data=None):
     top = tk.Toplevel(app["root"])
     top.title("Thông tin mã giảm giá")
@@ -6661,7 +6661,7 @@ def open_voucher_form(app, data=None):
     style_button(btns, "Hủy", THEME["danger"], top.destroy).pack(side="left", fill="x", expand=True)
 
 
-# Mở form sửa voucher đang chọn.
+
 def edit_voucher(app):
     tv = app.get("tv_voucher")
     if not tv:
@@ -6681,7 +6681,7 @@ def edit_voucher(app):
     open_voucher_form(app, voucher)
 
 
-# Xóa voucher đang chọn sau khi xác nhận.
+
 def delete_voucher(app):
     tv = app.get("tv_voucher")
     if not tv:
@@ -6714,7 +6714,7 @@ def delete_voucher(app):
     refresh_vouchers(app)
     set_status(app, f"Đã xóa voucher {code}", THEME["danger"])
 
-# Mở cửa sổ xem nhanh chi tiết voucher.
+
 def open_voucher_detail(app, code):
     voucher = next((v for v in app["ql"].list_vouchers if v.get("maVoucher") == code), None)
     if not voucher:
@@ -6849,7 +6849,7 @@ def open_voucher_detail(app, code):
     ).pack(side="left", fill="x", expand=True)
 
 
-# Mở cửa sổ chi tiết đầy đủ của voucher với thông tin mở rộng hơn.
+
 def open_voucher_detail_full(app, code):
     voucher = next((v for v in app["ql"].list_vouchers if v.get("maVoucher") == code), None)
     if not voucher:
@@ -7038,7 +7038,7 @@ def open_voucher_detail_full(app, code):
     ).pack(side="left", fill="x", expand=True)
 
 
-# Nạp lại bảng voucher để phản ánh dữ liệu mới nhất trên giao diện.
+
 def refresh_vouchers(app, keyword=""):
     tv = app.get("tv_voucher")
     if not tv:
@@ -7098,17 +7098,17 @@ def refresh_vouchers(app, keyword=""):
     update_admin_status_card(app, "voucher", f"Đang ở Mã giảm giá - Hiển thị {len(rows)} voucher", THEME["primary"])
 
 
-# Render tab quản lý voucher của admin.
+
 def admin_voucher_tab(app):
     clear_container(app)
 
-    # tk.Label(
-    #     app["container"],
-    #     text="QUẢN LÝ MÃ GIẢM GIÁ",
-    #     font=("Times New Roman", 20, "bold"),
-    #     bg=THEME["bg"],
-    #     fg=THEME["text"]
-    # ).pack(anchor="w", pady=(0, 10))
+
+
+
+
+
+
+
 
     toolbar = tk.Frame(app["container"], bg=THEME["bg"])
     toolbar.pack(fill="x", pady=(0, 10))
@@ -7197,11 +7197,6 @@ def admin_voucher_tab(app):
 
     refresh_vouchers(app, app["search_voucher_var"].get())
 
-# =========================
-# SYSTEM
-# =========================
-
-# Đăng xuất khỏi giao diện admin và quay về màn hình đăng nhập / chọn vai trò.
 def logout(app):
     if messagebox.askyesno("Đăng xuất", "Bạn có chắc chắn muốn thoát khỏi hệ thống quản trị?"):
         for widget in app["root"].winfo_children():
@@ -7215,11 +7210,11 @@ def logout(app):
             messagebox.showerror("Lỗi", f"Không thể quay lại màn hình đăng nhập.\n{e}")
 
 
-# =========================
-# MAIN
-# =========================
-# Hàm khởi tạo giao diện admin chính.
-# Tạo root/window, datastore, sidebar, container nội dung, thanh trạng thái và gắn các tab chức năng.
+
+
+
+
+
 def main(root=None):
     enable_tk_text_autofix()
     if root is None:
@@ -7291,7 +7286,6 @@ def main(root=None):
         relief="flat",
         gripcount=0,
     )
-    # Đồng bộ toàn bộ scrollbar theo kiểu tối giản, không mÅ©i tên.
     style.layout(
         "Vertical.TScrollbar",
         [
@@ -7510,7 +7504,7 @@ def main(root=None):
         justify="center",
     ).pack(fill="x")
 
-# Khung menu có thể cuộn
+
     menu_shell = tk.Frame(sidebar, bg=SIDEBAR_BG)
     menu_shell.pack(fill="both", expand=True, padx=12, pady=(4, 0))
 

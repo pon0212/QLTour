@@ -1,8 +1,9 @@
 
 
-# =========================
-# VALIDATION & HELPER
-# =========================
+
+
+
+
 
 from GUI.common.rounded_button import RoundedButton
 from GUI.common.weather_popup import open_tour_weather_popup
@@ -96,7 +97,7 @@ def is_tour_visible_to_user(tour, ql=None):
     total = safe_int(tour.get("khach", 0))
     if "khach" not in tour and "soLuotMoBan" not in tour:
         total = 99
-    
+
     booked = safe_int(ql.get_occupied_seats(tour.get("ma", ""))) if ql else safe_int(tour.get("soLuotDaDat", 0))
     open_slots = safe_int(tour.get("soLuotMoBan", total))
     capacity = open_slots if open_slots > 0 else total
@@ -107,9 +108,9 @@ def is_tour_visible_to_user(tour, ql=None):
     return True
 
 
-# =========================
-# THEME & CONSTANTS
-# =========================
+
+
+
 THEME = {
     "bg": "#f1f5f9",
     "surface": "#ffffff",
@@ -181,9 +182,9 @@ def fetch_transfer_qr_photo(qr_url, max_size_px=220):
     raw_photo = tk.PhotoImage(data=base64.b64encode(payload).decode("ascii"))
     return scale_photo_to_square(raw_photo, max_size_px)
 
-# =========================
-# PATH DỮ LIỆU
-# =========================
+
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 RAW_DATA_DIR = os.getenv("TRAVEL_DATA_DIR", os.path.join(PROJECT_DIR, "data"))
@@ -209,9 +210,9 @@ DEFAULT_DATA = {
 }
 
 
-# =========================
-# DATA STORE
-# =========================
+
+
+
 
 def normalize_notification_item(n, datastore=None):
     return core_normalize_notification_item(
@@ -236,9 +237,9 @@ class DataStore(JSONDataStore):
         )
 
 
-# =========================
-# UI HELPER
-# =========================
+
+
+
 def apply_zebra(tree):
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
@@ -319,9 +320,9 @@ def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
     return _refresh
 
 
-# =========================
-# USER UI
-# =========================
+
+
+
 
 def khoi_tao_khach(root, user_data=None):
     if not user_data:
@@ -365,7 +366,7 @@ def khoi_tao_khach(root, user_data=None):
     root.configure(bg=THEME["bg"])
     configure_ui_fonts(root)
 
-    # Styles Config...
+
     style = ttk.Style()
     style.theme_use("clam")
     style.configure("Treeview", font=("Times New Roman", 12), rowheight=38, background=THEME["surface"], fieldbackground=THEME["surface"], foreground=THEME["text"], bordercolor=THEME["border"], relief="flat")
@@ -393,12 +394,12 @@ def khoi_tao_khach(root, user_data=None):
     brand_top.pack(fill="x")
     brand_title = tk.Label(brand_top, text="VIETNAM TRAVEL", justify="left", anchor="w", bg=SIDEBAR_BG, fg="#34d399", font=("Times New Roman", 21, "bold"))
     brand_title.pack(side="left", fill="x", expand=True)
-    
+
     collapse_btn = RoundedButton(brand_top, text="\u2630", bg=SIDEBAR_BG, fg="#dbeafe", activebackground=SIDEBAR_BTN_ACTIVE, activeforeground="white", relief="flat", bd=0, cursor="hand2", font=("Times New Roman", 12, "bold"), padx=8, pady=3)
     collapse_btn.pack(side="right")
     collapse_btn.bind("<Enter>", lambda _e: collapse_btn.configure(bg=SIDEBAR_BG))
     collapse_btn.bind("<Leave>", lambda _e: collapse_btn.configure(bg=SIDEBAR_BG))
-    
+
     brand_subtitle = tk.Label(brand, text="Customer Service Center", justify="left", anchor="w", bg=SIDEBAR_BG, fg="#93c5fd", font=("Times New Roman", 11, "italic"))
     brand_subtitle.pack(fill="x", pady=(2, 0))
 
@@ -598,7 +599,7 @@ def khoi_tao_khach(root, user_data=None):
         all_open_tours = [t for t in visible_tours if normalize_tour_status(t.get("trangThai", "")) in TOUR_BOOKABLE_STATUSES]
         total_open = len(all_open_tours)
         total_visible = len(visible_tours)
-        
+
         my_total_bookings = len(my_bookings())
 
         build_stat_card(stats_wrap, "Tour hiển thị", str(total_visible), "Các tour sắp diễn ra mà bạn có thể theo dõi trên hệ thống.", THEME["primary"])
@@ -719,10 +720,10 @@ def khoi_tao_khach(root, user_data=None):
         ent_pay_now = tk.Entry(pay_now_frame, font=("Times New Roman", 12), relief="solid", bd=1, justify="right")
         ent_pay_now.insert(0, "0")
         ent_pay_now.pack(side="top", fill="x", ipady=4)
-        
+
         quick_pay_frame = tk.Frame(pay_now_frame, bg=THEME["surface"])
         quick_pay_frame.pack(side="top", fill="x", pady=(4, 0))
-        
+
         def set_pay_amount(percent):
             booking_context = refresh_booking_quote()
             if booking_context:
@@ -731,7 +732,7 @@ def khoi_tao_khach(root, user_data=None):
                 ent_pay_now.delete(0, "end")
                 ent_pay_now.insert(0, str(amount))
                 update_transfer_qr()
-                
+
         btn_deposit = tk.Button(quick_pay_frame, text="Cọc 30%", font=("Times New Roman", 9), relief="solid", bd=1, cursor="hand2", bg=THEME["surface"], command=lambda: set_pay_amount(0.3))
         btn_deposit.pack(side="left", padx=(0, 4))
         btn_full = tk.Button(quick_pay_frame, text="Đủ 100%", font=("Times New Roman", 9), relief="solid", bd=1, cursor="hand2", bg=THEME["surface"], command=lambda: set_pay_amount(1.0))
@@ -773,7 +774,7 @@ def khoi_tao_khach(root, user_data=None):
         qr_status_lbl = tk.Label(qr_box, textvariable=qr_status_var, font=("Times New Roman", 10), bg=THEME["note_bg"], fg=THEME["note_fg"], justify="left", wraplength=260)
         qr_status_lbl.pack(anchor="w")
 
-        # Bank details panel
+
         bank_details_fr = tk.Frame(qr_box, bg=THEME["note_bg"])
         bank_details_fr.pack(fill="x", pady=(5, 5))
 
@@ -786,7 +787,7 @@ def khoi_tao_khach(root, user_data=None):
         nd_row = tk.Frame(bank_details_fr, bg=THEME["note_bg"])
         nd_row.pack(fill="x", pady=2)
         tk.Label(nd_row, text="Nội dung CK: ", font=("Times New Roman", 10, "bold"), bg=THEME["note_bg"], fg=THEME["text"]).pack(side="left")
-        
+
         qr_transfer_content_var = tk.StringVar(value="-")
         lbl_transfer_content = tk.Label(nd_row, textvariable=qr_transfer_content_var, font=("Times New Roman", 10, "bold"), bg=THEME["note_bg"], fg=THEME["primary"])
         lbl_transfer_content.pack(side="left")
@@ -1073,7 +1074,7 @@ def khoi_tao_khach(root, user_data=None):
             update_transfer_qr()
 
         tv.bind("<<TreeviewSelect>>", on_select)
-        
+
         def on_tour_double_click(event):
             sel = tv.selection()
             if not sel:
@@ -1082,7 +1083,7 @@ def khoi_tao_khach(root, user_data=None):
             tour = app["ql"].find_tour(ma)
             if tour:
                 open_tour_weather_popup(app["root"], tour, app["ql"])
-        
+
         tv.bind("<Double-1>", on_tour_double_click)
 
         def dang_ky_tour():
@@ -1245,7 +1246,7 @@ def khoi_tao_khach(root, user_data=None):
             if b.get("trangThai") not in BOOKING_CANCEL_STATUSES:
                 if safe_int(b.get("conNo", 0)) > 0:
                     style_button(card, "Thanh toán", THEME["primary"], lambda m=b["maBooking"]: cap_nhat_thanh_toan(m)).pack(side="right", padx=(0, 8))
-                
+
                 if cancel_allowed:
                     style_button(card, "Hủy", THEME["danger"], lambda m=b["maBooking"]: huy_tour(m)).pack(side="right")
                 else:
@@ -1366,7 +1367,7 @@ def khoi_tao_khach(root, user_data=None):
         canvas.bind("<Configure>", on_canvas_resize)
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        # Bind mousewheel to the Toplevel window so scrolling works smoothly everywhere inside the popup
+
         top.bind("<MouseWheel>", lambda ev: canvas.yview_scroll(int(-1 * (ev.delta / 120)), "units"))
 
         tk.Label(card, text=f"Booking: {ma_booking}", bg=THEME["surface"], fg=THEME["text"], font=("Times New Roman", 14, "bold")).pack(anchor="w", pady=(0, 8))
@@ -1426,7 +1427,7 @@ def khoi_tao_khach(root, user_data=None):
         qr_status_lbl = tk.Label(qr_box, textvariable=qr_status_var, font=("Times New Roman", 10), bg=THEME["note_bg"], fg=THEME["note_fg"], justify="left", wraplength=420)
         qr_status_lbl.pack(anchor="w")
 
-        # Bank details panel (dialog)
+
         bank_details_dialog_fr = tk.Frame(qr_box, bg=THEME["note_bg"])
         bank_details_dialog_fr.pack(fill="x", pady=(5, 5))
 
@@ -1439,7 +1440,7 @@ def khoi_tao_khach(root, user_data=None):
         nd_dialog_row = tk.Frame(bank_details_dialog_fr, bg=THEME["note_bg"])
         nd_dialog_row.pack(fill="x", pady=2)
         tk.Label(nd_dialog_row, text="Nội dung CK: ", font=("Times New Roman", 10, "bold"), bg=THEME["note_bg"], fg=THEME["text"]).pack(side="left")
-        
+
         qr_transfer_content_var = tk.StringVar(value="-")
         lbl_transfer_content_dialog = tk.Label(nd_dialog_row, textvariable=qr_transfer_content_var, font=("Times New Roman", 10, "bold"), bg=THEME["note_bg"], fg=THEME["primary"])
         lbl_transfer_content_dialog.pack(side="left")
@@ -1604,7 +1605,7 @@ def khoi_tao_khach(root, user_data=None):
         booking_sel_fr = tk.Frame(card, bg=THEME["surface"])
         booking_sel_fr.pack(fill="x", pady=(0, 15))
         tk.Label(booking_sel_fr, text="Chọn Booking đủ điều kiện đánh giá:", font=("Times New Roman", 12, "bold"), bg=THEME["surface"]).pack(anchor="w", pady=(0, 5))
-        
+
         tour_sel_var = tk.StringVar()
         tour_sel_map = {}
         tour_sel_cb = ttk.Combobox(booking_sel_fr, textvariable=tour_sel_var, values=[], state="readonly", width=60, font=("Times New Roman", 11))
@@ -1612,7 +1613,7 @@ def khoi_tao_khach(root, user_data=None):
 
         warning_label = tk.Label(card, text="Bạn chỉ có thể đánh giá sau khi tour đã hoàn thành.", font=("Times New Roman", 13, "bold"), bg=THEME["surface"], fg=THEME["danger"])
         info_fr = tk.LabelFrame(card, text="Thông tin chi tiết booking", font=("Times New Roman", 12, "bold"), bg=THEME["surface"], fg=THEME["primary"], padx=15, pady=10)
-        
+
         lbl_ma_booking = tk.Label(info_fr, text="Mã booking: -", font=("Times New Roman", 12), bg=THEME["surface"], fg=THEME["text"]); lbl_ma_booking.pack(anchor="w", pady=2)
         lbl_ten_tour = tk.Label(info_fr, text="Tên tour: -", font=("Times New Roman", 12), bg=THEME["surface"], fg=THEME["text"]); lbl_ten_tour.pack(anchor="w", pady=2)
         lbl_ten_hdv = tk.Label(info_fr, text="Hướng dẫn viên: Không có", font=("Times New Roman", 12), bg=THEME["surface"], fg=THEME["text"]); lbl_ten_hdv.pack(anchor="w", pady=2)
@@ -1637,7 +1638,7 @@ def khoi_tao_khach(root, user_data=None):
                 booking_status = str(booking.get("trangThai", "")).strip()
                 if booking_status in {"Mới tạo", "Đã cọc", "Đã thanh toán", "Đã hủy", "Chờ hoàn tiền", "Hoàn tiền"}:
                     continue
-                
+
                 booking_state = booking_state_from_status(booking_status, str(booking.get("trangThaiHoanTien", "")).strip())
                 tour_status = str((tour or {}).get("trangThai", "")).strip()
                 tour_state = str((tour or {}).get("tourState", "")).strip()
@@ -1672,7 +1673,7 @@ def khoi_tao_khach(root, user_data=None):
 
             selected_display = tour_sel_var.get()
             booking = tour_sel_map.get(selected_display)
-            
+
             review_inputs.update({"show_tour": False, "show_hdv": False, "tour_rating_var": None, "txt_tour": None, "scores": {}, "txt_hdv": None, "hdv_code": ""})
 
             if not booking:
@@ -1686,7 +1687,7 @@ def khoi_tao_khach(root, user_data=None):
             tour = app["ql"].find_tour(booking.get("maTour", ""))
             lbl_ma_booking.config(text=f"Mã booking: {booking.get('maBooking', '-')}")
             lbl_trang_thai.config(text=f"Trạng thái booking: {booking.get('trangThai', '-')}")
-            
+
             hdv_code = ""
             if tour:
                 lbl_ten_tour.config(text=f"Tên tour: {tour.get('ten', '-')}")
@@ -1757,12 +1758,12 @@ def khoi_tao_khach(root, user_data=None):
             review_inputs["show_tour"] = True
             tour_rating_var = tk.StringVar(value="5")
             review_inputs["tour_rating_var"] = tour_rating_var
-            
+
             rating_row = tk.Frame(parent_frame, bg=THEME["surface"])
             rating_row.pack(fill="x", pady=4)
             tk.Label(rating_row, text="Điểm đánh giá dịch vụ (1-5):", font=("Times New Roman", 11, "bold"), bg=THEME["surface"]).pack(side="left", padx=(0, 10))
             ttk.Combobox(rating_row, textvariable=tour_rating_var, values=["1", "2", "3", "4", "5"], state="readonly", width=6, font=("Times New Roman", 11)).pack(side="left")
-            
+
             tk.Label(parent_frame, text="Nhận xét chất lượng dịch vụ:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"]).pack(anchor="w", pady=(10, 4))
             txt_tour = tk.Text(parent_frame, height=3, font=("Times New Roman", 11), relief="solid", bd=1, wrap="word")
             txt_tour.pack(fill="both", expand=True)
@@ -1778,7 +1779,7 @@ def khoi_tao_khach(root, user_data=None):
                 s = tk.Scale(row, from_=0, to=100, orient="horizontal", bg=THEME["surface"], showvalue=True, highlightthickness=0, length=200)
                 s.set(80); s.pack(fill="x", expand=True, pady=(2, 0))
                 scores[key] = s
-            
+
             review_inputs["scores"] = scores
             tk.Label(parent_frame, text="Nhận xét về Hướng dẫn viên:", font=("Times New Roman", 11, "bold"), bg=THEME["surface"]).pack(anchor="w", pady=(8, 4))
             txt_hdv = tk.Text(parent_frame, height=3, font=("Times New Roman", 11), relief="solid", bd=1, wrap="word")
@@ -1791,7 +1792,7 @@ def khoi_tao_khach(root, user_data=None):
             eligible_bookings = get_eligible_bookings()
             tour_sel_map.clear()
             options = []
-            
+
             for booking in eligible_bookings:
                 ma_booking, ma_tour = str(booking.get("maBooking", "")).strip(), str(booking.get("maTour", "")).strip()
                 tour = app["ql"].find_tour(ma_tour)
@@ -1799,7 +1800,7 @@ def khoi_tao_khach(root, user_data=None):
                 display = f"{ma_booking} | {ma_tour} - {ten_tour}" if ten_tour else f"{ma_booking} | {ma_tour}"
                 options.append(display)
                 tour_sel_map[display] = booking
-            
+
             tour_sel_cb["values"] = options
             if options:
                 warning_label.pack_forget()
@@ -1878,10 +1879,10 @@ def khoi_tao_khach(root, user_data=None):
                 top.transient(root); top.grab_set()
                 box = tk.Frame(top, bg=THEME["surface"], padx=18, pady=16)
                 box.pack(fill="both", expand=True, padx=16, pady=16)
-                
+
                 det_rating = get_review_rating(review)
                 det_rating_disp = str(det_rating) if det_rating > 0 else "Chưa có"
-                
+
                 for label, value in [("Mã đánh giá", review.get("maReview", "")), ("Booking", review.get("maBooking", "")), ("Tour", review.get("tenTour", "") or review.get("maTour", "")), ("Đối tượng", review.get("target", "")), ("Ngày gửi", review.get("date", "")), ("Điểm", det_rating_disp), ("Nội dung", review.get("content", "")), ("Phản hồi", review.get("adminReply", "") or "Chưa có phản hồi")]:
                     row = tk.Frame(box, bg=THEME["surface"]); row.pack(fill="x", pady=4)
                     tk.Label(row, text=f"{label}:", width=16, anchor="nw", bg=THEME["surface"], font=("Times New Roman", 11, "bold")).pack(side="left")
@@ -1904,7 +1905,7 @@ def khoi_tao_khach(root, user_data=None):
                 content_tour = review_inputs["txt_tour"].get("1.0", "end").strip()
                 if not content_tour: return messagebox.showwarning("Lỗi", "Vui lòng nhập nội dung nhận xét Tour!")
                 if len(content_tour) > 2000: return messagebox.showwarning("Lỗi", "Nội dung nhận xét Tour quá dài!")
-                
+
                 try: rating_tour = float(review_inputs["tour_rating_var"].get())
                 except ValueError: rating_tour = 5.0
 
@@ -1949,17 +1950,17 @@ def khoi_tao_khach(root, user_data=None):
         main_container = tk.Frame(body, bg=THEME["surface"])
         main_container.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # Thông tin tài khoản
+
         info_card = tk.Frame(main_container, bg="#eff6ff", highlightbackground="#93c5fd", highlightthickness=2, padx=20, pady=15)
         info_card.pack(fill="x", pady=(0, 20))
         tk.Label(info_card, text="THÔNG TIN TÀI KHOẢN", bg="#eff6ff", fg=THEME["primary"], font=("Times New Roman", 14, "bold")).pack(anchor="w", pady=(0, 12))
-        
+
         for label, value in [("Tên đăng nhập", user_info.get("username", "-")), ("Vai trò", "Khách hàng"), ("Ngày tạo", user_info.get("ngayTao", "-"))]:
             f = tk.Frame(info_card, bg="#eff6ff"); f.pack(fill="x", pady=5)
             tk.Label(f, text=f"{label}:", bg="#eff6ff", fg=THEME["muted"], font=("Times New Roman", 11, "bold"), width=20, anchor="w").pack(side="left")
             tk.Label(f, text=str(value), bg="#eff6ff", fg=THEME["text"], font=("Times New Roman", 11), anchor="w").pack(side="left", fill="x", expand=True)
 
-        # Thông tin cá nhân
+
         personal_card = tk.Frame(main_container, bg="#ffffff", highlightbackground="#22c55e", highlightthickness=2, padx=20, pady=15)
         personal_card.pack(fill="x", pady=(0, 20))
         tk.Label(personal_card, text="THÔNG TIN CÁ NHÂN", bg="#ffffff", fg="#16a34a", font=("Times New Roman", 14, "bold")).pack(anchor="w", pady=(0, 12))
@@ -1973,12 +1974,12 @@ def khoi_tao_khach(root, user_data=None):
             e.insert(0, user_info.get(key, ""))
             widgets[key] = e
 
-        # Bảo mật
+
         security_card = tk.Frame(main_container, bg="#fff7ed", highlightbackground="#fb923c", highlightthickness=2, padx=20, pady=15)
         security_card.pack(fill="x", pady=(0, 20))
         tk.Label(security_card, text="BẢO MẬT TÀI KHOẢN", bg="#fff7ed", fg="#c2410c", font=("Times New Roman", 14, "bold")).pack(anchor="w", pady=(0, 10))
         tk.Label(security_card, text="Lưu ý: Để trống nếu giữ nguyên mật khẩu hiện tại.", bg="#fff7ed", fg="#9a3412", font=("Times New Roman", 10, "italic")).pack(anchor="w", pady=(0, 12))
-        
+
         pass_frame = tk.Frame(security_card, bg="#fff7ed"); pass_frame.pack(fill="x")
         tk.Label(pass_frame, text="Mật khẩu mới", width=18, anchor="w", bg="#fff7ed", font=("Times New Roman", 12, "bold")).pack(side="left")
         pass_entry = tk.Entry(pass_frame, font=("Times New Roman", 12), relief="solid", bd=1, width=40, show="*")
@@ -2033,7 +2034,7 @@ def khoi_tao_khach(root, user_data=None):
 
         def parse_date(d_str):
             try: return datetime.strptime(d_str, "%d/%m/%Y %H:%M")
-            except: 
+            except:
                 try: return datetime.strptime(d_str, "%d/%m/%Y")
                 except: return datetime.min
 
@@ -2057,7 +2058,7 @@ def khoi_tao_khach(root, user_data=None):
             popup.transient(content_area.winfo_toplevel())
             popup.grab_set()
 
-            # Center popup
+
             popup.update_idletasks()
             pw = content_area.winfo_toplevel().winfo_width()
             ph = content_area.winfo_toplevel().winfo_height()
@@ -2103,7 +2104,7 @@ def khoi_tao_khach(root, user_data=None):
             ct.pack(side="left", fill="both", expand=True); s.pack(side="right", fill="y")
             ct.insert("1.0", str(n.get("content") or n.get("noiDung") or n.get("thongBao") or "").strip())
             ct.configure(state="disabled")
-            
+
             btn_close = ttk.Button(pad_frame, text="Đóng", command=popup.destroy)
             btn_close.pack(anchor="e")
 
@@ -2113,29 +2114,29 @@ def khoi_tao_khach(root, user_data=None):
             for n in relevant_notifs:
                 e_type = n.get("eventType") or "default"
                 colors = event_colors.get(e_type, event_colors["default"])
-                
-                # Single flat frame with bottom border
+
+
                 card = tk.Frame(list_frame, bg="#ffffff", highlightbackground=colors["border"], highlightthickness=1)
                 card.pack(fill="x", pady=4, padx=15)
-                
+
                 inner = tk.Frame(card, bg="#ffffff", padx=14, pady=10)
                 inner.pack(fill="both", expand=True)
 
                 h_fr = tk.Frame(inner, bg="#ffffff")
                 h_fr.pack(fill="x")
-                
+
                 tag_lbl = tk.Label(
-                    h_fr, text=event_type_translations.get(e_type, "Thông báo"), 
+                    h_fr, text=event_type_translations.get(e_type, "Thông báo"),
                     bg="#ffffff", fg=colors["fg"], font=("Times New Roman", 11, "bold")
                 )
                 tag_lbl.pack(side="left")
-                
+
                 if n.get("maTour"):
                     tour_lbl = tk.Label(h_fr, text=f" | Tour: {n.get('maTour')}", font=("Times New Roman", 11), bg="#ffffff", fg=THEME["primary"])
                     tour_lbl.pack(side="left")
                 else:
                     tour_lbl = None
-                
+
                 time_lbl = tk.Label(h_fr, text=str(n.get("date") or n.get("thoiGian") or ""), font=("Times New Roman", 11), bg="#ffffff", fg=THEME["muted"])
                 time_lbl.pack(side="right")
 
@@ -2150,8 +2151,8 @@ def khoi_tao_khach(root, user_data=None):
                 preview_text = text[:147] + "..." if len(text) > 150 else text
                 msg = tk.Label(inner, text=preview_text, font=("Times New Roman", 11), bg="#ffffff", fg="#475569", justify="left", wraplength=650)
                 msg.pack(anchor="w", pady=(2, 2))
-                
-                # Setup hover list
+
+
                 widgets_to_hover = [card, inner, h_fr, tag_lbl, time_lbl, msg]
                 if tour_lbl: widgets_to_hover.append(tour_lbl)
                 if title_lbl: widgets_to_hover.append(title_lbl)
@@ -2171,7 +2172,7 @@ def khoi_tao_khach(root, user_data=None):
                         w_item.configure(cursor="hand2")
 
                 make_hover(colors["hover"], "#ffffff", widgets_to_hover)
-                
+
                 for w in widgets_to_hover:
                     w.bind("<Button-1>", lambda e, notif=n: show_notif_detail(notif))
 
@@ -2218,7 +2219,7 @@ def khoi_tao_khach(root, user_data=None):
         if app.get("sidebar_collapsed"): button.configure(text=getattr(button, "_icon", "") or getattr(button, "_full_text", "")[:1].upper(), anchor="center", justify="center", padx=4, pady=12, wraplength=40)
         else: button.configure(text=f"  {getattr(button, '_icon', '')}  {getattr(button, '_full_text', '')}" if getattr(button, "_icon", "") else f"  {getattr(button, '_full_text', '')}", anchor="w", justify="left", padx=14, pady=13, wraplength=210)
 
-    # util and logout_btn are defined earlier to guarantee layout hierarchy
+
 
 
     def apply_sidebar_mode():
@@ -2263,5 +2264,5 @@ if __name__ == "__main__":
     win.title("Vietnam Travel 2026")
     win.geometry("1240x760")
     win.minsize(1040, 660)
-    # Cần tạo hàm mock DataStore hoặc file data.json thì file này mới có thể chạy độc lập
+
     win.mainloop()

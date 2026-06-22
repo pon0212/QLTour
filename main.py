@@ -2,6 +2,7 @@
 
 
 
+
 from GUI.Admin.Admin import DataStore, main as hien_thi_admin
 from GUI.HuongDV.Guide import khoi_tao_hdv as hien_thi_guide
 from GUI.Khach.user import khoi_tao_khach as hien_thi_khach
@@ -122,7 +123,7 @@ class TravelSystem:
             pady=max(8, int(height) * 5),
             command=command,
         )
-        # Giữ các nút đồng đều theo thông số width/height truyền vào.
+
         btn.configure(width=max(220, int(width) * 12), height=max(42, int(height) * 22))
         return btn
 

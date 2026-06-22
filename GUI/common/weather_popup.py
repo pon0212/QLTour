@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 """
 Module popup hiển thị thời tiết và vị trí địa điểm du lịch.
 Tích hợp với Open-Meteo API để lấy thông tin thời tiết thực tế.
@@ -16,7 +16,7 @@ from urllib.request import Request, urlopen
 from PIL import Image, ImageTk, ImageDraw
 from GUI.common.rounded_button import RoundedButton
 
-# Import API module
+
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -62,11 +62,11 @@ class TourWeatherPopup:
     """
     Popup hiển thị thông tin thời tiết và vị trí cho tour du lịch.
     """
-    
+
     def __init__(self, parent, tour_data, datastore=None):
         """
         Khởi tạo popup.
-        
+
         Args:
             parent: Widget cha (root window)
             tour_data: Dict chứa thông tin tour
@@ -88,31 +88,31 @@ class TourWeatherPopup:
             "longitude": None,
             "last_result": None,
         }
-        
-        # Tạo popup window
+
+
         self.window = tk.Toplevel(parent)
         self.window.title("Thời tiết & Vị trí điểm du lịch")
         self.window.geometry("1000x680")
         self.window.minsize(800, 500)
         self.window.configure(bg=THEME["bg"])
         self.window.resizable(True, True)
-        
-        # Center window
+
+
         self.window.update_idletasks()
         width, height = 1000, 680
         x = (self.window.winfo_screenwidth() // 2) - (width // 2)
         y = (self.window.winfo_screenheight() // 2) - (height // 2)
         self.window.geometry(f"{width}x{height}+{x}+{y}")
-        
-        # Build UI
+
+
         self._build_ui()
-        
-        # Auto-load weather cho điểm đến chính
+
+
         main_destination = safe_get(self.tour, "diemDen", "")
         if main_destination:
-            # Sử dụng after để đảm bảo UI đã render xong
+
             self.window.after(100, lambda: self._load_weather_for_destination(main_destination))
-    
+
     def _build_ui(self):
         """Xây dựng giao diện popup."""
         self.window.grid_rowconfigure(0, weight=0)
@@ -120,11 +120,11 @@ class TourWeatherPopup:
         self.window.grid_rowconfigure(2, weight=1)
         self.window.grid_rowconfigure(3, weight=0)
         self.window.grid_columnconfigure(0, weight=1)
-        
-        # Header
+
+
         header = tk.Frame(self.window, bg=THEME["primary"])
         header.grid(row=0, column=0, sticky="ew")
-        
+
         tk.Label(
             header,
             text="THỜI TIẾT & VỊ TRÍ ĐIỂM DU LỊCH",
@@ -140,8 +140,8 @@ class TourWeatherPopup:
             fg="#dbeafe",
             font=("Times New Roman", 11, "italic")
         ).pack(pady=(0, 12))
-        
-        # Tour info section
+
+
         self._build_tour_info_section(self.window)
 
         body_frame = tk.Frame(self.window, bg=THEME["bg"])
@@ -149,18 +149,18 @@ class TourWeatherPopup:
         body_frame.grid_rowconfigure(0, weight=1)
         body_frame.grid_columnconfigure(0, weight=11)
         body_frame.grid_columnconfigure(1, weight=9)
-        
-        # Itinerary section
+
+
         self._build_itinerary_section(body_frame)
-        
-        # Weather result section
+
+
         self._build_weather_section(body_frame)
-        
-        # Action buttons
+
+
         footer = tk.Frame(self.window, bg=THEME["bg"])
         footer.grid(row=3, column=0, sticky="ew", padx=16, pady=(0, 14))
         self._build_action_buttons(footer)
-    
+
     def _build_tour_info_section(self, parent):
         """Xây dựng phần thông tin tour."""
         frame = tk.LabelFrame(
@@ -175,7 +175,7 @@ class TourWeatherPopup:
         frame.grid(row=1, column=0, sticky="ew", padx=16, pady=(12, 0))
         frame.grid_columnconfigure(0, weight=1)
         frame.grid_columnconfigure(1, weight=1)
-        
+
         info_grid = tk.Frame(frame, bg=THEME["surface"])
         info_grid.grid(row=0, column=0, columnspan=2, sticky="ew", padx=16, pady=10)
         info_grid.grid_columnconfigure(0, weight=1)
@@ -214,7 +214,7 @@ class TourWeatherPopup:
                 wraplength=390,
                 justify="left",
             ).pack(side="left", fill="x", expand=True)
-    
+
     def _build_itinerary_section(self, parent):
         """Xây dựng phần danh sách địa điểm lịch trình."""
         frame = tk.LabelFrame(
@@ -229,10 +229,10 @@ class TourWeatherPopup:
         frame.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
         frame.grid_rowconfigure(0, weight=1)
         frame.grid_columnconfigure(0, weight=1)
-        
-        # Get itinerary
+
+
         lich_trinh = self.tour.get("lichTrinh", [])
-        
+
         if not lich_trinh:
             tk.Label(
                 frame,
@@ -244,13 +244,13 @@ class TourWeatherPopup:
                 justify="left"
             ).pack(padx=15, pady=15)
             return
-        
-        # Treeview for itinerary
+
+
         tree_frame = tk.Frame(frame, bg=THEME["surface"])
         tree_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         tree_frame.grid_rowconfigure(0, weight=1)
         tree_frame.grid_columnconfigure(0, weight=1)
-        
+
         cols = ("ngay", "dia_diem", "mo_ta")
         self.itinerary_tree = ttk.Treeview(
             tree_frame,
@@ -259,28 +259,28 @@ class TourWeatherPopup:
             height=14,
             selectmode="browse"
         )
-        
+
         self.itinerary_tree.heading("ngay", text="Ngày")
         self.itinerary_tree.heading("dia_diem", text="Địa điểm")
         self.itinerary_tree.heading("mo_ta", text="Mô tả")
-        
+
         self.itinerary_tree.column("ngay", width=80, anchor="center")
         self.itinerary_tree.column("dia_diem", width=250, anchor="w")
         self.itinerary_tree.column("mo_ta", width=400, anchor="w")
-        
-        # Scrollbar
+
+
         scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=self.itinerary_tree.yview)
         h_scrollbar = ttk.Scrollbar(tree_frame, orient="horizontal", command=self.itinerary_tree.xview)
         self.itinerary_tree.configure(yscrollcommand=scrollbar.set, xscrollcommand=h_scrollbar.set)
-        
+
         self.itinerary_tree.grid(row=0, column=0, sticky="nsew")
         scrollbar.grid(row=0, column=1, sticky="ns")
         h_scrollbar.grid(row=1, column=0, sticky="ew")
         tree_frame.grid_rowconfigure(0, weight=1)
         tree_frame.grid_rowconfigure(1, weight=0)
         tree_frame.grid_columnconfigure(0, weight=1)
-        
-        # Populate data
+
+
         for item in lich_trinh:
             ngay = safe_get(item, "ngay", "")
             dia_diem_list = item.get("diaDiem", [])
@@ -303,10 +303,10 @@ class TourWeatherPopup:
                 if len(row_desc) > 60:
                     row_desc = row_desc[:57] + "..."
                 self.itinerary_tree.insert("", "end", values=(row_day, place, row_desc))
-        
-        # Bind double-click
+
+
         self.itinerary_tree.bind("<Double-1>", self._on_itinerary_double_click)
-    
+
     def _build_weather_section(self, parent):
         """Xây dựng phần hiển thị kết quả thời tiết."""
         frame = tk.LabelFrame(
@@ -321,8 +321,8 @@ class TourWeatherPopup:
         frame.grid(row=0, column=1, sticky="nsew", padx=(8, 0))
         frame.grid_rowconfigure(1, weight=1)
         frame.grid_columnconfigure(0, weight=1)
-        
-        # Status label
+
+
         self.status_label = tk.Label(
             frame,
             text="Đang tải dữ liệu thời tiết...",
@@ -368,7 +368,7 @@ class TourWeatherPopup:
         self.weather_content.bind("<Configure>", _on_content_configure)
         self.weather_canvas.bind("<Configure>", _on_canvas_configure)
 
-        # Ràng buộc sự kiện cuộn chuột
+
         def _on_mousewheel(event):
             try:
                 self.weather_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
@@ -512,13 +512,13 @@ class TourWeatherPopup:
             return str(address)
 
         return ", ".join([x for x in [result.get("resolved_name", ""), area, result.get("country", "")] if x])
-    
+
     def _build_action_buttons(self, parent):
         """Xây dựng các nút hành động."""
         button_frame = tk.Frame(parent, bg=THEME["bg"])
         button_frame.pack(side="right")
-        
-        # Reload button
+
+
         self.reload_btn = RoundedButton(
             button_frame,
             text="Tải lại",
@@ -531,8 +531,8 @@ class TourWeatherPopup:
             command=self._reload_weather
         )
         self.reload_btn.pack(side="left", padx=(0, 10))
-        
-        # Open map button
+
+
         self.map_btn = RoundedButton(
             button_frame,
             text="Mở trên Google Maps",
@@ -546,8 +546,8 @@ class TourWeatherPopup:
             command=self._open_map
         )
         self.map_btn.pack(side="left", padx=(0, 10))
-        
-        # Close button
+
+
         self.close_btn = RoundedButton(
             button_frame,
             text="Đóng",
@@ -733,23 +733,23 @@ class TourWeatherPopup:
             width=image.width,
             height=image.height,
         )
-    
+
     def _on_itinerary_double_click(self, event):
         """Xử lý double-click vào địa điểm trong lịch trình."""
         selection = self.itinerary_tree.selection()
         if not selection:
             return
-        
+
         item = self.itinerary_tree.item(selection[0])
         values = item.get("values", [])
         if len(values) < 2:
             return
-        
+
         dia_diem_str = str(values[1]).strip()
         if not dia_diem_str:
             return
-        
-        # Tách địa điểm theo dấu phẩy nếu có nhiều
+
+
         dia_diem_list = [d.strip() for d in dia_diem_str.split(",") if d.strip()]
         if dia_diem_list:
             location = dia_diem_list[0]
@@ -757,7 +757,7 @@ class TourWeatherPopup:
             query = build_weather_location_query(self.tour, location)
             self.weather_state["current_query"] = query
             self._load_weather_async(query)
-    
+
     def _reload_weather(self):
         """Tải lại thời tiết cho địa điểm hiện tại."""
         if self.selected_location:
@@ -766,11 +766,11 @@ class TourWeatherPopup:
             main_destination = safe_get(self.tour, "diemDen", "")
             if main_destination:
                 self._load_weather_for_destination(main_destination)
-    
+
     def _load_weather_for_destination(self, destination):
         """Tải thời tiết cho điểm đến chính (không cần ghép thêm)."""
         self._load_weather_async(destination)
-    
+
     def _load_weather_async(self, location_name):
         """Tải thời tiết bất đồng bộ."""
         self.selected_location = location_name
@@ -779,19 +779,19 @@ class TourWeatherPopup:
             self.weather_state["current_place"] = location_name
         self.weather_request_id += 1
         request_id = self.weather_request_id
-        
+
         self.set_loading_state(location_name)
         self.map_btn.config(state="disabled")
         self.reload_btn.config(state="disabled")
-        
-        # Run in thread
+
+
         thread = threading.Thread(
             target=self._fetch_weather_data,
             args=(location_name, request_id),
             daemon=True
         )
         thread.start()
-    
+
     def _fetch_weather_data(self, location_name, request_id):
         """Gọi API lấy dữ liệu thời tiết (chạy trong thread)."""
         try:
@@ -805,14 +805,14 @@ class TourWeatherPopup:
                 except (tk.TclError, AttributeError):
                     pass
             self.window.after(0, update_loading)
-            
-            # 1. Kiểm tra tọa độ có sẵn trong thông tin tour
+
+
             lat = self.tour.get("lat") or self.tour.get("latitude")
             lon = self.tour.get("lon") or self.tour.get("longitude")
             main_destination = safe_get(self.tour, "diemDen", "")
-            
+
             result = None
-            # Chỉ sử dụng tọa độ nếu địa điểm đang tải là điểm đến chính
+
             if location_name.strip().lower() == main_destination.strip().lower() and lat is not None and lon is not None:
                 try:
                     lat_val = float(lat)
@@ -843,14 +843,14 @@ class TourWeatherPopup:
                     pass
 
             if result is None:
-                # 2. Không có tọa độ, tiến hành Geocode qua API
+
                 result = get_location_weather(
                     location_name,
                     expected_destination=main_destination,
                     timeout=20
                 )
-            
-            
+
+
             def post_result():
                 try:
                     if self.window and self.window.winfo_exists():
@@ -858,7 +858,7 @@ class TourWeatherPopup:
                 except (tk.TclError, AttributeError):
                     pass
             self.window.after(0, post_result)
-            
+
         except Exception as e:
             error_result = {
                 "ok": False,
@@ -882,11 +882,11 @@ class TourWeatherPopup:
                 return
         except (tk.TclError, AttributeError):
             return
-            
+
         if request_id != self.weather_request_id:
             return
         self._update_weather_ui(result)
-    
+
     def _update_weather_ui(self, result):
         """Cập nhật UI với dữ liệu thời tiết."""
         try:
@@ -899,7 +899,7 @@ class TourWeatherPopup:
             self.current_weather_data = result
             self.weather_state["last_result"] = result
             self.reload_btn.config(state="normal")
-            
+
             if not result.get("ok"):
                 error_msg = result.get("error", "Không thể lấy dữ liệu thời tiết")
                 self.set_error_state(error_msg, result.get("query", self.selected_location or ""))
@@ -908,25 +908,25 @@ class TourWeatherPopup:
                 self.weather_state["latitude"] = None
                 self.weather_state["longitude"] = None
                 return
-            
+
             self.status_label.grid_remove()
 
             admin1 = result.get("admin1", "")
             admin2 = result.get("admin2", "")
             admin3 = result.get("admin3", "")
             area = ", ".join([x for x in [admin1, admin2, admin3] if x])
-            
+
             lat = result.get("latitude")
             lon = result.get("longitude")
             lat_display = f"{lat:.4f}" if lat is not None else "N/A"
             lon_display = f"{lon:.4f}" if lon is not None else "N/A"
-            
+
             temp = result.get("temperature")
             temp_display = f"{temp} °C" if temp is not None else "N/A"
-            
+
             wind = result.get("wind_speed")
             wind_display = f"{wind} km/h" if wind is not None else "N/A"
-            
+
             time_str = result.get("time", "")
             if time_str:
                 try:
@@ -965,7 +965,7 @@ class TourWeatherPopup:
 
             self.weather_canvas.yview_moveto(0)
             self.render_map_preview(lat, lon)
-            
+
             if lat is not None and lon is not None:
                 self.map_btn.config(state="normal")
             else:
@@ -973,7 +973,7 @@ class TourWeatherPopup:
                 self.current_map_url = None
         except (tk.TclError, AttributeError):
             pass
-    
+
     def _open_map(self):
         """Mở vị trí trên Google Maps."""
         try:
@@ -987,11 +987,11 @@ class TourWeatherPopup:
         if (lat is None or lon is None) and self.current_weather_data:
             lat = self.current_weather_data.get("latitude")
             lon = self.current_weather_data.get("longitude")
-        
+
         country_code = ""
         if self.current_weather_data:
             country_code = str(self.current_weather_data.get("country_code", "")).upper()
-        
+
         if lat is None or lon is None:
             messagebox.showwarning(
                 "Chưa có tọa độ",
@@ -1014,7 +1014,7 @@ class TourWeatherPopup:
             )
             return
 
-        # Open Google Maps
+
         map_url = build_google_maps_url(lat, lon, self.selected_location)
         if not map_url:
             messagebox.showwarning("Thông báo", "Không tạo được URL bản đồ.", parent=self.window)
@@ -1033,7 +1033,7 @@ class TourWeatherPopup:
 def open_tour_weather_popup(parent, tour_data, datastore=None):
     """
     Hàm tiện ích để mở popup thời tiết cho tour.
-    
+
     Args:
         parent: Widget cha
         tour_data: Dict chứa thông tin tour
