@@ -11,19 +11,6 @@ from datetime import datetime
 
 
 def _resolve_log_file(datastore=None, log_file: str | None = None) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_resolve_log_file` ( resolve log file).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        log_file: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if log_file:
         return log_file
     if datastore is not None and getattr(datastore, "path", None):
@@ -32,18 +19,6 @@ def _resolve_log_file(datastore=None, log_file: str | None = None) -> str:
 
 
 def _load_entries(path: str) -> list[dict]:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_load_entries` ( load entries).
-    Tham số:
-        path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not os.path.exists(path):
         return []
 
@@ -65,24 +40,6 @@ def write_activity_log(
     datastore=None,
     log_file: str | None = None,
 ) -> None:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `write_activity_log` (write activity log).
-    Tham số:
-        action: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        status: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        detail: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        log_file: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     path = _resolve_log_file(datastore=datastore, log_file=log_file)
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
@@ -118,114 +75,30 @@ VIETNAM_MOBILE_PREFIXES = {
 
 
 def normalize_username(username: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_username` (normalize username).
-    Tham số:
-        username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return str(username or "").strip()
 
 
 def normalize_fullname(fullname: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_fullname` (normalize fullname).
-    Tham số:
-        fullname: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return " ".join(str(fullname or "").strip().split())
 
 
 def normalize_phone(phone: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_phone` (normalize phone).
-    Tham số:
-        phone: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return str(phone or "").strip()
 
 
 def is_valid_username(username: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_username` (is valid username).
-    Tham số:
-        username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return bool(USERNAME_PATTERN.fullmatch(normalize_username(username)))
 
 
 def is_valid_password(password: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_password` (is valid password).
-    Tham số:
-        password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return len(str(password or "").strip()) >= 3
 
 
 def is_valid_fullname(fullname: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_fullname` (is valid fullname).
-    Tham số:
-        fullname: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return len(normalize_fullname(fullname)) >= 3
 
 
 def is_valid_phone(phone: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_phone` (is valid phone).
-    Tham số:
-        phone: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     value = normalize_phone(phone)
     if not value:
         return True
@@ -235,18 +108,6 @@ def is_valid_phone(phone: str) -> bool:
 
 
 def is_valid_email(email: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_email` (is valid email).
-    Tham số:
-        email: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return bool(EMAIL_PATTERN.fullmatch(str(email or "").strip()))
 
 # ===== BEGIN core/text_utils.py =====
@@ -810,51 +671,14 @@ GUIDE_TRANSITIONS = {
 
 
 def _normalize_key(value: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_normalize_key` ( normalize key).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return " ".join(str(value or "").strip().lower().split())
 
 
 def tour_state_from_status(status: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `tour_state_from_status` (tour state from status).
-    Tham số:
-        status: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return TOUR_STATE_BY_STATUS.get(_normalize_key(status), TOUR_STATE_OPEN)
 
 
 def booking_state_from_status(status: str, refund_status: str = "") -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `booking_state_from_status` (booking state from status).
-    Tham số:
-        status: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        refund_status: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = _normalize_key(status)
     if normalized in BOOKING_STATE_BY_STATUS:
         return BOOKING_STATE_BY_STATUS[normalized]
@@ -1153,69 +977,18 @@ def cleanup_deleted_tour_references(datastore, tour_code: str) -> None:
 
 
 def guide_state_from_status(status: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `guide_state_from_status` (guide state from status).
-    Tham số:
-        status: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return GUIDE_STATE_BY_STATUS.get(_normalize_key(status), GUIDE_STATE_AVAILABLE)
 
 
 def can_tour_transition(state_from: str, state_to: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `can_tour_transition` (can tour transition).
-    Tham số:
-        state_from: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        state_to: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return TransitionRule(state_from, state_to) in TOUR_TRANSITIONS or state_from == state_to
 
 
 def can_booking_transition(state_from: str, state_to: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `can_booking_transition` (can booking transition).
-    Tham số:
-        state_from: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        state_to: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return TransitionRule(state_from, state_to) in BOOKING_TRANSITIONS or state_from == state_to
 
 
 def can_guide_transition(state_from: str, state_to: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `can_guide_transition` (can guide transition).
-    Tham số:
-        state_from: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        state_to: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return TransitionRule(state_from, state_to) in GUIDE_TRANSITIONS or state_from == state_to
 
 
@@ -1233,34 +1006,10 @@ BCRYPT_PREFIXES = ("$2a$", "$2b$", "$2y$")
 
 
 def legacy_sha256_hash(raw_password: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `legacy_sha256_hash` (legacy sha256 hash).
-    Tham số:
-        raw_password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return hashlib.sha256(str(raw_password or "").encode("utf-8")).hexdigest()
 
 
 def hash_password(raw_password: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `hash_password` (hash password).
-    Tham số:
-        raw_password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     raw = str(raw_password or "").strip()
     if not raw:
         return ""
@@ -1273,51 +1022,15 @@ def hash_password(raw_password: str) -> str:
 
 
 def looks_like_sha256(value: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `looks_like_sha256` (looks like sha256).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return bool(SHA256_PATTERN.fullmatch(str(value).strip()))
 
 
 def is_bcrypt_hash(value: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_bcrypt_hash` (is bcrypt hash).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = str(value or "").strip()
     return normalized.startswith(BCRYPT_PREFIXES)
 
 
 def prepare_password_for_storage(password: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `prepare_password_for_storage` (prepare password for storage).
-    Tham số:
-        password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = str(password or "").strip()
     if not normalized:
         return ""
@@ -1329,19 +1042,6 @@ def prepare_password_for_storage(password: str) -> str:
 
 
 def password_matches(stored_password: str, input_password: str) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `password_matches` (password matches).
-    Tham số:
-        stored_password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        input_password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     stored = str(stored_password or "").strip()
     provided = str(input_password or "").strip()
     if not stored:
@@ -1357,19 +1057,6 @@ def password_matches(stored_password: str, input_password: str) -> bool:
 
 
 def upgrade_password_hash(stored_password: str, input_password: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `upgrade_password_hash` (upgrade password hash).
-    Tham số:
-        stored_password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        input_password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     stored = str(stored_password or "").strip()
     provided = str(input_password or "").strip()
     if not stored or not provided:
@@ -1382,38 +1069,12 @@ def upgrade_password_hash(stored_password: str, input_password: str) -> str:
 
 
 def mask_password(_: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `mask_password` (mask password).
-    Tham số:
-        _: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return MASKED_PASSWORD
 
 # ===== BEGIN core/normalizers.py =====
 
 
 def _first_text(data: dict, keys: tuple[str, ...], default: str = "") -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_first_text` ( first text).
-    Tham số:
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        keys: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     for key in keys:
         value = data.get(key)
         if value is None:
@@ -1433,23 +1094,6 @@ def normalize_review_item(
     include_rating: bool = False,
     include_ma_hdv: bool = False,
 ) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_review_item` (normalize review item).
-    Tham số:
-        review: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        fullname_keys: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        content_keys: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        date_keys: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        include_rating: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        include_ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     username = _first_text(review, ("username", "user"))
     fullname = _first_text(review, fullname_keys)
 
@@ -1494,21 +1138,6 @@ def normalize_notification_item(
     content_keys: tuple[str, ...] = ("content", "noiDung", "message"),
     date_keys: tuple[str, ...] = ("date", "thoiGian", "ngayGui", "ngay"),
 ) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_notification_item` (normalize notification item).
-    Tham số:
-        notification: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        content_keys: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        date_keys: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     ma_hdv = _first_text(notification, ("maHDV",))
     ma_tour = _first_text(notification, ("maTour",))
 
@@ -1547,20 +1176,6 @@ def normalize_notification_item(
 
 
 def collect_changed_fields(before: dict | None, after: dict | None, keys: list[str] | None = None) -> list[str]:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `collect_changed_fields` (collect changed fields).
-    Tham số:
-        before: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        after: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        keys: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     before = before or {}
     after = after or {}
 
@@ -1585,25 +1200,6 @@ def write_crud_log(
     status: str = "SUCCESS",
     detail: str = "",
 ) -> None:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `write_crud_log` (write crud log).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        entity: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        operation: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        target: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        status: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        detail: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     entity_name = str(entity or "").strip().upper()
     operation_name = str(operation or "").strip().upper()
     target_name = str(target or "").strip()
@@ -1627,19 +1223,6 @@ def write_crud_log(
 
 
 def _safe_int(value, default: int = 0) -> int:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_safe_int` ( safe int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return int(str(value).strip())
     except (TypeError, ValueError):
@@ -1647,18 +1230,6 @@ def _safe_int(value, default: int = 0) -> int:
 
 
 def normalize_business_state(data: dict) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_business_state` (normalize business state).
-    Tham số:
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not isinstance(data, dict):
         return data
 
@@ -1751,19 +1322,6 @@ def normalize_business_state(data: dict) -> dict:
 
 
 def safe_int(value, default=0):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `safe_int` (safe int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return int(str(value).strip())
     except (TypeError, ValueError):
@@ -1771,19 +1329,6 @@ def safe_int(value, default=0):
 
 
 def normalize_passenger_breakdown(raw_breakdown, total_people):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_passenger_breakdown` (normalize passenger breakdown).
-    Tham số:
-        raw_breakdown: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        total_people: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     total = max(1, safe_int(total_people, 1))
     data = raw_breakdown if isinstance(raw_breakdown, dict) else {}
 
@@ -1804,19 +1349,6 @@ def normalize_passenger_breakdown(raw_breakdown, total_people):
 
 
 def calculate_age_discount(price_per_person, breakdown):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `calculate_age_discount` (calculate age discount).
-    Tham số:
-        price_per_person: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        breakdown: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not isinstance(breakdown, dict):
         return 0
 
@@ -1836,19 +1368,6 @@ from datetime import datetime
 
 
 def safe_int(value, default=0):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `safe_int` (safe int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return int(str(value).strip())
     except (TypeError, ValueError):
@@ -1856,18 +1375,6 @@ def safe_int(value, default=0):
 
 
 def parse_ddmmyyyy(value):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `parse_ddmmyyyy` (parse ddmmyyyy).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return datetime.strptime(str(value or "").strip(), "%d/%m/%Y").date()
     except ValueError:
@@ -1875,18 +1382,6 @@ def parse_ddmmyyyy(value):
 
 
 def normalize_tour_scope(value) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_tour_scope` (normalize tour scope).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     def _scope_key(text: str) -> str:
         normalized = unicodedata.normalize("NFKD", str(text or "").strip())
         ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
@@ -1924,36 +1419,11 @@ def normalize_tour_scope(value) -> str:
 
 
 def parse_tour_scope(value) -> list[str]:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `parse_tour_scope` (parse tour scope).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = normalize_tour_scope(value)
     return [part.strip() for part in normalized.split(",") if part.strip()]
 
 
 def resolve_voucher_discount(voucher, gross_total):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `resolve_voucher_discount` (resolve voucher discount).
-    Tham số:
-        voucher: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        gross_total: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not voucher:
         return 0
 
@@ -1972,18 +1442,6 @@ def resolve_voucher_discount(voucher, gross_total):
 
 
 def _list_vouchers(datastore):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_list_vouchers` ( list vouchers).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     vouchers = getattr(datastore, "list_vouchers", None)
     if vouchers is not None:
         return vouchers
@@ -1991,19 +1449,6 @@ def _list_vouchers(datastore):
 
 
 def _find_voucher(datastore, code):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_find_voucher` ( find voucher).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = str(code or "").strip().upper()
     if not normalized:
         return None
@@ -2025,20 +1470,6 @@ def _find_voucher(datastore, code):
 
 
 def _iter_active_voucher_bookings(datastore, code, exclude_booking=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_iter_active_voucher_bookings` ( iter active voucher bookings).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        exclude_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized_code = str(code or "").strip().upper()
     exclude_booking = str(exclude_booking or "").strip()
 
@@ -2058,22 +1489,6 @@ def _iter_active_voucher_bookings(datastore, code, exclude_booking=None):
 
 
 def get_voucher_usage(datastore, code, username="", ma_tour="", exclude_booking=None) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `get_voucher_usage` (get voucher usage).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        exclude_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized_username = str(username or "").strip().lower()
     normalized_tour = str(ma_tour or "").strip().upper()
 
@@ -2100,18 +1515,6 @@ def get_voucher_usage(datastore, code, username="", ma_tour="", exclude_booking=
 
 
 def build_voucher_scope_label(voucher) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `build_voucher_scope_label` (build voucher scope label).
-    Tham số:
-        voucher: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tours = parse_tour_scope(voucher.get("tourApDung", ""))
     if not tours:
         return "Áp dụng toàn bộ tour"
@@ -2119,20 +1522,6 @@ def build_voucher_scope_label(voucher) -> str:
 
 
 def validate_voucher_payload(datastore, data, old_code=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `validate_voucher_payload` (validate voucher payload).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        old_code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     required = [
         "maVoucher",
         "tenVoucher",
@@ -2210,23 +1599,6 @@ def validate_voucher_payload(datastore, data, old_code=None):
 
 
 def build_voucher_quote(datastore, voucher_code, gross_total, username="", ma_tour="", exclude_booking=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `build_voucher_quote` (build voucher quote).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        voucher_code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        gross_total: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        exclude_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     code = str(voucher_code or "").strip().upper()
     if not code:
         return {
@@ -2365,35 +1737,10 @@ EVENT_TOUR_COMPLETED = "tour_completed"
 
 
 def _notifications(datastore):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_notifications` ( notifications).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return getattr(datastore, "list_notifications", datastore.notifications)
 
 
 def _tour_name(datastore, ma_tour: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_tour_name` ( tour name).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return ""
@@ -2401,19 +1748,6 @@ def _tour_name(datastore, ma_tour: str) -> str:
 
 
 def _guide_name(datastore, ma_hdv: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_guide_name` ( guide name).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     guide = datastore.find_hdv(ma_hdv) if hasattr(datastore, "find_hdv") else None
     if not isinstance(guide, dict):
         return ""
@@ -2431,25 +1765,6 @@ def emit_notification(
     username: str = "",
     ma_booking: str = "",
 ) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `emit_notification` (emit notification).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        event_type: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        content: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        persist: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        username: Tên đăng nhập của khách hàng nhận thông báo (tùy chọn).
-        ma_booking: Mã booking liên quan đến thông báo (tùy chọn).
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     payload = {
         "eventType": str(event_type or "").strip(),
         "maHDV": str(ma_hdv or "").strip(),
@@ -2470,21 +1785,6 @@ def emit_notification(
 
 
 def notify_booking_created(datastore, booking: dict, tour: dict, *, persist: bool = False) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `notify_booking_created` (notify booking created).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        persist: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return emit_notification(
         datastore,
         event_type=EVENT_BOOKING_CREATED,
@@ -2499,20 +1799,6 @@ def notify_booking_created(datastore, booking: dict, tour: dict, *, persist: boo
 
 
 def notify_payment_success(datastore, booking: dict, *, persist: bool = False) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `notify_payment_success` (notify payment success).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        persist: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return emit_notification(
         datastore,
         event_type=EVENT_PAYMENT_SUCCESS,
@@ -2526,21 +1812,6 @@ def notify_payment_success(datastore, booking: dict, *, persist: bool = False) -
 
 
 def notify_tour_cancelled(datastore, tour: dict, reason: str = "", *, persist: bool = False) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `notify_tour_cancelled` (notify tour cancelled).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        reason: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        persist: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     detail = f" Lý do: {reason.strip()}" if str(reason or "").strip() else ""
     return emit_notification(
         datastore,
@@ -2553,21 +1824,6 @@ def notify_tour_cancelled(datastore, tour: dict, reason: str = "", *, persist: b
 
 
 def notify_guide_assigned(datastore, tour: dict, guide: dict, *, persist: bool = False) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `notify_guide_assigned` (notify guide assigned).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        guide: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        persist: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return emit_notification(
         datastore,
         event_type=EVENT_GUIDE_ASSIGNED,
@@ -2582,20 +1838,6 @@ def notify_guide_assigned(datastore, tour: dict, guide: dict, *, persist: bool =
 
 
 def notify_tour_completed(datastore, tour: dict, *, persist: bool = False) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `notify_tour_completed` (notify tour completed).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        persist: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return emit_notification(
         datastore,
         event_type=EVENT_TOUR_COMPLETED,
@@ -2663,16 +1905,6 @@ def check_and_create_departure_notifications(datastore):
 
 
 def sync_completed_tour_bookings(datastore) -> bool:
-    """
-    Mục đích:
-        Duyệt danh sách bookings, tự động chuyển trạng thái booking sang 'Đã hoàn thành'
-        nếu tour liên quan có trạng thái 'Đã kết thúc' hoặc tourState == 'completed'.
-        Tạo notification cho user và lưu lại thay đổi.
-    Tham số:
-        datastore: Đối tượng lưu trữ dữ liệu JSONDataStore/SQLiteDataStore.
-    Giá trị trả về:
-        True nếu có thay đổi và đã lưu thành công, ngược lại False.
-    """
     datastore.load()
     bookings = getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
     notifications = getattr(datastore, "list_notifications", datastore.notifications)
@@ -2959,19 +2191,6 @@ class ReviewResult:
 
 
 def _find_booking(datastore, ma_booking: str):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_find_booking` ( find booking).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     target = str(ma_booking or "").strip()
     for booking in getattr(datastore, "list_bookings", datastore.data.get("bookings", [])):
         if str(booking.get("maBooking", "")).strip() == target:
@@ -2980,19 +2199,6 @@ def _find_booking(datastore, ma_booking: str):
 
 
 def _safe_float(value, default: float = 0.0) -> float:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_safe_float` ( safe float).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return float(str(value).strip())
     except (TypeError, ValueError):
@@ -3000,10 +2206,6 @@ def _safe_float(value, default: float = 0.0) -> float:
 
 
 def get_review_rating(review):
-    """
-    Mục đích:
-        Lấy điểm đánh giá từ review một cách an toàn và nhất quán.
-    """
     if not isinstance(review, dict):
         return 0
     for key in ("rating", "soSao", "diem", "ratingTour", "ratingHDV"):
@@ -3050,20 +2252,6 @@ def _normalize_review_rating(rating_value):
 
 
 def _update_guide_metrics(datastore, ma_hdv: str, rating: float) -> None:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_update_guide_metrics` ( update guide metrics).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        rating: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not ma_hdv:
         return
     guide = datastore.find_hdv(ma_hdv) if hasattr(datastore, "find_hdv") else None
@@ -3232,10 +2420,6 @@ def recalculate_hdv_review_stats(datastore, ma_hdv):
 
 
 def _next_review_code(datastore) -> str:
-    """
-    Mục đích:
-        Sinh mã đánh giá kế tiếp theo dạng REVxx.
-    """
     existing_ids = []
     for review in getattr(datastore, "list_reviews", datastore.reviews):
         code = str(review.get("maReview", "")).strip().upper()
@@ -3259,25 +2443,6 @@ def create_review(
     target_id: str = "",
     rating: float | None = None,
 ) -> ReviewResult:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `create_review` (create review).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        fullname: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        content: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        target: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        target_id: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        rating: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return ReviewResult(False, "Không tìm thấy booking để đánh giá.", level="error")
@@ -3368,51 +2533,14 @@ def create_review(
 
 
 def _iter_bookings(datastore):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_iter_bookings` ( iter bookings).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
 
 
 def _iter_tours(datastore):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_iter_tours` ( iter tours).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return getattr(datastore, "list_tours", datastore.data.get("tours", []))
 
 
 def _find_tour_name(datastore, ma_tour):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_find_tour_name` ( find tour name).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     finder = getattr(datastore, "find_tour", None)
     if callable(finder):
         tour = finder(ma_tour)
@@ -3426,10 +2554,6 @@ def _find_tour_name(datastore, ma_tour):
 
 
 def _revenue_booking(booking, datastore=None) -> bool:
-    """
-    Mục đích:
-        Xác định xem booking có phát sinh doanh thu hay không.
-    """
     paid = max(0, safe_int(booking.get("daThanhToan", 0)))
     status = str(booking.get("trangThai", "")).strip()
     if paid > 0:
@@ -3452,18 +2576,6 @@ def _booking_gross_refund_net(booking, datastore=None) -> tuple[int, int, int]:
 
 
 def _month_key(date_text):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_month_key` ( month key).
-    Tham số:
-        date_text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         _day, month, year = str(date_text or "").strip().split("/")
         return f"{year}-{month}"
@@ -3472,18 +2584,6 @@ def _month_key(date_text):
 
 
 def _quarter_key(month_key):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_quarter_key` ( quarter key).
-    Tham số:
-        month_key: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if month_key == "Không rõ":
         return month_key
 
@@ -3993,35 +3093,10 @@ def _calc_refund_rate(days_before_departure: int | None, company_cancelled: bool
 
 
 def _get_bookings(datastore):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_get_bookings` ( get bookings).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
 
 
 def _find_tour(datastore, ma_tour):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_find_tour` ( find tour).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     finder = getattr(datastore, "find_tour", None)
     if callable(finder):
         result = finder(ma_tour)
@@ -4039,19 +3114,6 @@ def _find_tour(datastore, ma_tour):
 
 
 def _find_booking(datastore, ma_booking):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_find_booking` ( find booking).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return next(
         (
             booking
@@ -4093,18 +3155,6 @@ def can_hard_delete_booking(datastore, booking: dict | None) -> tuple[bool, str]
 
 
 def _next_booking_code(datastore) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_next_booking_code` ( next booking code).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     existing_ids = []
     for booking in _get_bookings(datastore):
         ma_booking = str(booking.get("maBooking", "")).strip().upper()
@@ -4118,19 +3168,6 @@ def _next_booking_code(datastore) -> str:
 
 
 def _payment_status(total_amount, paid_amount):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_payment_status` ( payment status).
-    Tham số:
-        total_amount: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        paid_amount: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     total = max(0, safe_int(total_amount))
     paid = max(0, safe_int(paid_amount))
     if paid <= 0:
@@ -4141,19 +3178,6 @@ def _payment_status(total_amount, paid_amount):
 
 
 def _occupied_seats(datastore, ma_tour):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_occupied_seats` ( occupied seats).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     getter = getattr(datastore, "get_occupied_seats", None)
     if callable(getter):
         return max(0, safe_int(getter(ma_tour)))
@@ -4187,32 +3211,6 @@ def create_booking(
     actor="",
     role="user",
 ):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `create_booking` (create booking).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        num_people: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        pay_now: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        payment_method: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        fullname: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        phone: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        voucher_code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        danh_sach_khach: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        passenger_breakdown: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        source: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        note: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized_fullname = normalize_fullname(fullname)
     normalized_phone = normalize_phone(phone)
     if len(normalized_fullname) < 3:
@@ -4334,23 +3332,6 @@ def create_booking(
 
 
 def apply_payment(datastore, ma_booking, pay_more, method, actor="", role="user"):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `apply_payment` (apply payment).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        pay_more: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        method: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần thanh toán.", level="error")
@@ -4421,22 +3402,6 @@ def apply_payment(datastore, ma_booking, pay_more, method, actor="", role="user"
 
 
 def cancel_booking(datastore, ma_booking, actor="", role="user", note=""):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `cancel_booking` (cancel booking).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        note: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần hủy.", level="error")
@@ -4527,21 +3492,6 @@ def cancel_booking(datastore, ma_booking, actor="", role="user", note=""):
 
 
 def approve_refund(datastore, ma_booking, actor="", note="", role=""):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `approve_refund` (approve refund).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        note: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần duyệt hoàn tiền.", level="error")
@@ -4602,21 +3552,6 @@ def approve_refund(datastore, ma_booking, actor="", note="", role=""):
 
 
 def reject_refund(datastore, ma_booking, actor="", note="", role=""):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `reject_refund` (reject refund).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        note: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần từ chối hoàn tiền.", level="error")
@@ -4663,18 +3598,6 @@ def reject_refund(datastore, ma_booking, actor="", note="", role=""):
 
 
 def summarize_bookings_by_tour(datastore, actor: str = "", role: str = "admin") -> list[dict]:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `summarize_bookings_by_tour` (summarize bookings by tour).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not _is_admin_role(role):
         return []
 
@@ -4751,19 +3674,6 @@ class TourResult:
 
 
 def _safe_int(value, default: int = 0) -> int:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_safe_int` ( safe int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return int(str(value).strip())
     except (TypeError, ValueError):
@@ -4771,18 +3681,6 @@ def _safe_int(value, default: int = 0) -> int:
 
 
 def _parse_ddmmyyyy(value: str | None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_parse_ddmmyyyy` ( parse ddmmyyyy).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     text = str(value or "").strip()
     if not text:
         return None
@@ -4793,19 +3691,6 @@ def _parse_ddmmyyyy(value: str | None):
 
 
 def _is_overlapped(tour_a: dict, tour_b: dict) -> bool:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_is_overlapped` ( is overlapped).
-    Tham số:
-        tour_a: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        tour_b: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     start_a = _parse_ddmmyyyy(tour_a.get("ngay"))
     end_a = _parse_ddmmyyyy(tour_a.get("ngayKetThuc")) or start_a
     start_b = _parse_ddmmyyyy(tour_b.get("ngay"))
@@ -4816,37 +3701,10 @@ def _is_overlapped(tour_a: dict, tour_b: dict) -> bool:
 
 
 def _bookings(datastore):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_bookings` ( bookings).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
 
 
 def assign_guide(datastore, ma_tour: str, ma_hdv: str, actor: str = "admin") -> TourResult:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `assign_guide` (assign guide).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return TourResult(False, "Không tìm thấy tour cần phân công.", level="error")
@@ -4923,21 +3781,6 @@ def assign_guide(datastore, ma_tour: str, ma_hdv: str, actor: str = "admin") -> 
 
 
 def cancel_tour(datastore, ma_tour: str, actor: str = "admin", reason: str = "") -> TourResult:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `cancel_tour` (cancel tour).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        reason: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return TourResult(False, "Không tìm thấy tour cần hủy.", level="error")
@@ -4996,21 +3839,6 @@ def cancel_tour(datastore, ma_tour: str, actor: str = "admin", reason: str = "")
 
 
 def complete_tour(datastore, ma_tour: str, actor: str = "guide", note: str = "") -> TourResult:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `complete_tour` (complete tour).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        actor: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        note: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return TourResult(False, "Không tìm thấy tour cần kết thúc.", level="error")
@@ -5085,19 +3913,6 @@ AUTO_CANCEL_UNPAID_DAYS = 15
 
 
 def _safe_int(value, default=0):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_safe_int` ( safe int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return int(str(value).strip())
     except (TypeError, ValueError):
@@ -5105,35 +3920,10 @@ def _safe_int(value, default=0):
 
 
 def _non_negative_int(value, default=0):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_non_negative_int` ( non negative int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        default: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return max(0, _safe_int(value, default))
 
 
 def _parse_ddmmyyyy(value: str | None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_parse_ddmmyyyy` ( parse ddmmyyyy).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     text = str(value or "").strip()
     if not text:
         return None
@@ -5144,36 +3934,10 @@ def _parse_ddmmyyyy(value: str | None):
 
 
 def _normalize_voucher_scope(raw_value) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_normalize_voucher_scope` ( normalize voucher scope).
-    Tham số:
-        raw_value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return normalize_tour_scope(raw_value)
 
 
 def _normalize_booking(booking: dict, tours_by_code: dict[str, dict], today: date) -> None:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_normalize_booking` ( normalize booking).
-    Tham số:
-        booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        tours_by_code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        today: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tour_code = str(booking.get("maTour", "")).strip()
     tour = tours_by_code.get(tour_code)
 
@@ -5357,20 +4121,6 @@ def _normalize_booking(booking: dict, tours_by_code: dict[str, dict], today: dat
 
 
 def _normalize_voucher(voucher: dict, used_count: int, today: date) -> None:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_normalize_voucher` ( normalize voucher).
-    Tham số:
-        voucher: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        used_count: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        today: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     voucher["maVoucher"] = str(voucher.get("maVoucher", "")).strip().upper()
     voucher.setdefault("tenVoucher", "")
     voucher.setdefault("loaiGiam", "Tiền mặt")
@@ -5406,20 +4156,6 @@ def _normalize_voucher(voucher: dict, used_count: int, today: date) -> None:
 
 
 def _normalize_tour(tour: dict, occupied: int, today: date) -> None:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_normalize_tour` ( normalize tour).
-    Tham số:
-        tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        occupied: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        today: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     status = normalize_tour_status(str(tour.get("trangThai", "")).strip(), default=TOUR_STATUS_NOT_OPEN)
 
     valid_statuses = set(TOUR_STATUS_CHOICES)
@@ -5469,19 +4205,6 @@ def _normalize_tour(tour: dict, occupied: int, today: date) -> None:
 
 
 def _normalize_guide(guide: dict, assignments: dict[str, dict]) -> None:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_normalize_guide` ( normalize guide).
-    Tham số:
-        guide: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        assignments: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     ma_hdv = str(guide.get("maHDV", "")).strip()
     current_status = str(guide.get("trangThai", "")).strip()
     assignment = assignments.get(ma_hdv, {"assigned": False, "in_progress": False})
@@ -5624,19 +4347,6 @@ def _soft_revalidate_booking_vouchers(data: dict, today: date) -> None:
 
 
 def apply_system_rules(data: dict, today: date | None = None) -> dict:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `apply_system_rules` (apply system rules).
-    Tham số:
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        today: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not isinstance(data, dict):
         return data
 
@@ -5784,26 +4494,6 @@ class SQLiteDataStore:
         normalize_notification_item: Callable | None = None,
         text_normalizer: Callable | None = None,
     ):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `__init__` (  init  ).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            rev_path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            notif_path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            db_path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            default_data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            normalize_review_item: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            normalize_notification_item: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            text_normalizer: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         self.path = path
         self.rev_path = rev_path
         self.notif_path = notif_path
@@ -5819,18 +4509,6 @@ class SQLiteDataStore:
         self.load()
 
     def _new_data_container(self) -> dict:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_new_data_container` ( new data container).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         data = copy.deepcopy(self.default_data)
         data.setdefault("hdv", [])
         data.setdefault("tours", [])
@@ -5841,18 +4519,6 @@ class SQLiteDataStore:
         return data
 
     def _connect(self) -> sqlite3.Connection:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_connect` ( connect).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         folder = os.path.dirname(self.db_path)
         if folder and not os.path.exists(folder):
             os.makedirs(folder, exist_ok=True)
@@ -5862,19 +4528,6 @@ class SQLiteDataStore:
         return conn
 
     def _ensure_schema(self, conn: sqlite3.Connection) -> None:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_ensure_schema` ( ensure schema).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            conn: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS app_state (
@@ -5895,19 +4548,6 @@ class SQLiteDataStore:
         conn.commit()
 
     def _is_initialized(self, conn: sqlite3.Connection) -> bool:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_is_initialized` ( is initialized).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            conn: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         row = conn.execute(
             "SELECT 1 FROM app_state WHERE state_key = ? LIMIT 1",
             ("data",),
@@ -5915,37 +4555,11 @@ class SQLiteDataStore:
         return row is not None
 
     def _apply_text_normalizer(self, value):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_apply_text_normalizer` ( apply text normalizer).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if callable(self._text_normalizer):
             return self._text_normalizer(value)
         return value
 
     def _normalize_data_payload(self, data: dict) -> dict:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_normalize_data_payload` ( normalize data payload).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         payload = self._apply_text_normalizer(data)
         if not isinstance(payload, dict):
             payload = {}
@@ -5955,20 +4569,6 @@ class SQLiteDataStore:
         return normalize_business_state(system_normalized)
 
     def _normalize_collection(self, rows, normalizer: Callable | None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_normalize_collection` ( normalize collection).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            rows: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            normalizer: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if not isinstance(rows, list):
             return []
         normalized_rows = []
@@ -5986,18 +4586,6 @@ class SQLiteDataStore:
         return normalized_rows
 
     def _read_legacy_json(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_read_legacy_json` ( read legacy json).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         data = self._new_data_container()
         reviews = []
         notifications = []
@@ -6032,19 +4620,6 @@ class SQLiteDataStore:
         return data, reviews, notifications
 
     def _secure_password_fields(self, data: dict) -> dict:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_secure_password_fields` ( secure password fields).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         secured = copy.deepcopy(data)
         for guide in secured.get("hdv", []):
             guide["password"] = prepare_password_for_storage(guide.get("password", ""))
@@ -6057,21 +4632,6 @@ class SQLiteDataStore:
         return secured
 
     def _write_payload(self, conn: sqlite3.Connection, key: str, value) -> None:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_write_payload` ( write payload).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            conn: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            key: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         conn.execute(
             """
             INSERT INTO app_state (state_key, payload, updated_at)
@@ -6088,19 +4648,6 @@ class SQLiteDataStore:
         )
 
     def _bootstrap_from_legacy_json(self, conn: sqlite3.Connection) -> None:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_bootstrap_from_legacy_json` ( bootstrap from legacy json).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            conn: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         raw_data, raw_reviews, raw_notifications = self._read_legacy_json()
         normalized_data = self._normalize_data_payload(raw_data)
         secured_data = self._secure_password_fields(normalized_data)
@@ -6126,21 +4673,6 @@ class SQLiteDataStore:
         conn.commit()
 
     def _read_payload(self, conn: sqlite3.Connection, key: str, fallback):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_read_payload` ( read payload).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            conn: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            key: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            fallback: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         row = conn.execute(
             "SELECT payload FROM app_state WHERE state_key = ?",
             (key,),
@@ -6153,18 +4685,6 @@ class SQLiteDataStore:
             return fallback
 
     def load(self) -> None:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `load` (load).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         with self._connect() as conn:
             self._ensure_schema(conn)
             if not self._is_initialized(conn):
@@ -6181,18 +4701,6 @@ class SQLiteDataStore:
             )
 
     def save(self) -> None:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `save` (save).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         sync_tour_booking_counts(self)
         normalized_data = self._normalize_data_payload(self.data)
         secured_data = self._secure_password_fields(normalized_data)
@@ -6244,166 +4752,43 @@ class SQLiteDataStore:
 
     @property
     def list_hdv(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `list_hdv` (list hdv).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return self.data["hdv"]
 
     @property
     def list_tours(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `list_tours` (list tours).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return self.data["tours"]
 
     @property
     def list_bookings(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `list_bookings` (list bookings).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return self.data["bookings"]
 
     @property
     def list_users(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `list_users` (list users).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return self.data["users"]
 
     @property
     def list_reviews(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `list_reviews` (list reviews).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return self.reviews
 
     @property
     def list_notifications(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `list_notifications` (list notifications).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return self.notifications
 
     @property
     def list_vouchers(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `list_vouchers` (list vouchers).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return self.data["maVoucher"]
 
     def find_admin(self, username):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `find_admin` (find admin).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         admin = self.data.get("admin", {})
         if isinstance(admin, dict) and str(admin.get("username", "")).strip() == str(username or "").strip():
             return admin
         return None
 
     def find_user(self, username):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `find_user` (find user).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         normalized = str(username or "").strip().lower()
         return next((u for u in self.list_users if str(u.get("username", "")).strip().lower() == normalized), None)
 
     def find_hdv(self, ma_hdv):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `find_hdv` (find hdv).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         normalized = str(ma_hdv or "").strip().upper()
         return next((h for h in self.list_hdv if str(h.get("maHDV", "")).strip().upper() == normalized), None)
 
@@ -6416,36 +4801,10 @@ class SQLiteDataStore:
         return []
 
     def find_tour(self, ma_tour):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `find_tour` (find tour).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         normalized = str(ma_tour or "").strip().upper()
         return next((t for t in self.list_tours if str(t.get("ma", "")).strip().upper() == normalized), None)
 
     def find_voucher(self, code):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `find_voucher` (find voucher).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         normalized = str(code or "").strip().upper()
         if not normalized:
             return None
@@ -6459,19 +4818,6 @@ class SQLiteDataStore:
         )
 
     def get_bookings_by_tour(self, ma_tour, actor: str = "", role: str = "admin"):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `get_bookings_by_tour` (get bookings by tour).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         normalized = str(ma_tour or "").strip().upper()
         tour = self.find_tour(normalized)
         if _is_guide_role(role) and not guide_can_access_tour(actor, role, tour):
@@ -6486,19 +4832,6 @@ class SQLiteDataStore:
         return [booking for booking in self.list_bookings if str(booking.get("maTour", "")).strip().upper() == normalized]
 
     def get_occupied_seats(self, ma_tour):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `get_occupied_seats` (get occupied seats).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         total = 0
         for booking in self.get_bookings_by_tour(ma_tour):
             refund_status = str(booking.get("trangThaiHoanTien", "")).strip()
@@ -6586,37 +4919,9 @@ class ServiceResult:
 
 class AuthService:
     def __init__(self, datastore):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `__init__` (  init  ).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         self.datastore = datastore
 
     def authenticate(self, role: str, username: str, password: str) -> ServiceResult:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `authenticate` (authenticate).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         normalized_username = normalize_username(username)
 
         if not normalized_username or not str(password or "").strip():
@@ -6692,22 +4997,6 @@ class AuthService:
         phone: str,
         email: str = "",
     ) -> ServiceResult:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `register_user` (register user).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            password: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            fullname: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            phone: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         normalized_username = normalize_username(username)
         normalized_fullname = normalize_fullname(fullname)
         normalized_phone = normalize_phone(phone)
@@ -6814,20 +5103,6 @@ class AuthService:
         )
 
     def _resolve_account(self, role: str, username: str):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_resolve_account` ( resolve account).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if _is_admin_role(role):
             admin = self.datastore.data.get("admin", {})
             return admin if str(username).lower() == str(admin.get("username", "")).lower() else None
@@ -6861,20 +5136,6 @@ class AuthService:
 
     @staticmethod
     def _account_username(role: str, record: dict, fallback: str) -> str:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_account_username` ( account username).
-        Tham số:
-            role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            record: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            fallback: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if _is_guide_role(role):
             return record.get("maHDV", fallback)
         if _is_customer_role(role):
@@ -6885,20 +5146,6 @@ class AuthService:
 
     @staticmethod
     def _display_name(role: str, record: dict, fallback: str) -> str:
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_display_name` ( display name).
-        Tham số:
-            role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            record: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            fallback: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Giá trị theo khai báo kiểu trả về của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if _is_guide_role(role):
             return record.get("tenHDV", fallback)
         if _is_customer_role(role):
@@ -7019,18 +5266,6 @@ def _decode_mojibake_pairs(text: str) -> str:
 
 
 def _fix_token(token: str) -> str:
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_fix_token` ( fix token).
-    Tham số:
-        token: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Giá trị theo khai báo kiểu trả về của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if not token or not any(marker in token for marker in _MARKERS):
         return token
 
@@ -7051,18 +5286,6 @@ def _fix_token(token: str) -> str:
 
 
 def fix_mojibake(value):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `fix_mojibake` (fix mojibake).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if isinstance(value, str):
         # Bảo vệ chữ Việt hợp lệ: chỉ cố sửa khi có dấu hiệu mojibake rõ ràng.
         suspicious_markers = ("\u00c3", "\u00c4", "\u00c2", "\u00ca", "\u00d4", "\u00c6", "\ufffd")
@@ -7101,53 +5324,15 @@ def fix_mojibake(value):
 
 
 def enable_tk_text_autofix():
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `enable_tk_text_autofix` (enable tk text autofix).
-    Tham số:
-        Không có.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     global _PATCHED
     if _PATCHED:
         return
     _PATCHED = True
 
     def patch_widget_init(widget_class):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `patch_widget_init` (patch widget init).
-        Tham số:
-            widget_class: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         original_init = widget_class.__init__
 
         def wrapped_init(self, *args, **kwargs):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `wrapped_init` (wrapped init).
-            Tham số:
-                self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-                *args: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-                **kwargs: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             if "text" in kwargs:
                 kwargs["text"] = fix_mojibake(kwargs["text"])
             return original_init(self, *args, **kwargs)
@@ -7172,19 +5357,6 @@ def enable_tk_text_autofix():
     original_tk_title = tk.Wm.title
 
     def wrapped_title(self, string=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `wrapped_title` (wrapped title).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            string: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if string is not None:
             string = fix_mojibake(string)
         return original_tk_title(self, string)
@@ -7194,21 +5366,6 @@ def enable_tk_text_autofix():
     original_tree_heading = ttk.Treeview.heading
 
     def wrapped_heading(self, column, option=None, **kwargs):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `wrapped_heading` (wrapped heading).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            column: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            option: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            **kwargs: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if "text" in kwargs:
             kwargs["text"] = fix_mojibake(kwargs["text"])
         return original_tree_heading(self, column, option, **kwargs)
@@ -7218,22 +5375,6 @@ def enable_tk_text_autofix():
     original_tree_insert = ttk.Treeview.insert
 
     def wrapped_insert(self, parent, index, iid=None, **kwargs):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `wrapped_insert` (wrapped insert).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            index: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            iid: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            **kwargs: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if "values" in kwargs:
             kwargs["values"] = fix_mojibake(kwargs["values"])
         if "text" in kwargs:
@@ -7245,21 +5386,6 @@ def enable_tk_text_autofix():
     original_stringvar_init = tk.StringVar.__init__
 
     def wrapped_stringvar_init(self, master=None, value=None, name=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `wrapped_stringvar_init` (wrapped stringvar init).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            master: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            name: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return original_stringvar_init(self, master=master, value=fix_mojibake(value), name=name)
 
     tk.StringVar.__init__ = wrapped_stringvar_init
@@ -7267,19 +5393,6 @@ def enable_tk_text_autofix():
     original_variable_set = tk.Variable.set
 
     def wrapped_variable_set(self, value):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `wrapped_variable_set` (wrapped variable set).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return original_variable_set(self, fix_mojibake(value))
 
     tk.Variable.set = wrapped_variable_set
@@ -7290,34 +5403,7 @@ def enable_tk_text_autofix():
     original_askyesno = messagebox.askyesno
 
     def wrap_messagebox(func):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `wrap_messagebox` (wrap messagebox).
-        Tham số:
-            func: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         def wrapped(title=None, message=None, *args, **kwargs):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `wrapped` (wrapped).
-            Tham số:
-                title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-                message: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-                *args: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-                **kwargs: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             return func(fix_mojibake(title), fix_mojibake(message), *args, **kwargs)
 
         return wrapped

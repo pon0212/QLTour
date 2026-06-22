@@ -1231,15 +1231,6 @@ def khoi_tao_hdv(root, user_data=None):
         note_frame = tk.Frame(chart_body, bg="#fffbeb", highlightbackground="#fcd34d", highlightthickness=1, padx=12, pady=10)
         note_frame.pack(fill="x", pady=(5, 10))
         
-        tk.Label(
-            note_frame,
-            text="💡 Lưu ý: Các chỉ số này được tính toán tự động dựa trên đánh giá chi tiết từ khách hàng.",
-            font=("Times New Roman", 10, "italic"),
-            bg="#fffbeb",
-            fg="#92400e",
-            justify="left"
-        ).pack(anchor="w")
-
         # 3. Giao diện danh sách đánh giá
         _, review_body = make_section(
             content_area,

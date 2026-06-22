@@ -476,19 +476,6 @@ DEFAULT_DATA = {
 # Hàm này không tự xử lý logic mới mà ủy quyền sang core.normalizers.
 # -----------------------------------------------------------------------------
 def normalize_review_item(r, datastore=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_review_item` (normalize review item).
-    Tham số:
-        r: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = core_normalize_review_item(
         r,
         include_rating=True,
@@ -532,19 +519,6 @@ def normalize_review_item(r, datastore=None):
 # Có truyền kèm datastore khi cần đối chiếu dữ liệu liên quan trong quá trình chuẩn hóa.
 # -----------------------------------------------------------------------------
 def normalize_notification_item(n, datastore=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_notification_item` (normalize notification item).
-    Tham số:
-        n: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return core_normalize_notification_item(n, datastore=datastore)
 # =============================================================================
 # Lớp kho dữ liệu chính của màn hình Admin.
@@ -553,21 +527,6 @@ def normalize_notification_item(n, datastore=None):
 # =============================================================================
 class DataStore(JSONDataStore):
     def __init__(self, path=DATA_FILE, rev_path=REVIEWS_FILE, notif_path=NOTIF_FILE):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `__init__` (  init  ).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            rev_path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            notif_path: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         super().__init__(
             path=path,
             rev_path=rev_path,
@@ -583,38 +542,12 @@ class DataStore(JSONDataStore):
 # =========================
 # Xóa toàn bộ widget con trong vùng nội dung trung tâm để chuẩn bị render tab mới.
 def clear_container(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `clear_container` (clear container).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     for widget in app["container"].winfo_children():
         widget.destroy()
 
 # Cập nhật nội dung thanh trạng thái phía dưới giao diện.
 # Nếu có truyền màu, đồng thời đổi màu chữ để nhấn mạnh trạng thái hiện tại.
 def set_status(app, text, color=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `set_status` (set status).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        color: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     app["status_var"].set(text)
     if color:
         app["status_label"].config(fg=color)
@@ -623,19 +556,6 @@ def set_status(app, text, color=None):
 # Tải lại dữ liệu từ datastore, sau đó render lại đúng tab admin đang mở.
 # Dùng khi cần làm mới giao diện sau khi CRUD hoặc sau khi dữ liệu thay đổi từ nơi khác.
 def reload_admin_current_tab(app, success_message="Đã tải lại dữ liệu"):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `reload_admin_current_tab` (reload admin current tab).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        success_message: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     app["ql"].load()
     current_tab = app.get("current_tab", "dashboard")
     handler = get_admin_tab_handler(current_tab)
@@ -645,22 +565,6 @@ def reload_admin_current_tab(app, success_message="Đã tải lại dữ liệu"
 # Tạo nhanh một nút theo bộ giao diện thống nhất của toàn module admin.
 # Việc gom style vào một hàm giúp các nút đồng nhất màu sắc, font và hành vi.
 def style_button(parent, text, bg, command, fg="white"):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `style_button` (style button).
-    Tham số:
-        parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        command: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        fg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return RoundedButton(
         parent,
         text=text,
@@ -779,18 +683,6 @@ def style_form_text_widget(widget):
 
 # Thiết lập font mặc định cho toàn bộ ứng dụng Tkinter và cho các widget ttk.
 def configure_ui_fonts(root):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `configure_ui_fonts` (configure ui fonts).
-    Tham số:
-        root: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     default_font = ("Times New Roman", 12)
     heading_font = ("Times New Roman", 12, "bold")
     root.option_add("*Font", default_font)
@@ -809,18 +701,6 @@ def configure_ui_fonts(root):
 
 # Tô màu xen kẽ từng dòng của Treeview để bảng dữ liệu dễ nhìn hơn.
 def apply_zebra(tree):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `apply_zebra` (apply zebra).
-    Tham số:
-        tree: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
     for i, item in enumerate(tree.get_children()):
@@ -828,34 +708,10 @@ def apply_zebra(tree):
 
 # Hàm chuyển tiếp sang validator lõi để kiểm tra số điện thoại hợp lệ.
 def is_valid_phone(phone):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_phone` (is valid phone).
-    Tham số:
-        phone: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return core_is_valid_phone(phone)
 
 # Hàm chuyển tiếp sang validator lõi để kiểm tra email hợp lệ.
 def is_valid_email(email):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_email` (is valid email).
-    Tham số:
-        email: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return core_is_valid_email(email)
 
 
@@ -917,50 +773,14 @@ def itinerary_to_text(lich_trinh):
 
 # Chuyển chuỗi ngày theo định dạng dd/mm/yyyy sang đối tượng datetime; lỗi thì trả về None.
 def parse_ddmmyyyy(date_text):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `parse_ddmmyyyy` (parse ddmmyyyy).
-    Tham số:
-        date_text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return parse_tour_ddmmyyyy(date_text)
 
 # Kiểm tra chuỗi ngày có đúng định dạng dd/mm/yyyy hay không.
 def is_valid_date(date_text):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `is_valid_date` (is valid date).
-    Tham số:
-        date_text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return parse_ddmmyyyy(date_text) is not None
 
 # Ép kiểu sang số nguyên an toàn; nếu lỗi thì trả về 0 để tránh làm hỏng luồng xử lý.
 def safe_int(value):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `safe_int` (safe int).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     try:
         return int(value)
     except (ValueError, TypeError):
@@ -969,18 +789,6 @@ def safe_int(value):
 
 # Đá»‹nh dạng số tiền theo kiểu hiển thị Việt Nam, ví dụ: 1000000 -> 1.000.000đ.
 def format_currency(value):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `format_currency` (format currency).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return f"{safe_int(value):,}đ".replace(",", ".")
 
 
@@ -1322,35 +1130,11 @@ def show_detail_popup(root, title, data_dict, geometry="900x620", minsize=(760, 
 
 # Lấy username admin hiện tại để ghi log thao tác CRUD và các hành động nghiệp vụ.
 def get_admin_actor(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `get_admin_actor` (get admin actor).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return str(app["ql"].data.get("admin", {}).get("username", "admin")).strip() or "admin"
 
 
 # Chuẩn hóa họ tên: bỏ khoảng trắng thừa và viết hoa chữ cái đầu từng từ.
 def normalize_name_case(value):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `normalize_name_case` (normalize name case).
-    Tham số:
-        value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     return normalize_title_case(value)
 
 
@@ -1358,19 +1142,6 @@ BOOKING_CANCEL_STATUSES = {"Đã hủy", "Chờ hoàn tiền", "Hoàn tiền"}
 
 
 def build_tour_display_label(datastore, ma_tour):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `build_tour_display_label` (build tour display label).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     code = normalize_code(ma_tour)
     if not code:
         return ""
@@ -1380,19 +1151,6 @@ def build_tour_display_label(datastore, ma_tour):
 
 
 def build_hdv_display_label(datastore, ma_hdv):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `build_hdv_display_label` (build hdv display label).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     code = normalize_code(ma_hdv)
     if not code:
         return ""
@@ -1404,20 +1162,6 @@ def build_hdv_display_label(datastore, ma_hdv):
 # Chuyển đối tượng được đánh giá (HDV/Tour/Công ty) sang chuỗi hiển thị thân thiện.
 # Nếu có thể, hàm sẽ tra cứu thêm tên thật từ datastore để tránh chỉ hiện mã.
 def format_review_target(datastore, review, include_code=False):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `format_review_target` (format review target).
-    Tham số:
-        datastore: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        review: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        include_code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     target = str(review.get("target", "") or review.get("doiTuong", "") or "Công ty").strip()
     target_id = str(review.get("target_id", "") or review.get("maHDV", "") or review.get("maTour", "")).strip()
 
@@ -1443,10 +1187,6 @@ def format_review_target(datastore, review, include_code=False):
 
 # Tự động ẩn thanh cuộn khi nội dung chưa tràn khung hiển thị.
 def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
-    """
-    Mục đích:
-        Tự động ẩn/hiện scrollbar theo trạng thái tràn nội dung.
-    """
     is_vertical = str(orient).lower().startswith("v")
     pack_side = "right" if is_vertical else "bottom"
     pack_fill = "y" if is_vertical else "x"
@@ -1499,19 +1239,6 @@ def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
 # Tạo một form có thể cuộn theo trục dọc.
 # Rất hữu ích cho các cửa sổ nhập liệu dài như HDV, tour, booking, voucher.
 def create_scrollable_form(parent, bg):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `create_scrollable_form` (create scrollable form).
-    Tham số:
-        parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     outer = tk.Frame(parent, bg=bg)
     canvas = tk.Canvas(outer, bg=bg, highlightthickness=0, bd=0)
     v_scroll = ttk.Scrollbar(
@@ -1527,51 +1254,15 @@ def create_scrollable_form(parent, bg):
     win = canvas.create_window((0, 0), window=content, anchor="nw")
 
     def on_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_configure` (on configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def on_canvas_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_canvas_configure` (on canvas configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.itemconfig(win, width=event.width)
 
     content.bind("<Configure>", on_configure)
     canvas.bind("<Configure>", on_canvas_configure)
 
     def _on_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_mousewheel` ( on mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
@@ -1587,18 +1278,6 @@ def create_scrollable_form(parent, bg):
 # Render tab Dashboard của admin.
 # Tab này tổng hợp số liệu nhanh, tác vụ nhanh và các ghi chú điều hành dựa trên dữ liệu hiện tại.
 def dashboard_tab(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `dashboard_tab` (dashboard tab).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     clear_container(app)
     ql = app["ql"]
     root = app.get("root")
@@ -1795,20 +1474,6 @@ def dashboard_tab(app):
 # Bao gồm: bắt buộc trường, định dạng mã, độ dài tên/mật khẩu, trùng số điện thoại/email,
 # phạm vi năm kinh nghiệm và ràng buộc giới tính.
 def validate_hdv(app, form_data, old_ma=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `validate_hdv` (validate hdv).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        form_data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        old_ma: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     form_data["maHDV"] = normalize_code(form_data.get("maHDV", ""))
     form_data["tenHDV"] = normalize_name_case(form_data.get("tenHDV", ""))
     form_data["sdt"] = normalize_spaces(form_data.get("sdt", ""))
@@ -1966,18 +1631,6 @@ def open_hdv_form(app, data=None):
         widgets["maHDV"].config(state="disabled")
 
     def sync_hdv_name_case(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `sync_hdv_name_case` (sync hdv name case).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         name_widget = widgets.get("tenHDV")
         if not name_widget:
             return
@@ -1995,18 +1648,6 @@ def open_hdv_form(app, data=None):
     widgets["tenHDV"].bind("<FocusOut>", sync_hdv_name_case)
 
     def save_hdv():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `save_hdv` (save hdv).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         new_data = {}
         before_data = copy.deepcopy(data) if data else None
         for _, key, kind, *extra in fields:
@@ -2112,18 +1753,6 @@ def open_hdv_form(app, data=None):
 
 # Lấy dòng HDV đang chọn và mở form chỉnh sửa cho bản ghi đó.
 def edit_hdv(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `edit_hdv` (edit hdv).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_hdv"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn hướng dẫn viên cần sửa.")
@@ -2137,18 +1766,6 @@ def edit_hdv(app):
 # Xóa HDV được chọn sau khi kiểm tra ràng buộc.
 # Không cho xóa nếu HDV vẫn đang được phân công cho tour.
 def delete_hdv(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `delete_hdv` (delete hdv).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_hdv"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn hướng dẫn viên cần xóa.")
@@ -2196,19 +1813,6 @@ def delete_hdv(app):
 # Mở cửa sổ xem chi tiết hướng dẫn viên theo kiểu chỉ đọc.
 # Hiển thị cả hồ sơ, điểm đánh giá và các tour HDV đang/đã phụ trách.
 def open_hdv_detail(app, ma_hdv):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_hdv_detail` (open hdv detail).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_hdv: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     hdv = app["ql"].find_hdv(ma_hdv)
     if not hdv:
         messagebox.showerror("Lỗi", "Không tìm thấy thông tin HDV.")
@@ -2264,84 +1868,24 @@ def open_hdv_detail(app, ma_hdv):
     canvas_window = canvas.create_window((0, 0), window=outer, anchor="nw")
 
     def _on_frame_configure(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_frame_configure` ( on frame configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def _on_canvas_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_canvas_configure` ( on canvas configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.itemconfigure(canvas_window, width=event.width)
 
     outer.bind("<Configure>", _on_frame_configure)
     canvas.bind("<Configure>", _on_canvas_configure)
 
     def _on_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_mousewheel` ( on mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
             pass
 
     def _bind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_bind_mousewheel` ( bind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     def _unbind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_unbind_mousewheel` ( unbind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.unbind_all("<MouseWheel>")
 
     top.bind("<Enter>", _bind_mousewheel)
@@ -2376,20 +1920,6 @@ def open_hdv_detail(app, ma_hdv):
     ).pack()
 
     def create_section(parent, title, bg_color):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `create_section` (create section).
-        Tham số:
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            bg_color: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         wrapper = tk.Frame(
             parent,
             bg=bg_color,
@@ -2411,22 +1941,6 @@ def open_hdv_detail(app, ma_hdv):
         return body
 
     def create_info_row(parent, label_text, value, bg_color, wraplength=320):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `create_info_row` (create info row).
-        Tham số:
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            label_text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            bg_color: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            wraplength: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         row = tk.Frame(parent, bg=bg_color)
         row.pack(fill="x", pady=4)
 
@@ -2592,18 +2106,6 @@ def open_hdv_detail(app, ma_hdv):
 
 # Render tab quản lý hướng dẫn viên của admin.
 def admin_hdv_tab(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `admin_hdv_tab` (admin hdv tab).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     clear_container(app)
 
     # tk.Label(
@@ -2660,18 +2162,6 @@ def admin_hdv_tab(app):
         tv.column(c, anchor=("w" if c == "ten" else "center"), width=w, minwidth=max(80, w - 20), stretch=(c in {"ten", "kv"}))
 
     def on_double_click(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_double_click` (on double click).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         sel = tv.selection()
         if not sel:
             return
@@ -2698,19 +2188,6 @@ def admin_hdv_tab(app):
 # =========================
 # Nạp lại danh sách khách hàng lên bảng, có hỗ trợ lọc theo từ khóa.
 def refresh_users(app, keyword=""):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `refresh_users` (refresh users).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        keyword: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tree = app.get("tv_users")
     if not tree:
         return
@@ -2748,21 +2225,6 @@ def refresh_users(app, keyword=""):
 # Hàm dựng cửa sổ chi tiết dùng chung theo phong cách pastel.
 # Các tab khác chỉ cần truyền tiêu đề, phụ đề và danh sách section là có thể tái sử dụng.
 def create_detail_window(app, title_text, subtitle_text, sections):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `create_detail_window` (create detail window).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        title_text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        subtitle_text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        sections: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     PASTEL_DETAIL = {
         "bg": "#edf6f9",
         "surface": "#ffffff",
@@ -2803,84 +2265,24 @@ def create_detail_window(app, title_text, subtitle_text, sections):
     canvas_window = canvas.create_window((0, 0), window=outer, anchor="nw")
 
     def _on_frame_configure(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_frame_configure` ( on frame configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def _on_canvas_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_canvas_configure` ( on canvas configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.itemconfigure(canvas_window, width=event.width)
 
     outer.bind("<Configure>", _on_frame_configure)
     canvas.bind("<Configure>", _on_canvas_configure)
 
     def _on_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_mousewheel` ( on mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
             pass
 
     def _bind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_bind_mousewheel` ( bind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     def _unbind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_unbind_mousewheel` ( unbind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.unbind_all("<MouseWheel>")
 
     top.bind("<Enter>", _bind_mousewheel)
@@ -2906,20 +2308,6 @@ def create_detail_window(app, title_text, subtitle_text, sections):
     ).pack(pady=(4, 6))
 
     def create_section(parent, title, bg_color):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `create_section` (create section).
-        Tham số:
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            bg_color: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         wrapper = tk.Frame(
             parent,
             bg=bg_color,
@@ -2996,19 +2384,6 @@ def create_detail_window(app, title_text, subtitle_text, sections):
 
 # Mở cửa sổ xem chi tiết khách hàng và thống kê booking liên quan.
 def open_user_detail(app, username):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_user_detail` (open user detail).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     user = app["ql"].find_user(username)
     if not user:
         messagebox.showerror("Lỗi", "Không tìm thấy khách hàng.")
@@ -3069,19 +2444,6 @@ def open_user_detail(app, username):
 # Mở form thêm mới / chỉnh sửa khách hàng.
 # Khi sửa, username bị khóa để tránh làm hỏng khóa liên kết dữ liệu.
 def open_user_form(app, data=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_user_form` (open user form).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     top = tk.Toplevel(app["root"])
     top.title("Thông tin Khách hàng")
     top.geometry("520x420")
@@ -3126,18 +2488,6 @@ def open_user_form(app, data=None):
     tk.Label(card, text="Để trống mật khẩu nếu không muốn thay đổi.", bg=THEME["surface"], fg=THEME["muted"], font=("Times New Roman", 11, "italic")).pack(anchor="w", padx=20, pady=(3, 0))
 
     def save():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `save` (save).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         before_user = copy.deepcopy(data) if data else None
         username = normalize_spaces(data["username"] if data else widgets["username"].get())
         password = widgets["password"].get().strip()
@@ -3243,18 +2593,6 @@ def open_user_form(app, data=None):
 
 # Mở form chỉnh sửa cho khách hàng đang được chọn trong bảng.
 def edit_user(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `edit_user` (edit user).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_users"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn khách hàng cần sửa.")
@@ -3271,18 +2609,6 @@ def edit_user(app):
 
 # Xóa khách hàng được chọn, sau đó lưu dữ liệu và ghi log thao tác.
 def delete_user(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `delete_user` (delete user).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_users"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn khách hàng cần xóa.")
@@ -3334,18 +2660,6 @@ def delete_user(app):
 
 # Render tab quản lý khách hàng của admin.
 def admin_user_tab(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `admin_user_tab` (admin user tab).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     clear_container(app)
     # tk.Label(app["container"], text="QUẢN LÝ DANH SÁCH KHÁCH HÀNG", font=("Times New Roman", 20, "bold"), bg=THEME["bg"], fg=THEME["text"]).pack(anchor="w", pady=(0, 10))
 
@@ -3403,18 +2717,6 @@ def admin_user_tab(app):
     refresh_users(app, app["search_user_var"].get())
 
     def on_double_click_user(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_double_click_user` (on double click user).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         sel = tv.selection()
         if not sel:
             return
@@ -3430,20 +2732,6 @@ def admin_user_tab(app):
 # Bao gồm: định dạng mã tour, ngày đi/ngày về, sức chứa, giá, điểm đi/đến,
 # chi phí, HDV tồn tại hay không và xung đột lịch HDV.
 def validate_tour(app, form_data, old_ma=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `validate_tour` (validate tour).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        form_data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        old_ma: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     form_data["ma"] = normalize_code(form_data.get("ma", ""))
     form_data["ten"] = normalize_tour_name(form_data.get("ten", ""))
     form_data["diemDi"] = normalize_name_case(form_data.get("diemDi", ""))
@@ -3546,19 +2834,6 @@ def validate_tour(app, form_data, old_ma=None):
 
 # Nạp lại bảng tour; đồng thời tính số chỗ đã đặt / tổng sức chứa để hiển thị.
 def refresh_tours(app, keyword="", sync_status=False, show_status_popup=False):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `refresh_tours` (refresh tours).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        keyword: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if sync_status:
         refresh_tour_lifecycle_for_admin(app, show_popup=show_status_popup)
 
@@ -3599,19 +2874,6 @@ def refresh_tours(app, keyword="", sync_status=False, show_status_popup=False):
 # Mở form thêm mới / chỉnh sửa tour.
 # Khi lưu, hàm còn cập nhật trạng thái HDV phụ trách tương ứng với trạng thái tour.
 def open_tour_form(app, data=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_tour_form` (open tour form).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     top = tk.Toplevel(app["root"])
     top.title("Thông tin tour du lịch")
     top.geometry("820x640")
@@ -3787,18 +3049,6 @@ def open_tour_form(app, data=None):
             widgets["trangThai"].configure(state="disabled")
 
     def save_tour():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `save_tour` (save tour).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         before_tour = copy.deepcopy(data) if data else None
         form_data = {}
         for _, key, kind, *extra in fields:
@@ -4011,18 +3261,6 @@ def open_tour_form(app, data=None):
 
 # Mở form sửa tour đang chọn.
 def edit_tour(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `edit_tour` (edit tour).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_tour"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn tour cần sửa.")
@@ -4036,18 +3274,6 @@ def edit_tour(app):
 # Xóa tour nếu thỏa điều kiện nghiệp vụ.
 # Không cho xóa tour đang chạy hoặc tour còn booking hiệu lực.
 def delete_tour(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `delete_tour` (delete tour).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_tour"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn tour cần xóa.")
@@ -4210,18 +3436,6 @@ def open_weather_for_selected_tour(app):
 # =========================
 # Render tab quản lý tour và khai báo thêm cửa sổ xem chi tiết tour bên trong tab này.
 def admin_tour_tab(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `admin_tour_tab` (admin tour tab).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     clear_container(app)
 
     # tk.Label(app["container"], text="QUẢN LÝ DANH SÁCH TOUR DU LỊCH", font=("Times New Roman", 20, "bold"), bg=THEME["bg"], fg=THEME["text"]).pack(anchor="w", pady=(0, 10))
@@ -4273,19 +3487,6 @@ def admin_tour_tab(app):
 
    
     def open_tour_detail_window(app, ma_tour):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `open_tour_detail_window` (open tour detail window).
-        Tham số:
-            app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            ma_tour: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if "open_tour_details" not in app:
             app["open_tour_details"] = {}
         app["open_tour_detail_window_func"] = open_tour_detail_window
@@ -4362,84 +3563,24 @@ def admin_tour_tab(app):
         canvas_window = canvas.create_window((0, 0), window=outer, anchor="nw")
 
         def _on_frame_configure(event=None):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `_on_frame_configure` ( on frame configure).
-            Tham số:
-                event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             canvas.configure(scrollregion=canvas.bbox("all"))
 
         def _on_canvas_configure(event):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `_on_canvas_configure` ( on canvas configure).
-            Tham số:
-                event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             canvas.itemconfigure(canvas_window, width=event.width)
 
         outer.bind("<Configure>", _on_frame_configure)
         canvas.bind("<Configure>", _on_canvas_configure)
 
         def _on_mousewheel(event):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `_on_mousewheel` ( on mousewheel).
-            Tham số:
-                event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             try:
                 canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
             except (tk.TclError, ValueError, AttributeError):
                 pass
 
         def _bind_mousewheel(_event=None):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `_bind_mousewheel` ( bind mousewheel).
-            Tham số:
-                _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
         def _unbind_mousewheel(_event=None):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `_unbind_mousewheel` ( unbind mousewheel).
-            Tham số:
-                _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             canvas.unbind_all("<MouseWheel>")
 
         top.bind("<Enter>", _bind_mousewheel)
@@ -4474,20 +3615,6 @@ def admin_tour_tab(app):
         ).pack()
 
         def create_section(parent, title, bg_color):
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `create_section` (create section).
-            Tham số:
-                parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-                title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-                bg_color: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             wrapper = tk.Frame(
                 parent,
                 bg=bg_color,
@@ -4686,18 +3813,6 @@ def admin_tour_tab(app):
 
 
     def on_double_click(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_double_click` (on double click).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         sel = tv.selection()
         if not sel:
             return
@@ -4716,19 +3831,6 @@ def admin_tour_tab(app):
 # Mở cửa sổ xem chi tiết booking.
 # Hiển thị đầy đủ thông tin khách, tour, thanh toán, hoàn tiền và danh sách khách đi cùng.
 def open_booking_detail(app, ma_booking):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_booking_detail` (open booking detail).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     booking = next((b for b in app["ql"].list_bookings if b.get("maBooking") == ma_booking), None)
     if not booking:
         messagebox.showerror("Lỗi", "Không tìm thấy booking.")
@@ -4786,84 +3888,24 @@ def open_booking_detail(app, ma_booking):
     canvas_window = canvas.create_window((0, 0), window=outer, anchor="nw")
 
     def _on_frame_configure(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_frame_configure` ( on frame configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def _on_canvas_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_canvas_configure` ( on canvas configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.itemconfigure(canvas_window, width=event.width)
 
     outer.bind("<Configure>", _on_frame_configure)
     canvas.bind("<Configure>", _on_canvas_configure)
 
     def _on_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_mousewheel` ( on mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
             pass
 
     def _bind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_bind_mousewheel` ( bind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     def _unbind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_unbind_mousewheel` ( unbind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.unbind_all("<MouseWheel>")
 
     top.bind("<Enter>", _bind_mousewheel)
@@ -4897,20 +3939,6 @@ def open_booking_detail(app, ma_booking):
     ).pack()
 
     def create_section(parent, title, bg_color):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `create_section` (create section).
-        Tham số:
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            bg_color: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         wrapper = tk.Frame(
             parent,
             bg=bg_color,
@@ -5078,18 +4106,6 @@ def open_booking_detail(app, ma_booking):
 
 # Trả về mã booking đang được chọn trong bảng; nếu chưa chọn thì trả về chuỗi rỗng.
 def _selected_booking_code(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `_selected_booking_code` ( selected booking code).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tree = app.get("tv_booking")
     if not tree:
         return ""
@@ -5101,18 +4117,6 @@ def _selected_booking_code(app):
 
 # Mở cửa sổ tổng hợp booking theo từng tour để admin theo dõi sức chứa và doanh thu nhanh.
 def open_booking_summary_window(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_booking_summary_window` (open booking summary window).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     rows = summarize_bookings_by_tour(app["ql"])
 
     top = tk.Toplevel(app["root"])
@@ -5545,20 +4549,6 @@ def open_revenue_report_window(app):
     style_button(actions_frame, "👁 Xem chi tiết booking", "#0f766e", view_selected_booking_detail).pack(side="left")
     style_button(actions_frame, "❌ Đóng cửa sổ", THEME["danger"], top.destroy).pack(side="right")
 def handle_refund_decision(app, approve=True, ma_booking=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `handle_refund_decision` (handle refund decision).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        approve: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        ma_booking: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     ma_booking = ma_booking or _selected_booking_code(app)
     if not ma_booking:
         messagebox.showwarning("Thông báo", "Vui lòng chọn booking cần xử lý hoàn tiền.")
@@ -5592,20 +4582,6 @@ def handle_refund_decision(app, approve=True, ma_booking=None):
 # Ràng buộc chính: mã booking, tour tồn tại, username đặt hợp lệ, đủ chỗ trống,
 # và không cho đặt vào tour đã hủy / tạm hoãn / hoàn tất.
 def validate_booking(app, form_data, old_ma=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `validate_booking` (validate booking).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        form_data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        old_ma: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     form_data["maBooking"] = normalize_code(form_data.get("maBooking", ""))
     form_data["maTour"] = normalize_code(form_data.get("maTour", ""))
     form_data["tenKhach"] = normalize_name_case(form_data.get("tenKhach", ""))
@@ -5702,19 +4678,6 @@ def _next_booking_code_ui(app) -> str:
 
 # Nạp lại danh sách booking lên Treeview, có hỗ trợ lọc theo mã/tên/trạng thái/hoàn tiền.
 def refresh_bookings(app, keyword=""):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `refresh_bookings` (refresh bookings).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        keyword: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tree = app.get("tv_booking")
     if not tree:
         return
@@ -5766,19 +4729,6 @@ def refresh_bookings(app, keyword=""):
 # Đây là form có logic phụ trợ khá nhiều: tự tính tổng tiền, tiền cọc, còn nợ,
 # chuẩn hóa cơ cấu độ tuổi và suy ra trạng thái thanh toán.
 def open_booking_form(app, data=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_booking_form` (open booking form).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     top = tk.Toplevel(app["root"])
     top.title("Thông tin đặt chỗ (Booking)")
     top.geometry("760x680")
@@ -5929,19 +4879,6 @@ def open_booking_form(app, data=None):
     readonly_fields = {"tongTien", "conNo"}
 
     def set_entry_value(key, value):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `set_entry_value` (set entry value).
-        Tham số:
-            key: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            value: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         widget = widgets[key]
         if key in readonly_fields:
             widget.config(state="normal")
@@ -5951,19 +4888,6 @@ def open_booking_form(app, data=None):
             widget.config(state="readonly", readonlybackground="#f8fafc")
 
     def build_payment_status(total_amount, paid_amount):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `build_payment_status` (build payment status).
-        Tham số:
-            total_amount: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            paid_amount: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         if paid_amount <= 0:
             return BOOKING_STATUSES[0]
         if total_amount > 0 and paid_amount < total_amount:
@@ -5971,18 +4895,6 @@ def open_booking_form(app, data=None):
         return BOOKING_STATUSES[2]
 
     def refresh_booking_quote():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `refresh_booking_quote` (refresh booking quote).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         people = max(1, safe_int(widgets["soNguoi"].get() or 1))
         age_breakdown = normalize_passenger_breakdown(
             {
@@ -6068,18 +4980,6 @@ def open_booking_form(app, data=None):
         widgets[key].bind("<FocusOut>", lambda _event: refresh_booking_quote())
 
     def save_booking():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `save_booking` (save booking).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         form_data = {}
         before_booking = copy.deepcopy(data) if data else None
         for _, key, kind, *extra in fields:
@@ -6194,18 +5094,6 @@ def open_booking_form(app, data=None):
 
 # Mở form sửa booking đang chọn.
 def edit_booking(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `edit_booking` (edit booking).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_booking"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn booking cần sửa.")
@@ -6219,18 +5107,6 @@ def edit_booking(app):
 
 # Hủy booking theo nghiệp vụ, không xóa cứng dữ liệu khỏi JSON.
 def delete_booking(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `delete_booking` (delete booking).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     sel = app["tv_booking"].selection()
     if not sel:
         messagebox.showwarning("Thông báo", "Vui lòng chọn booking cần hủy.")
@@ -6271,18 +5147,6 @@ def delete_booking(app):
 
 # Render tab quản lý booking, hoàn tiền và báo cáo liên quan.
 def admin_booking_tab(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `admin_booking_tab` (admin booking tab).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     clear_container(app)
 
     # tk.Label(
@@ -6348,18 +5212,6 @@ def admin_booking_tab(app):
     tv.pack(side="left", fill="both", expand=True)
 
     def on_double_click(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_double_click` (on double click).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         sel = tv.selection()
         if not sel:
             return
@@ -6379,20 +5231,6 @@ def admin_booking_tab(app):
 
 # Mở popup xem nhanh chi tiết một phản hồi / thông báo.
 def open_feedback_detail(app, mode, data):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_feedback_detail` (open feedback detail).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        mode: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     PASTEL_DETAIL = {
         "bg": "#edf6f9",
         "surface": "#ffffff",
@@ -6512,20 +5350,6 @@ def open_feedback_detail(app, mode, data):
 
 # Mở phiên bản chi tiết đầy đủ hơn cho phản hồi / thông báo.
 def open_feedback_detail_full(app, mode, data):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_feedback_detail_full` (open feedback detail full).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        mode: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     PASTEL_DETAIL = {
         "bg": "#edf6f9",
         "surface": "#ffffff",
@@ -6567,84 +5391,24 @@ def open_feedback_detail_full(app, mode, data):
     canvas_window = canvas.create_window((0, 0), window=card, anchor="nw")
 
     def _on_frame_configure(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_frame_configure` ( on frame configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def _on_canvas_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_canvas_configure` ( on canvas configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.itemconfigure(canvas_window, width=event.width)
 
     card.bind("<Configure>", _on_frame_configure)
     canvas.bind("<Configure>", _on_canvas_configure)
 
     def _on_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_mousewheel` ( on mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
             pass
 
     def _bind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_bind_mousewheel` ( bind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     def _unbind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_unbind_mousewheel` ( unbind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.unbind_all("<MouseWheel>")
 
     top.bind("<Enter>", _bind_mousewheel)
@@ -7168,12 +5932,6 @@ def show_detailed_notification_popup(root, notif, datastore):
 
 
 def admin_notifications_tab(app):
-    """
-    Mục đích:
-        Gửi thông báo (tách làm 2 cột: form gửi và lịch sử gửi).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    """
     clear_container(app)
 
     # 1. Tạo Canvas và Scrollbar để tab có thể scroll dọc và ngang khi màn hình nhỏ
@@ -7690,20 +6448,6 @@ def admin_feedback_tab(app):
 
 # Kiểm tra tính hợp lệ của dữ liệu voucher trước khi lưu.
 def validate_voucher(app, data, old_code=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `validate_voucher` (validate voucher).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        old_code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     normalized = copy.deepcopy(data)
     normalized["maVoucher"] = normalize_code(normalized.get("maVoucher", ""))
     normalized["tenVoucher"] = normalize_spaces(normalized.get("tenVoucher", ""))
@@ -7715,19 +6459,6 @@ def validate_voucher(app, data, old_code=None):
 
 # Mở form thêm mới / chỉnh sửa voucher và kiểm tra dữ liệu trước khi lưu.
 def open_voucher_form(app, data=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_voucher_form` (open voucher form).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        data: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     top = tk.Toplevel(app["root"])
     top.title("Thông tin mã giảm giá")
     top.geometry("720x620")
@@ -7849,18 +6580,6 @@ def open_voucher_form(app, data=None):
     ).pack(anchor="w", padx=20, pady=(0, 8))
 
     def on_discount_type_change(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_discount_type_change` (on discount type change).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         loai = widgets["loaiGiam"].get().strip()
         if loai == "Phần trăm":
             hint_var.set("Nhập giảm giá dạng phần trăm, ví dụ: 10%")
@@ -7871,18 +6590,6 @@ def open_voucher_form(app, data=None):
         widgets["loaiGiam"].bind("<<ComboboxSelected>>", on_discount_type_change)
 
     def save_voucher():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `save_voucher` (save voucher).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         new_data = {}
         before_voucher = copy.deepcopy(data) if data else None
         for _, key, kind, *extra in fields:
@@ -7955,18 +6662,6 @@ def open_voucher_form(app, data=None):
 
 # Mở form sửa voucher đang chọn.
 def edit_voucher(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `edit_voucher` (edit voucher).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tv = app.get("tv_voucher")
     if not tv:
         return
@@ -7987,18 +6682,6 @@ def edit_voucher(app):
 
 # Xóa voucher đang chọn sau khi xác nhận.
 def delete_voucher(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `delete_voucher` (delete voucher).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tv = app.get("tv_voucher")
     if not tv:
         return
@@ -8032,19 +6715,6 @@ def delete_voucher(app):
 
 # Mở cửa sổ xem nhanh chi tiết voucher.
 def open_voucher_detail(app, code):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_voucher_detail` (open voucher detail).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     voucher = next((v for v in app["ql"].list_vouchers if v.get("maVoucher") == code), None)
     if not voucher:
         messagebox.showerror("Lỗi", "Không tìm thấy voucher.")
@@ -8180,19 +6850,6 @@ def open_voucher_detail(app, code):
 
 # Mở cửa sổ chi tiết đầy đủ của voucher với thông tin mở rộng hơn.
 def open_voucher_detail_full(app, code):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `open_voucher_detail_full` (open voucher detail full).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        code: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     voucher = next((v for v in app["ql"].list_vouchers if v.get("maVoucher") == code), None)
     if not voucher:
         messagebox.showerror("Lỗi", "Không tìm thấy voucher.")
@@ -8245,84 +6902,24 @@ def open_voucher_detail_full(app, code):
     canvas_window = canvas.create_window((0, 0), window=card, anchor="nw")
 
     def _on_frame_configure(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_frame_configure` ( on frame configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def _on_canvas_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_canvas_configure` ( on canvas configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.itemconfigure(canvas_window, width=event.width)
 
     card.bind("<Configure>", _on_frame_configure)
     canvas.bind("<Configure>", _on_canvas_configure)
 
     def _on_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_mousewheel` ( on mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
             pass
 
     def _bind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_bind_mousewheel` ( bind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     def _unbind_mousewheel(_event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_unbind_mousewheel` ( unbind mousewheel).
-        Tham số:
-            _event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         canvas.unbind_all("<MouseWheel>")
 
     top.bind("<Enter>", _bind_mousewheel)
@@ -8442,19 +7039,6 @@ def open_voucher_detail_full(app, code):
 
 # Nạp lại bảng voucher để phản ánh dữ liệu mới nhất trên giao diện.
 def refresh_vouchers(app, keyword=""):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `refresh_vouchers` (refresh vouchers).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        keyword: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     tv = app.get("tv_voucher")
     if not tv:
         return
@@ -8515,18 +7099,6 @@ def refresh_vouchers(app, keyword=""):
 
 # Render tab quản lý voucher của admin.
 def admin_voucher_tab(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `admin_voucher_tab` (admin voucher tab).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     clear_container(app)
 
     # tk.Label(
@@ -8603,18 +7175,6 @@ def admin_voucher_tab(app):
         tv.column(c, anchor=("w" if c == "ten" else "center"), width=w, minwidth=max(80, w - 25), stretch=(c == "ten"))
 
     def on_double_click_voucher(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `on_double_click_voucher` (on double click voucher).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         sel = tv.selection()
         if not sel:
             return
@@ -8642,18 +7202,6 @@ def admin_voucher_tab(app):
 
 # Đăng xuất khỏi giao diện admin và quay về màn hình đăng nhập / chọn vai trò.
 def logout(app):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `logout` (logout).
-    Tham số:
-        app: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     if messagebox.askyesno("Đăng xuất", "Bạn có chắc chắn muốn thoát khỏi hệ thống quản trị?"):
         for widget in app["root"].winfo_children():
             widget.destroy()
@@ -8672,18 +7220,6 @@ def logout(app):
 # Hàm khởi tạo giao diện admin chính.
 # Tạo root/window, datastore, sidebar, container nội dung, thanh trạng thái và gắn các tab chức năng.
 def main(root=None):
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `main` (main).
-    Tham số:
-        root: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     enable_tk_text_autofix()
     if root is None:
         root = tk.Tk()
@@ -8995,51 +7531,15 @@ def main(root=None):
     menu_window = menu_canvas.create_window((0, 0), window=menu, anchor="nw")
 
     def _on_menu_configure(event=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_menu_configure` ( on menu configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
 
     def _on_menu_canvas_configure(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_menu_canvas_configure` ( on menu canvas configure).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         menu_canvas.itemconfigure(menu_window, width=event.width)
 
     menu.bind("<Configure>", _on_menu_configure)
     menu_canvas.bind("<Configure>", _on_menu_canvas_configure)
 
     def _on_sidebar_mousewheel(event):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `_on_sidebar_mousewheel` ( on sidebar mousewheel).
-        Tham số:
-            event: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             menu_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         except (tk.TclError, ValueError, AttributeError):
@@ -9049,18 +7549,6 @@ def main(root=None):
     menu_canvas.bind("<Leave>", lambda _e: menu_canvas.unbind_all("<MouseWheel>"))
 
     def set_active_menu(button):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `set_active_menu` (set active menu).
-        Tham số:
-            button: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         prev = app.get("active_menu_btn")
         if prev and prev.winfo_exists() and prev is not button:
             prev.configure(bg=SIDEBAR_BG, fg="#dbe4f5")
@@ -9068,39 +7556,11 @@ def main(root=None):
         button.configure(bg=SIDEBAR_BTN_ACTIVE, fg="white")
 
     def set_page(title, subtitle, current_tab):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `set_page` (set page).
-        Tham số:
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            subtitle: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            current_tab: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         app["page_title_var"].set(title)
         app["page_subtitle_var"].set(subtitle)
         app["current_tab"] = current_tab
 
     def menu_btn(text, cmd, icon=""):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `menu_btn` (menu btn).
-        Tham số:
-            text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            cmd: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            icon: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         label = f"  {icon}  {text}" if icon else f"  {text}"
         btn = RoundedButton(
             menu,
@@ -9236,39 +7696,11 @@ def main(root=None):
     app["content_canvas"] = None
 
     def open_view(title, subtitle, current_tab, view_fn, button):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `open_view` (open view).
-        Tham số:
-            title: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            subtitle: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            current_tab: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            view_fn: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            button: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         set_page(title, subtitle, current_tab)
         set_active_menu(button)
         view_fn()
 
     def reload_current_page():
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `reload_current_page` (reload current page).
-        Tham số:
-            Không có.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         reload_admin_current_tab(app)
 
     style_button(head_right, "Tải lại", THEME["primary"], reload_current_page).pack(anchor="e")

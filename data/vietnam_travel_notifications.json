@@ -321,5 +321,23 @@
     "tenTour": "",
     "content": "Chào mừng đến với VIETNAMTRAVEL",
     "date": "21/06/2026 00:35"
+  },
+  {
+    "eventType": "booking_created",
+    "maHDV": "HDV01",
+    "tenHDV": "Trần Thị Như Ý",
+    "maTour": "T11",
+    "tenTour": "Quy Nhơn Biển Đảo 3N2Đ",
+    "content": "Booking BK23 vừa được tạo cho tour Quy Nhơn Biển Đảo 3N2Đ.",
+    "date": "21/06/2026 09:31"
+  },
+  {
+    "eventType": "payment_success",
+    "maHDV": "",
+    "tenHDV": "",
+    "maTour": "T11",
+    "tenTour": "Quy Nhơn Biển Đảo 3N2Đ",
+    "content": "Booking BK23 đã thanh toán 82.900.000đ.",
+    "date": "21/06/2026 09:31"
   }
 ]

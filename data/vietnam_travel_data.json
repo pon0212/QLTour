@@ -217,6 +217,25 @@
       "ngoaiNgu": "Anh",
       "chuyenMon": "",
       "chungChi": ""
+    },
+    {
+      "maHDV": "HDV11",
+      "tenHDV": "Nguyễn Hoàng Nam",
+      "password": "$2b$12$drUIijJMfBM50./44WUyi.BfV/.Qv5gQaegdwhuyfmaBl7Y5faN7e",
+      "sdt": "0911223344",
+      "email": "hdv11@gmail.com",
+      "kn": "1",
+      "gioiTinh": "Nữ",
+      "cccd": "",
+      "khuVuc": "Miền Bắc",
+      "trangThai": "Sẵn sàng",
+      "total_reviews": 0,
+      "avg_rating": 0,
+      "skill_score": 0,
+      "attitude_score": 0,
+      "problem_solving_score": 0,
+      "trangThaiTaiKhoan": "Đang hoạt động",
+      "guideState": "available"
     }
   ],
   "tours": [
@@ -450,7 +469,7 @@
       "gia": "1990000",
       "diemDi": "Tp.hcm",
       "diemDen": "Cần Thơ",
-      "ghiChuDieuHanh": "Tour sắp mở bán, đang chuẩn bị chương trình và lịch trình chi tiết.",
+      "ghiChuDieuHanh": "Tour đang mở bán, cần theo dõi số lượng khách đăng ký, tình trạng thanh toán và hỗ trợ khách đặt tour.",
       "trangThai": "Đang mở bán",
       "hdvPhuTrach": "HDV08",
       "lichTrinh": [
@@ -630,6 +649,104 @@
           "moTa": "Mua đặc sản tại Chợ Hàn, kết thúc chương trình và trở về TP.HCM."
         }
       ]
+    },
+    {
+      "ma": "T11",
+      "ten": "Quy Nhơn Biển Đảo 3N2Đ",
+      "ngay": "15/07/2026",
+      "ngayKetThuc": "17/07/2026",
+      "soNgay": "3N2D",
+      "khach": "25",
+      "gia": "3500000",
+      "diemDi": "Tp.hcm",
+      "diemDen": "Quy Nhơn",
+      "ghiChuDieuHanh": "Tour đã đủ số lượng khách dự kiến, cần kiểm tra thanh toán, danh sách khách và chuẩn bị điều hành trước ngày khởi hành.",
+      "trangThai": "Đã đủ khách",
+      "hdvPhuTrach": "HDV01",
+      "lichTrinh": [
+        {
+          "ngay": "Ngày 1",
+          "tieuDe": "Ngày 1: TP.HCM - Quy Nhơn",
+          "diaDiem": [
+            "Ngày 1: TP.HCM - Quy Nhơn"
+          ],
+          "moTa": "Ngày 1: TP.HCM - Quy Nhơn | Ngày 1: TP.HCM - Quy Nhơn"
+        },
+        {
+          "ngay": "Ngày 2",
+          "tieuDe": "Địa điểm: Eo Gió, Kỳ Co",
+          "diaDiem": [
+            "Địa điểm: Eo Gió",
+            "Kỳ Co"
+          ],
+          "moTa": "Địa điểm: Eo Gió, Kỳ Co | Địa điểm: Eo Gió, Kỳ Co"
+        },
+        {
+          "ngay": "Ngày 3",
+          "tieuDe": "Mô tả: Khởi hành từ TP.HCM đến Quy Nhơn, tham quan Eo Gió và tắm biển Kỳ Co.",
+          "diaDiem": [
+            "Mô tả: Khởi hành từ TP.HCM đến Quy Nhơn",
+            "tham quan Eo Gió và tắm biển Kỳ Co."
+          ],
+          "moTa": "Mô tả: Khởi hành từ TP.HCM đến Quy Nhơn, tham quan Eo Gió và tắm biển Kỳ Co. | Mô tả: Khởi hành từ TP.HCM đến Quy Nhơn, tham quan Eo Gió và tắm biển Kỳ Co."
+        },
+        {
+          "ngay": "Ngày 4",
+          "tieuDe": "Ngày 2: Khám phá biển đảo Quy Nhơn",
+          "diaDiem": [
+            "Ngày 2: Khám phá biển đảo Quy Nhơn"
+          ],
+          "moTa": "Ngày 2: Khám phá biển đảo Quy Nhơn | Ngày 2: Khám phá biển đảo Quy Nhơn"
+        },
+        {
+          "ngay": "Ngày 5",
+          "tieuDe": "Địa điểm: Hòn Khô, Tháp Đôi, Ghềnh Ráng",
+          "diaDiem": [
+            "Địa điểm: Hòn Khô",
+            "Tháp Đôi",
+            "Ghềnh Ráng"
+          ],
+          "moTa": "Địa điểm: Hòn Khô, Tháp Đôi, Ghềnh Ráng | Địa điểm: Hòn Khô, Tháp Đôi, Ghềnh Ráng"
+        },
+        {
+          "ngay": "Ngày 6",
+          "tieuDe": "Mô tả: Tham quan Hòn Khô, lặn ngắm san hô, buổi chiều tham quan Tháp Đôi và Ghềnh Ráng.",
+          "diaDiem": [
+            "Mô tả: Tham quan Hòn Khô",
+            "lặn ngắm san hô",
+            "buổi chiều tham quan Tháp Đôi và Ghềnh Ráng."
+          ],
+          "moTa": "Mô tả: Tham quan Hòn Khô, lặn ngắm san hô, buổi chiều tham quan Tháp Đôi và Ghềnh Ráng. | Mô tả: Tham quan Hòn Khô, lặn ngắm san hô, buổi chiều tham quan Tháp Đôi và Ghềnh Ráng."
+        },
+        {
+          "ngay": "Ngày 7",
+          "tieuDe": "Ngày 3: Quy Nhơn - TP.HCM",
+          "diaDiem": [
+            "Ngày 3: Quy Nhơn - TP.HCM"
+          ],
+          "moTa": "Ngày 3: Quy Nhơn - TP.HCM | Ngày 3: Quy Nhơn - TP.HCM"
+        },
+        {
+          "ngay": "Ngày 8",
+          "tieuDe": "Địa điểm: Chợ Quy Nhơn",
+          "diaDiem": [
+            "Địa điểm: Chợ Quy Nhơn"
+          ],
+          "moTa": "Địa điểm: Chợ Quy Nhơn | Địa điểm: Chợ Quy Nhơn"
+        },
+        {
+          "ngay": "Ngày 9",
+          "tieuDe": "Mô tả: Mua sắm đặc sản tại chợ Quy Nhơn, kết thúc chương trình và trở về TP.HCM.",
+          "diaDiem": [
+            "Mô tả: Mua sắm đặc sản tại chợ Quy Nhơn",
+            "kết thúc chương trình và trở về TP.HCM."
+          ],
+          "moTa": "Mô tả: Mua sắm đặc sản tại chợ Quy Nhơn, kết thúc chương trình và trở về TP.HCM. | Mô tả: Mua sắm đặc sản tại chợ Quy Nhơn, kết thúc chương trình và trở về TP.HCM."
+        }
+      ],
+      "soLuotDaDat": 25,
+      "soLuotMoBan": 25,
+      "tourState": "full"
     }
   ],
   "bookings": [
@@ -1047,10 +1164,10 @@
       "tenKhach": "Võ Thanh Quỳnh",
       "sdt": "0701332598",
       "soNguoi": "6",
-      "tongTien": 15700500,
+      "tongTien": 15750500,
       "tienCoc": 0,
       "daThanhToan": 0,
-      "conNo": 15700500,
+      "conNo": 15750500,
       "hinhThucThanhToan": "Chưa thanh toán",
       "nguonKhach": "Khách lẻ",
       "usernameDat": "vothanhquynh3",
@@ -1065,9 +1182,9 @@
       },
       "ngayDat": "17/06/2026",
       "danhSachKhach": [],
-      "maVoucher": "NEW50",
-      "tenVoucher": "Khách mới 50K",
-      "giamGiaVoucher": 50000,
+      "maVoucher": "",
+      "tenVoucher": "",
+      "giamGiaVoucher": 0,
       "trangThaiHoanTien": "",
       "soTienHoan": 0,
       "ngayYeuCauHoanTien": "",
@@ -1464,6 +1581,56 @@
       "lastPaymentAt": "07/06/2026 10:15",
       "paidBy": "phanbaophuc2",
       "completedNotified": true
+    },
+    {
+      "maBooking": "BK23",
+      "maTour": "T11",
+      "tenKhach": "Trần Nguyễn Ngọc Tuyền",
+      "sdt": "0321316760",
+      "soNguoi": "25",
+      "trangThai": "Đã thanh toán",
+      "ngayDat": "21/06/2026",
+      "tongTienGoc": 87500000,
+      "giamGiaDoiTuong": 4550000,
+      "tongTien": 82900000,
+      "tienCoc": 24870000,
+      "daThanhToan": 82900000,
+      "conNo": 0,
+      "hinhThucThanhToan": "Chuyển khoản",
+      "nguonKhach": "Khách lẻ",
+      "ghiChu": "",
+      "usernameDat": "ngoctuyen",
+      "user": "ngoctuyen",
+      "danhSachKhach": [],
+      "coCauDoTuoi": {
+        "treEm": 3,
+        "trungNien": 20,
+        "nguoiCaoTuoi": 2
+      },
+      "maVoucher": "NEW50",
+      "tenVoucher": "Khách mới 50K",
+      "giamGiaVoucher": 50000,
+      "trangThaiHoanTien": "",
+      "soTienHoan": 0,
+      "ngayYeuCauHoanTien": "",
+      "ngayXuLyHoanTien": "",
+      "nguoiXuLyHoanTien": "",
+      "ghiChuHoanTien": "",
+      "tourStatusChanges": [
+        {
+          "maTour": "T11",
+          "tenTour": "Quy Nhơn Biển Đảo 3N2Đ",
+          "oldStatus": "Đang mở bán",
+          "newStatus": "Đã đủ khách",
+          "reason": "đã đủ số khách"
+        }
+      ],
+      "username": "ngoctuyen",
+      "refundStatus": "",
+      "bookingState": "paid",
+      "paidAmount": 82900000,
+      "lastPaymentAt": "21/06/2026 09:31",
+      "paidBy": "ngoctuyen"
     }
   ],
   "users": [
@@ -1555,7 +1722,7 @@
       "soLuong": "10",
       "daSuDung": "1",
       "gioiHanMoiUser": "1",
-      "tourApDung": "",
+      "tourApDung": "T11",
       "ngayBatDau": "01/05/2026",
       "ngayKetThuc": "31/10/2026",
       "trangThai": "Đang áp dụng",

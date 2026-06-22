@@ -41,19 +41,6 @@ PASTEL = {
 
 class TravelSystem:
     def __init__(self, root):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `__init__` (  init  ).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            root: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         self.root = root
         self.configure_ui_fonts()
         self.root.title("Hệ thống Quản lý Du lịch 2026")
@@ -76,18 +63,6 @@ class TravelSystem:
         self.show_role_selection()
 
     def configure_ui_fonts(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `configure_ui_fonts` (configure ui fonts).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         default_font = ("Times New Roman", 12)
         heading_font = ("Times New Roman", 12, "bold")
 
@@ -106,51 +81,15 @@ class TravelSystem:
         style.configure("TCombobox", font=default_font)
 
     def clear_screen(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `clear_screen` (clear screen).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         for widget in self.main_frame.winfo_children():
             widget.destroy()
         self.bg_label = None
 
     def get_bg_path(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `get_bg_path` (get bg path).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         base_dir = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(base_dir, "background.jpg")
 
     def set_background(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `set_background` (set background).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         try:
             image_path = self.get_bg_path()
             self.root.update_idletasks()
@@ -169,25 +108,6 @@ class TravelSystem:
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
     def make_soft_button(self, parent, text, bg, hover_bg, command, width=24, height=2):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `make_soft_button` (make soft button).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            text: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            hover_bg: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            command: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            width: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            height: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         btn = RoundedButton(
             parent,
             text=text,
@@ -206,20 +126,6 @@ class TravelSystem:
         return btn
 
     def make_entry(self, parent, show=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `make_entry` (make entry).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            parent: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            show: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         return tk.Entry(
             parent,
             font=("Times New Roman", 12),
@@ -232,20 +138,6 @@ class TravelSystem:
         )
 
     def make_center_card(self, width=430, height=None):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `make_center_card` (make center card).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            width: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            height: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         parent = self.bg_label if self.bg_label else self.main_frame
         card = tk.Frame(
             parent,
@@ -265,18 +157,6 @@ class TravelSystem:
         return card
 
     def show_role_selection(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `show_role_selection` (show role selection).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         self.clear_screen()
         self.root.geometry(LOGIN_WINDOW_SIZE)
         self.set_background()
@@ -324,19 +204,6 @@ class TravelSystem:
         ).pack(pady=(24, 4))
 
     def show_login_screen(self, role):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `show_login_screen` (show login screen).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            role: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         self.clear_screen()
         self.root.geometry(LOGIN_WINDOW_SIZE)
         self.current_role = role
@@ -435,18 +302,6 @@ class TravelSystem:
         self.ent_pass.bind("<Return>", lambda e: self.handle_login())
 
     def handle_login(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `handle_login` (handle login).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         result = self.auth_service.authenticate(
             self.current_role,
             self.ent_user.get().strip(),
@@ -462,19 +317,6 @@ class TravelSystem:
         notifier("Lỗi", result.message)
 
     def redirect_to_interface(self, username):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `redirect_to_interface` (redirect to interface).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-            username: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         self.main_frame.destroy()
         self.root.geometry(WORKSPACE_WINDOW_SIZE)
         self.root.resizable(True, True)
@@ -511,18 +353,6 @@ class TravelSystem:
             hien_thi_khach(self.root, user_data)
 
     def show_register_screen(self):
-        """
-        Mục đích:
-            Thực hiện xử lý cho hàm `show_register_screen` (show register screen).
-        Tham số:
-            self: Tham số đầu vào phục vụ nghiệp vụ của hàm.
-        Giá trị trả về:
-            Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-        Tác dụng phụ:
-            Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-        Lưu ý nghiệp vụ:
-            Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-        """
         self.clear_screen()
         self.root.geometry(LOGIN_WINDOW_SIZE)
         self.set_background()
@@ -583,18 +413,6 @@ class TravelSystem:
         ).pack(anchor="w", pady=(0, 12))
 
         def perform_register():
-            """
-            Mục đích:
-                Thực hiện xử lý cho hàm `perform_register` (perform register).
-            Tham số:
-                Không có.
-            Giá trị trả về:
-                Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-            Tác dụng phụ:
-                Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-            Lưu ý nghiệp vụ:
-                Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-            """
             result = self.auth_service.register_user(
                 self.reg_widgets["user"].get().strip(),
                 self.reg_widgets["pass"].get().strip(),
@@ -637,18 +455,6 @@ class TravelSystem:
 
 
 def main():
-    """
-    Mục đích:
-        Thực hiện xử lý cho hàm `main` (main).
-    Tham số:
-        Không có.
-    Giá trị trả về:
-        Dữ liệu kết quả theo luồng xử lý hiện tại của hàm.
-    Tác dụng phụ:
-        Có thể đọc/ghi trạng thái tùy theo ngữ cảnh gọi hàm.
-    Lưu ý nghiệp vụ:
-        Giữ nguyên hành vi cũ, chỉ chuẩn hóa trình bày và tài liệu hóa.
-    """
     enable_tk_text_autofix()
     root = tk.Tk()
     TravelSystem(root)
