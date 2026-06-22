@@ -1,14 +1,8 @@
-import os
-import re
-import base64
-import math
-import tkinter as tk
-from tkinter import messagebox, ttk
-from datetime import datetime, timedelta
-import threading
-from urllib.error import URLError
-from urllib.parse import quote_plus
-from urllib.request import urlopen
+
+
+# =========================
+# VALIDATION & HELPER
+# =========================
 
 from GUI.common.rounded_button import RoundedButton
 from GUI.common.weather_popup import open_tour_weather_popup
@@ -43,10 +37,17 @@ from core.app import (
     show_detailed_notification_popup,
     get_review_rating,
 )
-
-# =========================
-# VALIDATION & HELPER
-# =========================
+from datetime import datetime, timedelta
+from tkinter import messagebox, ttk
+from urllib.error import URLError
+from urllib.parse import quote_plus
+from urllib.request import urlopen
+import base64
+import math
+import os
+import re
+import threading
+import tkinter as tk
 
 def booking_payment_status(total_amount, paid_amount):
     total = max(0, safe_int(total_amount))

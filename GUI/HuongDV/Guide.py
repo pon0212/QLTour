@@ -1,11 +1,10 @@
-import os
-import re
-import tkinter as tk
-from tkinter import messagebox, ttk
-from datetime import datetime
+
+
+# =========================
+# VALIDATION
+# =========================
 from GUI.common.rounded_button import RoundedButton
 from GUI.common.weather_popup import open_tour_weather_popup
-
 from core.app import (
     JSONDataStore,
     fix_mojibake,
@@ -20,10 +19,12 @@ from core.app import (
     TOUR_STATUS_CANCELLED,
     TOUR_STATUS_STARTED,
 )
+from datetime import datetime
+from tkinter import messagebox, ttk
+import os
+import re
+import tkinter as tk
 
-# =========================
-# VALIDATION
-# =========================
 def is_valid_phone(phone):
     return feature_is_valid_phone(phone)
 

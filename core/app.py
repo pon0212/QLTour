@@ -1,14 +1,18 @@
 from __future__ import annotations
-
-# FILE GOM: Toan bo logic core duoc gom ve day de giam so luong file.
-
-
-# ===== BEGIN core/activity_log.py =====
-
+from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import date, datetime, timedelta
+from datetime import datetime
+from tkinter import messagebox, ttk
+import bcrypt
+import copy
+import hashlib
 import json
 import os
-from datetime import datetime
-
+import re
+import sqlite3
+import tkinter as tk
+import unicodedata
 
 def _resolve_log_file(datastore=None, log_file: str | None = None) -> str:
     if log_file:
@@ -58,9 +62,6 @@ def write_activity_log(
     with open(path, "w", encoding="utf-8") as file:
         json.dump(entries[-1000:], file, ensure_ascii=False, indent=2)
 
-# ===== BEGIN core/validation.py =====
-
-import re
 
 USERNAME_PATTERN = re.compile(r"[A-Za-z0-9_.-]{3,30}")
 PHONE_PATTERN = re.compile(r"0\d{9}")
@@ -110,9 +111,6 @@ def is_valid_phone(phone: str) -> bool:
 def is_valid_email(email: str) -> bool:
     return bool(EMAIL_PATTERN.fullmatch(str(email or "").strip()))
 
-# ===== BEGIN core/text_utils.py =====
-
-import re
 
 _SPACE_RE = re.compile(r"\s+")
 
@@ -159,13 +157,6 @@ def normalize_email(value: str | None) -> str:
     text = _SPACE_RE.sub("", str(value))
     return text.lower().strip()
 
-# ===== BEGIN core/tour_rules.py =====
-
-from datetime import date, datetime, timedelta
-import re
-
-
-
 TOUR_STATUS_NOT_OPEN = "Sắp mở bán"
 TOUR_STATUS_OPEN = "Đang mở bán"
 TOUR_STATUS_FULL = "Đã đủ khách"
@@ -173,7 +164,6 @@ TOUR_STATUS_STARTED = "Đang diễn ra"
 TOUR_STATUS_COMPLETED = "Đã kết thúc"
 TOUR_STATUS_CANCELLED = "Đã hủy"
 
-# Giữ alias để tương thích code cũ, nhưng không phát sinh trạng thái ngoài 6 trạng thái chuẩn.
 TOUR_STATUS_HOLD = TOUR_STATUS_OPEN
 TOUR_STATUS_INACTIVE = TOUR_STATUS_CANCELLED
 TOUR_STATUS_HIDDEN = TOUR_STATUS_CANCELLED
@@ -522,7 +512,6 @@ def is_upcoming_or_ongoing(start_date: date | None, end_date: date | None, today
 
 # ===== BEGIN core/state_machine.py =====
 
-from dataclasses import dataclass
 
 
 TOUR_STATE_DRAFT = "draft"
@@ -994,11 +983,7 @@ def can_guide_transition(state_from: str, state_to: str) -> bool:
 
 # ===== BEGIN core/security.py =====
 
-import os
-import hashlib
-import re
 
-import bcrypt
 
 SHA256_PATTERN = re.compile(r"[a-fA-F0-9]{64}")
 MASKED_PASSWORD = "********"
@@ -1363,7 +1348,6 @@ def calculate_age_discount(price_per_person, breakdown):
 
 # ===== BEGIN core/voucher_service.py =====
 
-from datetime import datetime
 
 
 
@@ -1726,7 +1710,6 @@ def build_voucher_quote(datastore, voucher_code, gross_total, username="", ma_to
 
 # ===== BEGIN core/notification_service.py =====
 
-from datetime import datetime
 
 
 EVENT_BOOKING_CREATED = "booking_created"
@@ -2176,9 +2159,6 @@ def update_tour_operational_note(
 
 # ===== BEGIN core/review_service.py =====
 
-from dataclasses import dataclass
-from datetime import datetime
-import unicodedata
 
 
 
@@ -2829,8 +2809,6 @@ def build_revenue_report(datastore, actor: str = "", role: str = "admin", month:
 
 # ===== BEGIN core/booking_service.py =====
 
-from dataclasses import dataclass
-from datetime import datetime
 
 
 TOUR_BOOKABLE_STATUSES = {TOUR_STATUS_OPEN}
@@ -3661,8 +3639,6 @@ def summarize_bookings_by_tour(datastore, actor: str = "", role: str = "admin") 
 
 # ===== BEGIN core/tour_service.py =====
 
-from dataclasses import dataclass
-from datetime import datetime
 
 
 @dataclass(slots=True)
@@ -3902,7 +3878,6 @@ def complete_tour(datastore, ma_tour: str, actor: str = "guide", note: str = "")
 # ===== BEGIN core/system_rules.py =====
 # -*- coding: utf-8 -*-
 
-from datetime import date, datetime, timedelta
 
 
 
@@ -4469,12 +4444,6 @@ def sync_tour_booking_counts(datastore):
 
 # ===== BEGIN core/datastore.py =====
 
-import copy
-import json
-import os
-import sqlite3
-from collections.abc import Callable
-from datetime import datetime
 
 
 
@@ -4904,7 +4873,6 @@ class JSONDataStore(SQLiteDataStore):
 
 # ===== BEGIN core/auth.py =====
 
-from dataclasses import dataclass
 
 
 @dataclass(slots=True)
@@ -5156,9 +5124,6 @@ class AuthService:
 
 # ===== BEGIN core/tk_text.py =====
 
-import re
-import tkinter as tk
-from tkinter import messagebox, ttk
 
 
 _PATCHED = False

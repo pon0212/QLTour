@@ -1,17 +1,8 @@
-import os
-import re
-import json
-import tkinter as tk
-from tkinter import messagebox, simpledialog, ttk
-from datetime import datetime
-from dataclasses import dataclass
-import copy
-import threading
-import urllib.parse
-import urllib.request
+
+
+
 from GUI.common.rounded_button import RoundedButton
 from GUI.common.weather_popup import open_tour_weather_popup
-
 from core.app import (
     ACTIVE_TOUR_STATUSES_FOR_GUIDE,
     JSONDataStore,
@@ -78,7 +69,17 @@ from core.app import (
     write_crud_log,
     get_review_rating,
 )
-
+from dataclasses import dataclass
+from datetime import datetime
+from tkinter import messagebox, simpledialog, ttk
+import copy
+import json
+import os
+import re
+import threading
+import tkinter as tk
+import urllib.parse
+import urllib.request
 
 @dataclass(frozen=True)
 class AdminTabDef:
