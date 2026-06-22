@@ -7276,12 +7276,12 @@ def main(root=None):
     style.map("Treeview", background=[("selected", "#dbeafe")], foreground=[("selected", THEME["text"])])
     style.configure(
         "TScrollbar",
-        bordercolor="#1e293b",
-        troughcolor="#1e293b",
-        background="#475569",
-        darkcolor="#475569",
-        lightcolor="#475569",
-        arrowcolor="#1e293b",
+        troughcolor="#f1f5f9",
+        background="#cbd5e1",
+        darkcolor="#f1f5f9",
+        lightcolor="#f1f5f9",
+        bordercolor="#f1f5f9",
+        arrowcolor="#64748b",
         arrowsize=10,
         relief="flat",
         gripcount=0,
@@ -7293,30 +7293,32 @@ def main(root=None):
                 "Vertical.Scrollbar.trough",
                 {
                     "children": [
-                        ("Vertical.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"})
+                        ("Vertical.Scrollbar.uparrow", {"side": "top", "sticky": ""}),
+                        ("Vertical.Scrollbar.downarrow", {"side": "bottom", "sticky": ""}),
+                        ("Vertical.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"}),
                     ],
-                    "sticky": "nswe",
+                    "sticky": "ns",
                 },
             )
         ],
     )
     style.configure(
         "Vertical.TScrollbar",
-        troughcolor="#1e293b",
-        background="#475569",
-        darkcolor="#475569",
-        lightcolor="#475569",
-        bordercolor="#1e293b",
-        arrowcolor="#1e293b",
+        troughcolor="#f1f5f9",
+        background="#cbd5e1",
+        darkcolor="#f1f5f9",
+        lightcolor="#f1f5f9",
+        bordercolor="#f1f5f9",
+        arrowcolor="#64748b",
         relief="flat",
-        arrowsize=11,
+        arrowsize=10,
         gripcount=0,
     )
     style.map(
         "Vertical.TScrollbar",
-        background=[("active", "#64748b"), ("pressed", "#64748b")],
-        darkcolor=[("active", "#64748b"), ("pressed", "#64748b")],
-        lightcolor=[("active", "#64748b"), ("pressed", "#64748b")],
+        background=[("active", "#94a3b8"), ("pressed", "#64748b")],
+        darkcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
+        lightcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
     )
     style.layout(
         POPUP_FORM_SCROLLBAR_STYLE,
@@ -7325,30 +7327,32 @@ def main(root=None):
                 "Vertical.Scrollbar.trough",
                 {
                     "children": [
-                        ("Vertical.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"})
+                        ("Vertical.Scrollbar.uparrow", {"side": "top", "sticky": ""}),
+                        ("Vertical.Scrollbar.downarrow", {"side": "bottom", "sticky": ""}),
+                        ("Vertical.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"}),
                     ],
-                    "sticky": "nswe",
+                    "sticky": "ns",
                 },
             )
         ],
     )
     style.configure(
         POPUP_FORM_SCROLLBAR_STYLE,
-        troughcolor="#dbe3ee",
-        background="#8fa3bd",
-        darkcolor="#8fa3bd",
-        lightcolor="#8fa3bd",
-        bordercolor="#dbe3ee",
-        arrowcolor="#dbe3ee",
+        troughcolor="#f1f5f9",
+        background="#cbd5e1",
+        darkcolor="#f1f5f9",
+        lightcolor="#f1f5f9",
+        bordercolor="#f1f5f9",
+        arrowcolor="#64748b",
         relief="flat",
         arrowsize=10,
         gripcount=0,
     )
     style.map(
         POPUP_FORM_SCROLLBAR_STYLE,
-        background=[("active", "#7188a6"), ("pressed", "#5f7694")],
-        darkcolor=[("active", "#7188a6"), ("pressed", "#5f7694")],
-        lightcolor=[("active", "#7188a6"), ("pressed", "#5f7694")],
+        background=[("active", "#94a3b8"), ("pressed", "#64748b")],
+        darkcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
+        lightcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
     )
     style.layout(
         "Horizontal.TScrollbar",
@@ -7357,30 +7361,32 @@ def main(root=None):
                 "Horizontal.Scrollbar.trough",
                 {
                     "children": [
-                        ("Horizontal.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"})
+                        ("Horizontal.Scrollbar.leftarrow", {"side": "left", "sticky": ""}),
+                        ("Horizontal.Scrollbar.rightarrow", {"side": "right", "sticky": ""}),
+                        ("Horizontal.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"}),
                     ],
-                    "sticky": "nswe",
+                    "sticky": "ew",
                 },
             )
         ],
     )
     style.configure(
         "Horizontal.TScrollbar",
-        troughcolor="#1e293b",
-        background="#475569",
-        darkcolor="#475569",
-        lightcolor="#475569",
-        bordercolor="#1e293b",
-        arrowcolor="#1e293b",
+        troughcolor="#f1f5f9",
+        background="#cbd5e1",
+        darkcolor="#f1f5f9",
+        lightcolor="#f1f5f9",
+        bordercolor="#f1f5f9",
+        arrowcolor="#64748b",
         relief="flat",
-        arrowsize=11,
+        arrowsize=10,
         gripcount=0,
     )
     style.map(
         "Horizontal.TScrollbar",
-        background=[("active", "#64748b"), ("pressed", "#64748b")],
-        darkcolor=[("active", "#64748b"), ("pressed", "#64748b")],
-        lightcolor=[("active", "#64748b"), ("pressed", "#64748b")],
+        background=[("active", "#94a3b8"), ("pressed", "#64748b")],
+        darkcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
+        lightcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
     )
 
     app = {

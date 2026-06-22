@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 from GUI.common.rounded_button import RoundedButton
 from GUI.common.weather_popup import open_tour_weather_popup
 from core.app import (
@@ -372,7 +365,86 @@ def khoi_tao_khach(root, user_data=None):
     style.configure("Treeview", font=("Times New Roman", 12), rowheight=38, background=THEME["surface"], fieldbackground=THEME["surface"], foreground=THEME["text"], bordercolor=THEME["border"], relief="flat")
     style.configure("Treeview.Heading", font=("Times New Roman", 12, "bold"), background=THEME["heading_bg"], foreground=THEME["text"], relief="flat", padding=(8, 10))
     style.map("Treeview", background=[("selected", "#dbeafe")], foreground=[("selected", THEME["text"])])
-    style.configure("TScrollbar", bordercolor="#1e293b", troughcolor="#1e293b", background="#475569", darkcolor="#475569", lightcolor="#475569", arrowcolor="#1e293b", arrowsize=10, relief="flat", gripcount=0)
+    style.configure(
+        "TScrollbar",
+        troughcolor="#f1f5f9",
+        background="#cbd5e1",
+        darkcolor="#f1f5f9",
+        lightcolor="#f1f5f9",
+        bordercolor="#f1f5f9",
+        arrowcolor="#64748b",
+        arrowsize=10,
+        relief="flat",
+        gripcount=0,
+    )
+    style.layout(
+        "Vertical.TScrollbar",
+        [
+            (
+                "Vertical.Scrollbar.trough",
+                {
+                    "children": [
+                        ("Vertical.Scrollbar.uparrow", {"side": "top", "sticky": ""}),
+                        ("Vertical.Scrollbar.downarrow", {"side": "bottom", "sticky": ""}),
+                        ("Vertical.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"}),
+                    ],
+                    "sticky": "ns",
+                },
+            )
+        ],
+    )
+    style.configure(
+        "Vertical.TScrollbar",
+        troughcolor="#f1f5f9",
+        background="#cbd5e1",
+        darkcolor="#f1f5f9",
+        lightcolor="#f1f5f9",
+        bordercolor="#f1f5f9",
+        arrowcolor="#64748b",
+        relief="flat",
+        arrowsize=10,
+        gripcount=0,
+    )
+    style.map(
+        "Vertical.TScrollbar",
+        background=[("active", "#94a3b8"), ("pressed", "#64748b")],
+        darkcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
+        lightcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
+    )
+    style.layout(
+        "Horizontal.TScrollbar",
+        [
+            (
+                "Horizontal.Scrollbar.trough",
+                {
+                    "children": [
+                        ("Horizontal.Scrollbar.leftarrow", {"side": "left", "sticky": ""}),
+                        ("Horizontal.Scrollbar.rightarrow", {"side": "right", "sticky": ""}),
+                        ("Horizontal.Scrollbar.thumb", {"expand": "1", "sticky": "nswe"}),
+                    ],
+                    "sticky": "ew",
+                },
+            )
+        ],
+    )
+    style.configure(
+        "Horizontal.TScrollbar",
+        troughcolor="#f1f5f9",
+        background="#cbd5e1",
+        darkcolor="#f1f5f9",
+        lightcolor="#f1f5f9",
+        bordercolor="#f1f5f9",
+        arrowcolor="#64748b",
+        relief="flat",
+        arrowsize=10,
+        gripcount=0,
+    )
+    style.map(
+        "Horizontal.TScrollbar",
+        background=[("active", "#94a3b8"), ("pressed", "#64748b")],
+        darkcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
+        lightcolor=[("active", "#f1f5f9"), ("pressed", "#f1f5f9")],
+    )
 
     username = user_data.get("username", "Khach")
     display_name = user_data.get("fullname") or user_data.get("name", "Khách hàng")
