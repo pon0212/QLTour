@@ -21,15 +21,27 @@ import re
 import tkinter as tk
 
 def is_valid_phone(phone):
+    """
+    Kiểm tra xem số điện thoại có đúng định dạng số di động Việt Nam hay không.
+    """
     return feature_is_valid_phone(phone)
 
 def is_valid_email(email):
+    """
+    Kiểm tra xem địa chỉ email có đúng định dạng tiêu chuẩn hay không.
+    """
     return feature_is_valid_email(email)
 
 def is_valid_password(pwd):
+    """
+    Kiểm tra tính hợp lệ của mật khẩu (độ dài tối thiểu).
+    """
     return feature_is_valid_password(pwd)
 
 def safe_int(value):
+    """
+    Chuyển đổi giá trị sang số nguyên an toàn, trả về 0 nếu có lỗi.
+    """
     return feature_safe_int(value)
 
 
@@ -102,6 +114,9 @@ DEFAULT_DATA = {
 
 
 def normalize_review_item(r, datastore=None):
+    """
+    Chuẩn hóa thông tin bản ghi đánh giá của khách hàng đối với hướng dẫn viên.
+    """
     normalized = core_normalize_review_item(
         r,
         fullname_keys=("fullname", "tenKhach", "hoTen", "tenNguoiDanhGia"),
@@ -144,6 +159,9 @@ def normalize_review_item(r, datastore=None):
 
 
 def normalize_notification_item(n, datastore=None):
+    """
+    Chuẩn hóa dữ liệu thông báo điều phối nhận được từ hệ thống.
+    """
     return core_normalize_notification_item(
         n,
         datastore=datastore,
@@ -151,6 +169,9 @@ def normalize_notification_item(n, datastore=None):
     )
 
 def auto_fit_treeview_columns(tree, columns, min_widths=None, max_widths=None, padding=24):
+    """
+    Tự động điều chỉnh kích thước cột của Treeview dựa trên nội dung hiển thị.
+    """
     def estimate_width(text):
         text = "" if text is None else str(text)
         return max(40, len(text) * 8 + padding)
@@ -171,7 +192,13 @@ def auto_fit_treeview_columns(tree, columns, min_widths=None, max_widths=None, p
         tree.column(col, width=width)
 
 class DataStore(JSONDataStore):
+    """
+    Lớp truy xuất dữ liệu mở rộng từ JSONDataStore cho giao diện Hướng dẫn viên.
+    """
     def __init__(self, path=DATA_FILE, rev_path=REVIEWS_FILE, notif_path=NOTIF_FILE):
+        """
+        Khởi tạo DataStore và thiết lập các hàm chuẩn hóa nghiệp vụ tương ứng.
+        """
         super().__init__(
             path=path,
             rev_path=rev_path,
@@ -187,12 +214,18 @@ class DataStore(JSONDataStore):
 
 
 def apply_zebra(tree):
+    """
+    Áp dụng màu dòng xen kẽ (zebra striping) cho bảng dữ liệu Treeview.
+    """
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
     for idx, item in enumerate(tree.get_children()):
         tree.item(item, tags=(("even" if idx % 2 == 0 else "odd"),))
 
 def style_button(parent, text, bg, command, fg="white"):
+    """
+    Khởi tạo nút giao diện RoundedButton chuẩn hóa theo theme thiết kế.
+    """
     return RoundedButton(
         parent,
         text=text,
@@ -304,6 +337,9 @@ def responsive_wraplength(widget, offset=80, min_width=260, fallback=760):
 
 
 def khoi_tao_hdv(root, user_data=None):
+    """
+    Hàm khởi tạo chính xây dựng giao diện Dashboard cho Hướng dẫn viên.
+    """
     if not user_data:
         user_data = {"maHDV": "HDV01", "tenHDV": "Hướng Dẫn Viên"}
 

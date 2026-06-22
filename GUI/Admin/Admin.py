@@ -156,10 +156,16 @@ TAB_DEFINITIONS: tuple[AdminTabDef, ...] = (
 
 
 def get_admin_tab_definitions() -> tuple[AdminTabDef, ...]:
+    """
+    Lấy danh sách các lớp định nghĩa tab chức năng Admin.
+    """
     return TAB_DEFINITIONS
 
 
 def get_admin_tab_handler(tab_key: str):
+    """
+    Tìm hàm xử lý render giao diện tương ứng với khóa tab được chọn.
+    """
     normalized_key = str(tab_key or "").strip().lower()
     tab_def = next((item for item in TAB_DEFINITIONS if item.key == normalized_key), TAB_DEFINITIONS[0])
     if tab_def.handler_name == "report":
@@ -168,6 +174,9 @@ def get_admin_tab_handler(tab_key: str):
 
 
 def _render_matplotlib_charts(parent, report):
+    """
+    Vẽ biểu đồ Matplotlib hiển thị cấu trúc doanh thu và phân bố trạng thái tour.
+    """
     try:
         from matplotlib.figure import Figure
         from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -283,6 +292,9 @@ def _render_matplotlib_charts(parent, report):
 
 
 def _render_report_tab(app):
+    """
+    Render tab Báo cáo doanh thu tích hợp xuất báo cáo văn bản và vẽ biểu đồ trực quan.
+    """
     clear_container(app)
 
 
@@ -527,7 +539,13 @@ def normalize_notification_item(n, datastore=None):
 
 
 class DataStore(JSONDataStore):
+    """
+    Lớp quản lý dữ liệu mở rộng JSONDataStore cho phân hệ quản trị Admin.
+    """
     def __init__(self, path=DATA_FILE, rev_path=REVIEWS_FILE, notif_path=NOTIF_FILE):
+        """
+        Khởi tạo DataStore và đăng ký các hàm chuẩn hóa dữ liệu nghiệp vụ.
+        """
         super().__init__(
             path=path,
             rev_path=rev_path,
@@ -702,6 +720,9 @@ def configure_ui_fonts(root):
 
 
 def apply_zebra(tree):
+    """
+    Tạo hiệu ứng dòng màu xen kẽ cho bảng dữ liệu Treeview.
+    """
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
     for i, item in enumerate(tree.get_children()):
@@ -1279,6 +1300,9 @@ def create_scrollable_form(parent, bg):
 
 
 def dashboard_tab(app):
+    """
+    Render giao diện tab Dashboard tổng quan chứa thống kê nhanh, biểu đồ và nhật ký hoạt động.
+    """
     clear_container(app)
     ql = app["ql"]
     root = app.get("root")
@@ -1649,6 +1673,9 @@ def open_hdv_form(app, data=None):
     widgets["tenHDV"].bind("<FocusOut>", sync_hdv_name_case)
 
     def save_hdv():
+        """
+        Ghi thông tin hướng dẫn viên mới hoặc đã sửa đổi vào hệ thống.
+        """
         new_data = {}
         before_data = copy.deepcopy(data) if data else None
         for _, key, kind, *extra in fields:
@@ -2107,6 +2134,9 @@ def open_hdv_detail(app, ma_hdv):
 
 
 def admin_hdv_tab(app):
+    """
+    Render tab Quản lý Hướng dẫn viên (danh sách, tìm kiếm, thêm/sửa, phân tích chất lượng).
+    """
     clear_container(app)
 
 
@@ -2661,6 +2691,9 @@ def delete_user(app):
 
 
 def admin_user_tab(app):
+    """
+    Render tab Quản lý Khách hàng (danh sách khách, tìm kiếm, khóa/mở khóa tài khoản).
+    """
     clear_container(app)
 
 
@@ -3050,6 +3083,9 @@ def open_tour_form(app, data=None):
             widgets["trangThai"].configure(state="disabled")
 
     def save_tour():
+        """
+        Lưu trữ thông tin tour mới hoặc cập nhật tour hiện tại.
+        """
         before_tour = copy.deepcopy(data) if data else None
         form_data = {}
         for _, key, kind, *extra in fields:
@@ -3437,6 +3473,9 @@ def open_weather_for_selected_tour(app):
 
 
 def admin_tour_tab(app):
+    """
+    Render tab Quản lý Tour (thông tin tour, trạng thái, phân công HDV, lịch trình).
+    """
     clear_container(app)
 
 
@@ -5148,6 +5187,9 @@ def delete_booking(app):
 
 
 def admin_booking_tab(app):
+    """
+    Render tab Quản lý Đơn đặt tour (danh sách booking, thanh toán, duyệt hoàn tiền).
+    """
     clear_container(app)
 
 
@@ -5515,6 +5557,9 @@ def open_feedback_detail_full(app, mode, data):
 
 
 def admin_reviews_tab(app):
+    """
+    Render tab Quản lý Đánh giá (theo dõi chấm điểm của khách, ẩn/hiển thị phản hồi xấu).
+    """
     clear_container(app)
 
     toolbar = tk.Frame(app["container"], bg=THEME["bg"])
@@ -5933,6 +5978,9 @@ def show_detailed_notification_popup(root, notif, datastore):
 
 
 def admin_notifications_tab(app):
+    """
+    Render tab Lịch sử Thông báo hiển thị danh sách các thông báo đã gửi.
+    """
     clear_container(app)
 
 
@@ -6591,6 +6639,9 @@ def open_voucher_form(app, data=None):
         widgets["loaiGiam"].bind("<<ComboboxSelected>>", on_discount_type_change)
 
     def save_voucher():
+        """
+        Lưu thông tin voucher mới tạo hoặc cập nhật thông tin voucher.
+        """
         new_data = {}
         before_voucher = copy.deepcopy(data) if data else None
         for _, key, kind, *extra in fields:
@@ -7100,6 +7151,9 @@ def refresh_vouchers(app, keyword=""):
 
 
 def admin_voucher_tab(app):
+    """
+    Render tab Quản lý Voucher (tạo voucher mới, chỉnh sửa, thống kê số lượt dùng).
+    """
     clear_container(app)
 
 
@@ -7216,6 +7270,9 @@ def logout(app):
 
 
 def main(root=None):
+    """
+    Khởi dựng cửa sổ giao diện chính của Admin.
+    """
     enable_tk_text_autofix()
     if root is None:
         root = tk.Tk()

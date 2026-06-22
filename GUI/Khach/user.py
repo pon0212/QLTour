@@ -44,6 +44,9 @@ import threading
 import tkinter as tk
 
 def booking_payment_status(total_amount, paid_amount):
+    """
+    Xác định trạng thái thanh toán dựa trên tổng số tiền và số tiền đã trả thực tế.
+    """
     total = max(0, safe_int(total_amount))
     paid = max(0, safe_int(paid_amount))
     if paid <= 0:
@@ -54,6 +57,9 @@ def booking_payment_status(total_amount, paid_amount):
 
 
 def build_cash_policy_notice(ngay_khoi_hanh):
+    """
+    Tạo thông báo về chính sách thanh toán tiền mặt và thời hạn hủy tự động.
+    """
     base_msg = "Tiền mặt: nếu chưa đặt cọc/thanh toán trước hạn, booking sẽ bị hủy tự động."
     try:
         depart_date = datetime.strptime(str(ngay_khoi_hanh or "").strip(), "%d/%m/%Y")
@@ -64,6 +70,9 @@ def build_cash_policy_notice(ngay_khoi_hanh):
 
 
 def short_ui_error(exc, fallback="Không thể gọi API QR. Vui lòng thử lại sau."):
+    """
+    Rút ngắn và định dạng lại thông điệp lỗi để hiển thị lên UI không bị tràn dòng.
+    """
     text = " ".join(str(exc or "").split())
     if not text:
         return fallback
@@ -71,6 +80,9 @@ def short_ui_error(exc, fallback="Không thể gọi API QR. Vui lòng thử l�
 
 
 def parse_ddmmyyyy(value):
+    """
+    Chuyển đổi chuỗi ngày tháng dạng dd/mm/yyyy sang đối tượng ngày date.
+    """
     try:
         return datetime.strptime(str(value or "").strip(), "%d/%m/%Y").date()
     except ValueError:
@@ -139,6 +151,9 @@ TRANSFER_QR_CONFIG = {
 }
 
 def build_transfer_qr_url(amount, transfer_content):
+    """
+    Tạo đường dẫn ảnh QR code chuyển khoản tự động dựa trên API VietQR.
+    """
     bank_id = str(TRANSFER_QR_CONFIG.get("bank_id", "")).strip()
     account_no = str(TRANSFER_QR_CONFIG.get("account_no", "")).strip()
     account_name = str(TRANSFER_QR_CONFIG.get("account_name", "")).strip()
@@ -157,6 +172,9 @@ def build_transfer_qr_url(amount, transfer_content):
 
 
 def scale_photo_to_square(photo, max_size_px=220):
+    """
+    Thu nhỏ kích thước hình ảnh PhotoImage về dạng hình vuông để hiển thị cân đối.
+    """
     max_size = max(80, safe_int(max_size_px))
     width = max(1, photo.width())
     height = max(1, photo.height())
@@ -168,6 +186,9 @@ def scale_photo_to_square(photo, max_size_px=220):
 
 
 def fetch_transfer_qr_photo(qr_url, max_size_px=220):
+    """
+    Tải ảnh mã QR chuyển khoản từ API VietQR qua kết nối mạng.
+    """
     with urlopen(qr_url, timeout=10) as response:
         payload = response.read()
     if not payload:
@@ -218,7 +239,13 @@ def normalize_review_item(r):
 
 
 class DataStore(JSONDataStore):
+    """
+    Lớp truy xuất và quản lý dữ liệu mở rộng cho phân hệ Khách hàng.
+    """
     def __init__(self, path=DATA_FILE, rev_path=REVIEWS_FILE, notif_path=NOTIF_FILE):
+        """
+        Khởi tạo DataStore và thiết lập các bộ chuẩn hóa dữ liệu liên quan.
+        """
         super().__init__(
             path=path,
             rev_path=rev_path,
@@ -234,6 +261,9 @@ class DataStore(JSONDataStore):
 
 
 def apply_zebra(tree):
+    """
+    Tạo hiệu ứng dòng màu xen kẽ cho bảng hiển thị Treeview.
+    """
     tree.tag_configure("odd", background=THEME["zebra_odd"])
     tree.tag_configure("even", background=THEME["zebra_even"])
     for i, item in enumerate(tree.get_children()):
@@ -247,6 +277,9 @@ def copy_to_clipboard(root, text, button_widget=None, original_text=""):
         root.after(1500, lambda: button_widget.config(text=original_text))
 
 def style_button(parent, text, bg, command, fg="white"):
+    """
+    Tiện ích tạo nhanh một nút RoundedButton đồng bộ style.
+    """
     return RoundedButton(
         parent, text=text, bg=bg, fg=fg, activebackground=bg, activeforeground=fg,
         relief="flat", bd=0, cursor="hand2", font=("Times New Roman", 11, "bold"),
@@ -318,6 +351,9 @@ def bind_autohide_scrollbar(widget, scrollbar, orient="vertical"):
 
 
 def khoi_tao_khach(root, user_data=None):
+    """
+    Hàm khởi tạo chính xây dựng giao diện làm việc cho Khách hàng.
+    """
     if not user_data:
         user_data = {"username": "Khach", "name": "Khách hàng", "fullname": "Khách hàng", "sdt": ""}
 

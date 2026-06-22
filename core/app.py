@@ -15,6 +15,9 @@ import tkinter as tk
 import unicodedata
 
 def _resolve_log_file(datastore=None, log_file: str | None = None) -> str:
+    """
+    Xác định đường dẫn của tệp nhật ký hoạt động (activity_logs.json).
+    """
     if log_file:
         return log_file
     if datastore is not None and getattr(datastore, "path", None):
@@ -23,6 +26,9 @@ def _resolve_log_file(datastore=None, log_file: str | None = None) -> str:
 
 
 def _load_entries(path: str) -> list[dict]:
+    """
+    Tải các bản ghi nhật ký hoạt động từ tệp tin JSON.
+    """
     if not os.path.exists(path):
         return []
 
@@ -44,6 +50,9 @@ def write_activity_log(
     datastore=None,
     log_file: str | None = None,
 ) -> None:
+    """
+    Ghi nhật ký hoạt động của người dùng (actor, role, action, status, detail) vào tệp tin.
+    """
     path = _resolve_log_file(datastore=datastore, log_file=log_file)
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
@@ -76,30 +85,51 @@ VIETNAM_MOBILE_PREFIXES = {
 
 
 def normalize_username(username: str) -> str:
+    """
+    Chuẩn hóa tên đăng nhập (xóa khoảng trắng ở hai đầu).
+    """
     return str(username or "").strip()
 
 
 def normalize_fullname(fullname: str) -> str:
+    """
+    Chuẩn hóa họ tên (xóa khoảng trắng dư thừa ở giữa các từ).
+    """
     return " ".join(str(fullname or "").strip().split())
 
 
 def normalize_phone(phone: str) -> str:
+    """
+    Chuẩn hóa số điện thoại.
+    """
     return str(phone or "").strip()
 
 
 def is_valid_username(username: str) -> bool:
+    """
+    Kiểm tra định dạng tên đăng nhập có hợp lệ hay không.
+    """
     return bool(USERNAME_PATTERN.fullmatch(normalize_username(username)))
 
 
 def is_valid_password(password: str) -> bool:
+    """
+    Kiểm tra mật khẩu có độ dài tối thiểu hợp lệ hay không.
+    """
     return len(str(password or "").strip()) >= 3
 
 
 def is_valid_fullname(fullname: str) -> bool:
+    """
+    Kiểm tra họ tên có độ dài hợp lệ hay không.
+    """
     return len(normalize_fullname(fullname)) >= 3
 
 
 def is_valid_phone(phone: str) -> bool:
+    """
+    Kiểm tra số điện thoại có đúng định dạng số di động Việt Nam hay không.
+    """
     value = normalize_phone(phone)
     if not value:
         return True
@@ -109,6 +139,9 @@ def is_valid_phone(phone: str) -> bool:
 
 
 def is_valid_email(email: str) -> bool:
+    """
+    Kiểm tra địa chỉ email có đúng định dạng chuẩn hay không.
+    """
     return bool(EMAIL_PATTERN.fullmatch(str(email or "").strip()))
 
 
@@ -116,6 +149,9 @@ _SPACE_RE = re.compile(r"\s+")
 
 
 def normalize_spaces(value: str | None) -> str:
+    """
+    Loại bỏ các khoảng trắng thừa trong chuỗi.
+    """
     text = str(value or "").strip()
     if not text:
         return ""
@@ -123,6 +159,9 @@ def normalize_spaces(value: str | None) -> str:
 
 
 def normalize_title_case(value: str | None) -> str:
+    """
+    Chuyển đổi chuỗi thành dạng chữ hoa chữ thường chuẩn hóa (viết hoa chữ cái đầu).
+    """
     text = normalize_spaces(value)
     if not text:
         return ""
@@ -130,6 +169,9 @@ def normalize_title_case(value: str | None) -> str:
 
 
 def normalize_tour_name(value: str | None) -> str:
+    """
+    Chuẩn hóa tên tour du lịch (viết hoa chữ cái đầu và chữ viết tắt số/mã).
+    """
     text = normalize_spaces(value)
     if not text:
         return ""
@@ -145,6 +187,9 @@ def normalize_tour_name(value: str | None) -> str:
 
 
 def normalize_code(value: str | None) -> str:
+    """
+    Chuẩn hóa mã code (viết hoa toàn bộ và loại bỏ khoảng trắng).
+    """
     if value is None:
         return ""
     text = _SPACE_RE.sub("", str(value))
@@ -152,6 +197,9 @@ def normalize_code(value: str | None) -> str:
 
 
 def normalize_email(value: str | None) -> str:
+    """
+    Chuẩn hóa email (chuyển thành chữ thường và loại bỏ khoảng trắng).
+    """
     if value is None:
         return ""
     text = _SPACE_RE.sub("", str(value))
@@ -220,6 +268,9 @@ _SO_NGAY_RE = re.compile(r"(\d+)")
 
 
 def parse_ddmmyyyy(value: str | None) -> date | None:
+    """
+    Chuyển đổi chuỗi định dạng ngày dd/mm/yyyy thành đối tượng date.
+    """
     text = str(value or "").strip()
     if not text:
         return None
@@ -230,12 +281,18 @@ def parse_ddmmyyyy(value: str | None) -> date | None:
 
 
 def format_ddmmyyyy(value: date | None) -> str:
+    """
+    Chuyển đổi đối tượng date thành chuỗi định dạng dd/mm/yyyy.
+    """
     if value is None:
         return ""
     return value.strftime("%d/%m/%Y")
 
 
 def normalize_tour_status(value: str | None, default: str = TOUR_STATUS_NOT_OPEN) -> str:
+    """
+    Đồng bộ và chuẩn hóa trạng thái tour về các trạng thái chuẩn hệ thống.
+    """
     text = normalize_spaces(value)
     if not text:
         return default
@@ -302,6 +359,9 @@ def sync_ghi_chu_dieu_hanh(tour: dict):
 
 
 def get_operation_note_by_tour_status(status):
+    """
+    Lấy ghi chú điều hành mặc định tương ứng với trạng thái tour.
+    """
     notes = {
         "Sắp mở bán": "Tour đang trong giai đoạn chuẩn bị, cần hoàn thiện lịch trình, phân công HDV và kiểm tra thông tin mở bán.",
         "Đang mở bán": "Tour đang mở bán, cần theo dõi số lượng khách đăng ký, tình trạng thanh toán và hỗ trợ khách đặt tour.",
@@ -314,6 +374,9 @@ def get_operation_note_by_tour_status(status):
 
 
 def normalize_all_tour_operation_notes(tours):
+    """
+    Chuẩn hóa và đồng bộ ghi chú điều hành cho toàn bộ danh sách tour.
+    """
     changed = False
     for tour in tours:
         if not isinstance(tour, dict):
@@ -353,6 +416,9 @@ def normalize_all_tour_operation_notes(tours):
 
 
 def parse_duration_days(value, default: int = 1) -> int:
+    """
+    Phân tích số ngày của tour từ chuỗi văn bản mô tả thời gian.
+    """
     text = normalize_spaces(value)
     if not text:
         return max(1, int(default))
@@ -366,6 +432,9 @@ def parse_duration_days(value, default: int = 1) -> int:
 
 
 def compute_end_date(start: date | None, so_ngay: int) -> date | None:
+    """
+    Tính toán ngày kết thúc tour dựa trên ngày bắt đầu và số ngày đi.
+    """
     if start is None:
         return None
     days = max(1, int(so_ngay))
@@ -373,6 +442,9 @@ def compute_end_date(start: date | None, so_ngay: int) -> date | None:
 
 
 def compute_duration_days(start: date | None, end: date | None, default: int = 1) -> int:
+    """
+    Tính toán số ngày tour dựa trên ngày bắt đầu và ngày kết thúc.
+    """
     if start is None or end is None:
         return max(1, int(default))
     if end < start:
@@ -389,6 +461,9 @@ def derive_tour_status(
     capacity: int,
     today: date | None = None,
 ) -> str:
+    """
+    Tự động xác định trạng thái thực tế của tour dựa trên ngày đi, ngày về, số chỗ và sức chứa.
+    """
     current = normalize_tour_status(current_status)
     if current == TOUR_STATUS_CANCELLED:
         return current
@@ -421,6 +496,9 @@ def is_booking_allowed(
     capacity: int = 1,
     today: date | None = None,
 ) -> bool:
+    """
+    Kiểm tra xem tour có được phép đặt chỗ (booking) mới hay không.
+    """
     now = today or date.today()
     normalized = normalize_tour_status(status)
     if normalized not in BOOKABLE_TOUR_STATUSES:
@@ -435,6 +513,9 @@ def is_booking_allowed(
 
 
 def refresh_all_tour_statuses(datastore, today: date | None = None) -> list[dict]:
+    """
+    Quét và cập nhật trạng thái hoạt động thực tế của toàn bộ tour trong hệ thống.
+    """
     now = today or date.today()
     tours = getattr(datastore, "list_tours", getattr(datastore, "data", {}).get("tours", []))
     bookings = getattr(datastore, "list_bookings", getattr(datastore, "data", {}).get("bookings", []))
@@ -504,6 +585,9 @@ def refresh_all_tour_statuses(datastore, today: date | None = None) -> list[dict
 
 
 def is_upcoming_or_ongoing(start_date: date | None, end_date: date | None, today: date | None = None) -> bool:
+    """
+    Kiểm tra xem tour có đang hoặc sắp diễn ra hay không.
+    """
     if start_date is None:
         return False
     now = today or date.today()
@@ -970,10 +1054,16 @@ def can_tour_transition(state_from: str, state_to: str) -> bool:
 
 
 def can_booking_transition(state_from: str, state_to: str) -> bool:
+    """
+    Kiểm tra xem trạng thái booking có thể chuyển đổi hợp lệ hay không.
+    """
     return TransitionRule(state_from, state_to) in BOOKING_TRANSITIONS or state_from == state_to
 
 
 def can_guide_transition(state_from: str, state_to: str) -> bool:
+    """
+    Kiểm tra xem trạng thái HDV có thể chuyển đổi hợp lệ hay không.
+    """
     return TransitionRule(state_from, state_to) in GUIDE_TRANSITIONS or state_from == state_to
 
 
@@ -983,10 +1073,16 @@ BCRYPT_PREFIXES = ("$2a$", "$2b$", "$2y$")
 
 
 def legacy_sha256_hash(raw_password: str) -> str:
+    """
+    Mã hóa mật khẩu bằng thuật toán SHA256 truyền thống.
+    """
     return hashlib.sha256(str(raw_password or "").encode("utf-8")).hexdigest()
 
 
 def hash_password(raw_password: str) -> str:
+    """
+    Mã hóa bảo mật mật khẩu bằng thuật toán bcrypt.
+    """
     raw = str(raw_password or "").strip()
     if not raw:
         return ""
@@ -999,15 +1095,24 @@ def hash_password(raw_password: str) -> str:
 
 
 def looks_like_sha256(value: str) -> bool:
+    """
+    Kiểm tra chuỗi mật khẩu đã lưu có định dạng của mã SHA256 hay không.
+    """
     return bool(SHA256_PATTERN.fullmatch(str(value).strip()))
 
 
 def is_bcrypt_hash(value: str) -> bool:
+    """
+    Kiểm tra xem chuỗi có phải mã hóa bcrypt hay không.
+    """
     normalized = str(value or "").strip()
     return normalized.startswith(BCRYPT_PREFIXES)
 
 
 def prepare_password_for_storage(password: str) -> str:
+    """
+    Chuẩn bị mật khẩu để lưu trữ bảo mật (mã hóa bcrypt).
+    """
     normalized = str(password or "").strip()
     if not normalized:
         return ""
@@ -1019,6 +1124,9 @@ def prepare_password_for_storage(password: str) -> str:
 
 
 def password_matches(stored_password: str, input_password: str) -> bool:
+    """
+    Kiểm tra mật khẩu người dùng nhập có khớp với mật khẩu đã lưu hay không.
+    """
     stored = str(stored_password or "").strip()
     provided = str(input_password or "").strip()
     if not stored:
@@ -1034,6 +1142,9 @@ def password_matches(stored_password: str, input_password: str) -> bool:
 
 
 def upgrade_password_hash(stored_password: str, input_password: str) -> str:
+    """
+    Nâng cấp thuật toán mã hóa mật khẩu cũ lên bcrypt.
+    """
     stored = str(stored_password or "").strip()
     provided = str(input_password or "").strip()
     if not stored or not provided:
@@ -1046,12 +1157,18 @@ def upgrade_password_hash(stored_password: str, input_password: str) -> str:
 
 
 def mask_password(_: str) -> str:
+    """
+    Che giấu mật khẩu hiển thị bằng ký tự dấu sao.
+    """
     return MASKED_PASSWORD
 
 
 
 
 def _first_text(data: dict, keys: tuple[str, ...], default: str = "") -> str:
+    """
+    Lấy giá trị văn bản hợp lệ đầu tiên từ danh sách khóa cho trước.
+    """
     for key in keys:
         value = data.get(key)
         if value is None:
@@ -1071,6 +1188,9 @@ def normalize_review_item(
     include_rating: bool = False,
     include_ma_hdv: bool = False,
 ) -> dict:
+    """
+    Chuẩn hóa cấu trúc và dữ liệu của một đối tượng đánh giá.
+    """
     username = _first_text(review, ("username", "user"))
     fullname = _first_text(review, fullname_keys)
 
@@ -1115,6 +1235,9 @@ def normalize_notification_item(
     content_keys: tuple[str, ...] = ("content", "noiDung", "message"),
     date_keys: tuple[str, ...] = ("date", "thoiGian", "ngayGui", "ngay"),
 ) -> dict:
+    """
+    Chuẩn hóa cấu trúc và dữ liệu của một đối tượng thông báo.
+    """
     ma_hdv = _first_text(notification, ("maHDV",))
     ma_tour = _first_text(notification, ("maTour",))
 
@@ -1153,6 +1276,9 @@ def normalize_notification_item(
 
 
 def collect_changed_fields(before: dict | None, after: dict | None, keys: list[str] | None = None) -> list[str]:
+    """
+    So sánh và thu thập danh sách các trường thay đổi giữa dữ liệu cũ và mới.
+    """
     before = before or {}
     after = after or {}
 
@@ -1177,6 +1303,9 @@ def write_crud_log(
     status: str = "SUCCESS",
     detail: str = "",
 ) -> None:
+    """
+    Ghi nhật ký hoạt động tạo/sửa/xóa (CRUD) vào lịch sử hoạt động.
+    """
     entity_name = str(entity or "").strip().upper()
     operation_name = str(operation or "").strip().upper()
     target_name = str(target or "").strip()
@@ -1200,6 +1329,9 @@ def write_crud_log(
 
 
 def _safe_int(value, default: int = 0) -> int:
+    """
+    Chuyển đổi an toàn sang số nguyên.
+    """
     try:
         return int(str(value).strip())
     except (TypeError, ValueError):
@@ -1207,6 +1339,9 @@ def _safe_int(value, default: int = 0) -> int:
 
 
 def normalize_business_state(data: dict) -> dict:
+    """
+    Chuẩn hóa toàn bộ dữ liệu nghiệp vụ hệ thống.
+    """
     if not isinstance(data, dict):
         return data
 
@@ -1299,6 +1434,9 @@ def normalize_business_state(data: dict) -> dict:
 
 
 def safe_int(value, default=0):
+    """
+    Chuyển đổi giá trị sang số nguyên an toàn, mặc định bằng 0 nếu lỗi.
+    """
     try:
         return int(str(value).strip())
     except (TypeError, ValueError):
@@ -1306,6 +1444,9 @@ def safe_int(value, default=0):
 
 
 def normalize_passenger_breakdown(raw_breakdown, total_people):
+    """
+    Chuẩn hóa cơ cấu độ tuổi khách đi tour.
+    """
     total = max(1, safe_int(total_people, 1))
     data = raw_breakdown if isinstance(raw_breakdown, dict) else {}
 
@@ -1326,6 +1467,9 @@ def normalize_passenger_breakdown(raw_breakdown, total_people):
 
 
 def calculate_age_discount(price_per_person, breakdown):
+    """
+    Tính toán giảm giá dựa trên cơ cấu độ tuổi của hành khách.
+    """
     if not isinstance(breakdown, dict):
         return 0
 
@@ -1348,6 +1492,9 @@ def calculate_age_discount(price_per_person, breakdown):
 
 
 def normalize_tour_scope(value) -> str:
+    """
+    Chuẩn hóa phạm vi áp dụng của tour.
+    """
     def _scope_key(text: str) -> str:
         normalized = unicodedata.normalize("NFKD", str(text or "").strip())
         ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
@@ -1385,11 +1532,17 @@ def normalize_tour_scope(value) -> str:
 
 
 def parse_tour_scope(value) -> list[str]:
+    """
+    Chuyển đổi chuỗi phạm vi tour thành danh sách các địa danh.
+    """
     normalized = normalize_tour_scope(value)
     return [part.strip() for part in normalized.split(",") if part.strip()]
 
 
 def resolve_voucher_discount(voucher, gross_total):
+    """
+    Tính toán số tiền giảm giá của voucher dựa trên tổng tiền gốc.
+    """
     if not voucher:
         return 0
 
@@ -1408,6 +1561,9 @@ def resolve_voucher_discount(voucher, gross_total):
 
 
 def _list_vouchers(datastore):
+    """
+    Lấy danh sách voucher từ kho dữ liệu.
+    """
     vouchers = getattr(datastore, "list_vouchers", None)
     if vouchers is not None:
         return vouchers
@@ -1415,6 +1571,9 @@ def _list_vouchers(datastore):
 
 
 def _find_voucher(datastore, code):
+    """
+    Tìm kiếm voucher theo mã code.
+    """
     normalized = str(code or "").strip().upper()
     if not normalized:
         return None
@@ -1436,6 +1595,9 @@ def _find_voucher(datastore, code):
 
 
 def _iter_active_voucher_bookings(datastore, code, exclude_booking=None):
+    """
+    Duyệt qua các booking đang sử dụng voucher còn hiệu lực.
+    """
     normalized_code = str(code or "").strip().upper()
     exclude_booking = str(exclude_booking or "").strip()
 
@@ -1455,6 +1617,9 @@ def _iter_active_voucher_bookings(datastore, code, exclude_booking=None):
 
 
 def get_voucher_usage(datastore, code, username="", ma_tour="", exclude_booking=None) -> dict:
+    """
+    Lấy thông tin thống kê số lần sử dụng của voucher.
+    """
     normalized_username = str(username or "").strip().lower()
     normalized_tour = str(ma_tour or "").strip().upper()
 
@@ -1481,6 +1646,9 @@ def get_voucher_usage(datastore, code, username="", ma_tour="", exclude_booking=
 
 
 def build_voucher_scope_label(voucher) -> str:
+    """
+    Tạo nhãn mô tả phạm vi áp dụng của voucher.
+    """
     tours = parse_tour_scope(voucher.get("tourApDung", ""))
     if not tours:
         return "Áp dụng toàn bộ tour"
@@ -1488,6 +1656,9 @@ def build_voucher_scope_label(voucher) -> str:
 
 
 def validate_voucher_payload(datastore, data, old_code=None):
+    """
+    Kiểm tra tính hợp lệ của thông tin voucher khi tạo/sửa.
+    """
     required = [
         "maVoucher",
         "tenVoucher",
@@ -1565,6 +1736,9 @@ def validate_voucher_payload(datastore, data, old_code=None):
 
 
 def build_voucher_quote(datastore, voucher_code, gross_total, username="", ma_tour="", exclude_booking=None):
+    """
+    Tính toán chi tiết báo giá đặt tour sau khi áp dụng voucher.
+    """
     code = str(voucher_code or "").strip().upper()
     if not code:
         return {
@@ -1702,10 +1876,16 @@ EVENT_TOUR_COMPLETED = "tour_completed"
 
 
 def _notifications(datastore):
+    """
+    Lấy danh sách thông báo.
+    """
     return getattr(datastore, "list_notifications", datastore.notifications)
 
 
 def _tour_name(datastore, ma_tour: str) -> str:
+    """
+    Lấy tên tour từ mã tour.
+    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return ""
@@ -1713,6 +1893,9 @@ def _tour_name(datastore, ma_tour: str) -> str:
 
 
 def _guide_name(datastore, ma_hdv: str) -> str:
+    """
+    Lấy tên hướng dẫn viên từ mã HDV.
+    """
     guide = datastore.find_hdv(ma_hdv) if hasattr(datastore, "find_hdv") else None
     if not isinstance(guide, dict):
         return ""
@@ -1730,6 +1913,9 @@ def emit_notification(
     username: str = "",
     ma_booking: str = "",
 ) -> dict:
+    """
+    Tạo và gửi thông báo mới vào hệ thống.
+    """
     payload = {
         "eventType": str(event_type or "").strip(),
         "maHDV": str(ma_hdv or "").strip(),
@@ -1750,6 +1936,9 @@ def emit_notification(
 
 
 def notify_booking_created(datastore, booking: dict, tour: dict, *, persist: bool = False) -> dict:
+    """
+    Tự động gửi thông báo khi có booking mới được tạo.
+    """
     return emit_notification(
         datastore,
         event_type=EVENT_BOOKING_CREATED,
@@ -1764,6 +1953,9 @@ def notify_booking_created(datastore, booking: dict, tour: dict, *, persist: boo
 
 
 def notify_payment_success(datastore, booking: dict, *, persist: bool = False) -> dict:
+    """
+    Tự động gửi thông báo khi booking thanh toán thành công.
+    """
     return emit_notification(
         datastore,
         event_type=EVENT_PAYMENT_SUCCESS,
@@ -1777,6 +1969,9 @@ def notify_payment_success(datastore, booking: dict, *, persist: bool = False) -
 
 
 def notify_tour_cancelled(datastore, tour: dict, reason: str = "", *, persist: bool = False) -> dict:
+    """
+    Tự động gửi thông báo khi tour bị hủy.
+    """
     detail = f" Lý do: {reason.strip()}" if str(reason or "").strip() else ""
     return emit_notification(
         datastore,
@@ -1789,6 +1984,9 @@ def notify_tour_cancelled(datastore, tour: dict, reason: str = "", *, persist: b
 
 
 def notify_guide_assigned(datastore, tour: dict, guide: dict, *, persist: bool = False) -> dict:
+    """
+    Tự động gửi thông báo khi HDV được phân công dẫn tour.
+    """
     return emit_notification(
         datastore,
         event_type=EVENT_GUIDE_ASSIGNED,
@@ -1803,6 +2001,9 @@ def notify_guide_assigned(datastore, tour: dict, guide: dict, *, persist: bool =
 
 
 def notify_tour_completed(datastore, tour: dict, *, persist: bool = False) -> dict:
+    """
+    Tự động gửi thông báo khi tour kết thúc thành công.
+    """
     return emit_notification(
         datastore,
         event_type=EVENT_TOUR_COMPLETED,
@@ -1870,6 +2071,9 @@ def check_and_create_departure_notifications(datastore):
 
 
 def sync_completed_tour_bookings(datastore) -> bool:
+    """
+    Đồng bộ và tự động hoàn tất trạng thái các booking khi tour đã kết thúc.
+    """
     datastore.load()
     bookings = getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
     notifications = getattr(datastore, "list_notifications", datastore.notifications)
@@ -1943,6 +2147,9 @@ def sync_completed_tour_bookings(datastore) -> bool:
 
 
 def get_guide_assigned_tours(datastore, actor: str = "", role: str = "guide", include_history: bool = True) -> list[dict]:
+    """
+    Lấy danh sách tour đã phân công cho hướng dẫn viên cụ thể.
+    """
     tours = getattr(datastore, "list_tours", datastore.data.get("tours", []))
     if _is_admin_role(role):
         return list(tours)
@@ -1967,6 +2174,9 @@ def get_guide_tour_customers(
     role: str = "guide",
     include_financial: bool = False,
 ) -> list[dict]:
+    """
+    Lấy danh sách hành khách tham gia các tour của hướng dẫn viên phụ trách.
+    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return []
@@ -2006,6 +2216,9 @@ def send_guide_notification(
     role: str = "guide",
     title: str = "",
 ) -> dict:
+    """
+    Hướng dẫn viên gửi thông báo/ghi chú vận hành đến hành khách trong đoàn.
+    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return {"success": False, "message": "Không tìm thấy tour cần gửi thông báo."}
@@ -2056,6 +2269,9 @@ def send_guide_notification(
 
 
 def get_notifications_for_user(datastore, username: str, role: str = "user", actor: str = "") -> list[dict]:
+    """
+    Lấy danh sách thông báo gửi đến người dùng cụ thể.
+    """
     normalized = str(username or actor or "").strip().lower()
     if not normalized:
         return []
@@ -2081,6 +2297,9 @@ def get_notifications_for_user(datastore, username: str, role: str = "user", act
 
 
 def get_reviews_for_guide(datastore, guide_id: str, actor: str = "", role: str = "guide") -> list[dict]:
+    """
+    Lấy danh sách đánh giá của khách hàng dành cho hướng dẫn viên.
+    """
     target_guide = str(guide_id or "").strip().upper()
     if not target_guide:
         return []
@@ -2115,6 +2334,9 @@ def update_tour_operational_note(
     actor: str = "",
     role: str = "guide",
 ) -> dict:
+    """
+    Cập nhật ghi chú điều hành hoặc nhật ký vận hành tour.
+    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return {"success": False, "message": "Không tìm thấy tour để cập nhật ghi chú."}
@@ -2146,6 +2368,9 @@ def update_tour_operational_note(
 
 @dataclass(slots=True)
 class ReviewResult:
+    """
+    Lớp biểu diễn kết quả của thao tác đánh giá (trạng thái, thông điệp, dữ liệu).
+    """
     success: bool
     message: str
     review: dict | None = None
@@ -2153,6 +2378,9 @@ class ReviewResult:
 
 
 def _find_booking(datastore, ma_booking: str):
+    """
+    Tìm kiếm thông tin booking theo mã booking.
+    """
     target = str(ma_booking or "").strip()
     for booking in getattr(datastore, "list_bookings", datastore.data.get("bookings", [])):
         if str(booking.get("maBooking", "")).strip() == target:
@@ -2161,6 +2389,9 @@ def _find_booking(datastore, ma_booking: str):
 
 
 def _safe_float(value, default: float = 0.0) -> float:
+    """
+    Chuyển đổi giá trị sang số thực an toàn.
+    """
     try:
         return float(str(value).strip())
     except (TypeError, ValueError):
@@ -2168,6 +2399,9 @@ def _safe_float(value, default: float = 0.0) -> float:
 
 
 def get_review_rating(review):
+    """
+    Lấy điểm đánh giá trung bình từ đối tượng đánh giá.
+    """
     if not isinstance(review, dict):
         return 0
     for key in ("rating", "soSao", "diem", "ratingTour", "ratingHDV"):
@@ -2183,6 +2417,9 @@ def get_review_rating(review):
 
 
 def _normalize_review_rating(rating_value):
+    """
+    Chuẩn hóa điểm số đánh giá về miền giá trị hợp lệ.
+    """
     if rating_value is None or rating_value == "":
         return ""
     if isinstance(rating_value, dict):
@@ -2214,6 +2451,9 @@ def _normalize_review_rating(rating_value):
 
 
 def _update_guide_metrics(datastore, ma_hdv: str, rating: float) -> None:
+    """
+    Cập nhật lại điểm đánh giá trung bình và thống kê của hướng dẫn viên.
+    """
     if not ma_hdv:
         return
     guide = datastore.find_hdv(ma_hdv) if hasattr(datastore, "find_hdv") else None
@@ -2248,6 +2488,9 @@ def _update_guide_metrics(datastore, ma_hdv: str, rating: float) -> None:
 
 
 def find_review_by_id(datastore, ma_review):
+    """
+    Tìm kiếm đánh giá theo mã ID.
+    """
     target = str(ma_review or "").strip().upper()
     if not target:
         return None
@@ -2258,6 +2501,9 @@ def find_review_by_id(datastore, ma_review):
 
 
 def is_review_hidden(review) -> bool:
+    """
+    Kiểm tra xem đánh giá có bị ẩn khỏi giao diện hiển thị hay không.
+    """
     if not review:
         return False
     return bool(review.get("hidden", False)) or str(review.get("trangThai", "")).strip() == "Đã ẩn"
@@ -2266,6 +2512,9 @@ def is_review_hidden(review) -> bool:
 
 
 def normalize_review_for_display(review, datastore=None):
+    """
+    Chuẩn hóa thông tin đánh giá để hiển thị lên UI.
+    """
     normalized = normalize_review_item(review or {}, include_rating=True, include_ma_hdv=True)
 
 
@@ -2312,6 +2561,9 @@ def normalize_review_for_display(review, datastore=None):
 
 
 def save_reviews(datastore):
+    """
+    Lưu danh sách đánh giá vào tệp lưu trữ.
+    """
     datastore.save()
 
 
@@ -2324,6 +2576,9 @@ def create_review_notification(
     ten_tour="",
     ma_booking="",
 ):
+    """
+    Tạo thông báo phản hồi khi có đánh giá mới.
+    """
     payload = emit_notification(
         datastore,
         event_type="review_reply",
@@ -2340,6 +2595,9 @@ def create_review_notification(
 
 
 def recalculate_hdv_review_stats(datastore, ma_hdv):
+    """
+    Tính toán lại toàn bộ chỉ số đánh giá của hướng dẫn viên.
+    """
     guide_id = str(ma_hdv or "").strip()
     if not guide_id:
         return None
@@ -2367,6 +2625,9 @@ def recalculate_hdv_review_stats(datastore, ma_hdv):
 
 
 def _next_review_code(datastore) -> str:
+    """
+    Tạo mã đánh giá tự động tiếp theo.
+    """
     existing_ids = []
     for review in getattr(datastore, "list_reviews", datastore.reviews):
         code = str(review.get("maReview", "")).strip().upper()
@@ -2390,6 +2651,9 @@ def create_review(
     target_id: str = "",
     rating: float | None = None,
 ) -> ReviewResult:
+    """
+    Tạo đánh giá mới từ phía khách hàng dành cho tour và HDV.
+    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return ReviewResult(False, "Không tìm thấy booking để đánh giá.", level="error")
@@ -2480,14 +2744,23 @@ def create_review(
 
 
 def _iter_bookings(datastore):
+    """
+    Duyệt qua danh sách booking.
+    """
     return getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
 
 
 def _iter_tours(datastore):
+    """
+    Duyệt qua danh sách tour.
+    """
     return getattr(datastore, "list_tours", datastore.data.get("tours", []))
 
 
 def _find_tour_name(datastore, ma_tour):
+    """
+    Tìm tên tour từ mã tour.
+    """
     finder = getattr(datastore, "find_tour", None)
     if callable(finder):
         tour = finder(ma_tour)
@@ -2501,6 +2774,9 @@ def _find_tour_name(datastore, ma_tour):
 
 
 def _revenue_booking(booking, datastore=None) -> bool:
+    """
+    Kiểm tra xem booking có được tính vào doanh thu thực tế hay không.
+    """
     paid = max(0, safe_int(booking.get("daThanhToan", 0)))
     status = str(booking.get("trangThai", "")).strip()
     if paid > 0:
@@ -2511,6 +2787,9 @@ def _revenue_booking(booking, datastore=None) -> bool:
 
 
 def _booking_gross_refund_net(booking, datastore=None) -> tuple[int, int, int]:
+    """
+    Tính toán doanh thu gộp, số tiền hoàn và doanh thu thuần của một booking.
+    """
     paid = max(0, safe_int(booking.get("daThanhToan", 0)))
     refund_status = str(booking.get("trangThaiHoanTien", "")).strip()
     if refund_status == "Từ chối":
@@ -2523,6 +2802,9 @@ def _booking_gross_refund_net(booking, datastore=None) -> tuple[int, int, int]:
 
 
 def _month_key(date_text):
+    """
+    Trích xuất chuỗi tháng/năm từ văn bản ngày tháng.
+    """
     try:
         _day, month, year = str(date_text or "").strip().split("/")
         return f"{year}-{month}"
@@ -2531,6 +2813,9 @@ def _month_key(date_text):
 
 
 def _quarter_key(month_key):
+    """
+    Xác định quý từ khóa tháng.
+    """
     if month_key == "Không rõ":
         return month_key
 
@@ -2541,6 +2826,9 @@ def _quarter_key(month_key):
 
 
 def _find_tour_name_with_booking(datastore, ma_tour, booking=None):
+    """
+    Tìm tên tour liên quan đến booking.
+    """
     if booking and booking.get("tenTour"):
         return str(booking.get("tenTour")).strip()
     name = _find_tour_name(datastore, ma_tour)
@@ -2548,6 +2836,9 @@ def _find_tour_name_with_booking(datastore, ma_tour, booking=None):
 
 
 def build_revenue_report(datastore, actor: str = "", role: str = "admin", month: str = None, year: str = None, query: str = None) -> dict:
+    """
+    Tạo lập báo cáo doanh thu tổng hợp chi tiết theo thời gian và theo tour.
+    """
     if not _is_admin_role(role):
         return {
             "overview": {
@@ -2836,6 +3127,9 @@ _GUIDE_STATUS_MAP = {
 
 @dataclass(slots=True)
 class BookingResult:
+    """
+    Lớp biểu diễn kết quả thực hiện các thao tác trên Booking.
+    """
     success: bool
     message: str
     booking: dict | None = None
@@ -2843,34 +3137,58 @@ class BookingResult:
 
 
 def _normalize_role_name(role: str | None) -> str:
+    """
+    Chuẩn hóa tên vai trò người dùng.
+    """
     return str(role or "").strip().lower()
 
 
 def _is_admin_role(role: str | None) -> bool:
+    """
+    Kiểm tra vai trò có phải Quản trị viên hay không.
+    """
     return _normalize_role_name(role) in ADMIN_ROLES
 
 
 def _is_customer_role(role: str | None) -> bool:
+    """
+    Kiểm tra vai trò có phải Khách hàng hay không.
+    """
     return _normalize_role_name(role) in CUSTOMER_ROLES
 
 
 def _is_guide_role(role: str | None) -> bool:
+    """
+    Kiểm tra vai trò có phải Hướng dẫn viên hay không.
+    """
     return _normalize_role_name(role) in GUIDE_ROLES
 
 
 def is_admin_role(role: str | None) -> bool:
+    """
+    Kiểm tra vai trò quản trị.
+    """
     return _is_admin_role(role)
 
 
 def is_guide_role(role: str | None) -> bool:
+    """
+    Kiểm tra vai trò hướng dẫn viên.
+    """
     return _is_guide_role(role)
 
 
 def is_customer_role(role: str | None) -> bool:
+    """
+    Kiểm tra vai trò khách hàng.
+    """
     return _is_customer_role(role)
 
 
 def normalize_user_status(status: str | None) -> str:
+    """
+    Chuẩn hóa trạng thái tài khoản khách hàng.
+    """
     raw = str(status or "")
     key = _normalize_key(raw)
     key_ascii = _normalize_status_key(raw)
@@ -2889,6 +3207,9 @@ def normalize_user_status(status: str | None) -> str:
 
 
 def normalize_guide_status(status: str | None) -> str:
+    """
+    Chuẩn hóa trạng thái tài khoản hướng dẫn viên.
+    """
     raw = str(status or "")
     key = _normalize_key(raw)
     key_ascii = _normalize_status_key(raw)
@@ -2909,6 +3230,9 @@ def normalize_guide_status(status: str | None) -> str:
 
 
 def _normalize_status_key(value: str | None) -> str:
+    """
+    Tạo khóa chuẩn hóa trạng thái.
+    """
     raw = str(value or "").strip().lower()
     if not raw:
         return ""
@@ -2926,6 +3250,9 @@ def _normalize_status_key(value: str | None) -> str:
 
 
 def is_user_active(user: dict | None) -> bool:
+    """
+    Kiểm tra tài khoản khách hàng có đang hoạt động hay không.
+    """
     if not isinstance(user, dict):
         return False
     status = normalize_user_status(user.get("trangThai", user.get("status", "")))
@@ -2933,6 +3260,9 @@ def is_user_active(user: dict | None) -> bool:
 
 
 def is_guide_active(guide: dict | None) -> bool:
+    """
+    Kiểm tra tài khoản hướng dẫn viên có đang hoạt động hay không.
+    """
     if not isinstance(guide, dict):
         return False
     status = normalize_guide_status(guide.get("trangThai", guide.get("status", "")))
@@ -2940,6 +3270,9 @@ def is_guide_active(guide: dict | None) -> bool:
 
 
 def booking_belongs_to_user(booking: dict | None, username: str | None) -> bool:
+    """
+    Kiểm tra xem booking có thuộc về khách hàng cụ thể hay không.
+    """
     if not isinstance(booking, dict):
         return False
     owner = str(
@@ -2956,6 +3289,9 @@ def booking_belongs_to_user(booking: dict | None, username: str | None) -> bool:
 
 
 def guide_assigned_to_tour(guide: str | dict | None, tour: dict | None) -> bool:
+    """
+    Kiểm tra hướng dẫn viên có được phân công dẫn tour cụ thể hay không.
+    """
     if not isinstance(tour, dict):
         return False
     if isinstance(guide, dict):
@@ -2975,6 +3311,9 @@ def guide_assigned_to_tour(guide: str | dict | None, tour: dict | None) -> bool:
 
 
 def user_can_access_booking(actor: str | None, role: str | None, booking: dict | None) -> bool:
+    """
+    Kiểm tra quyền truy cập của khách hàng đối với booking.
+    """
     if not isinstance(booking, dict):
         return False
     if _is_admin_role(role):
@@ -2985,6 +3324,9 @@ def user_can_access_booking(actor: str | None, role: str | None, booking: dict |
 
 
 def guide_can_access_tour(actor: str | None, role: str | None, tour: dict | None) -> bool:
+    """
+    Kiểm tra quyền truy cập của hướng dẫn viên đối với tour.
+    """
     if not isinstance(tour, dict):
         return False
     if _is_admin_role(role):
@@ -2995,6 +3337,9 @@ def guide_can_access_tour(actor: str | None, role: str | None, tour: dict | None
 
 
 def guide_can_access_booking(actor: str | None, role: str | None, booking: dict | None, tour: dict | None = None) -> bool:
+    """
+    Kiểm tra quyền truy cập của hướng dẫn viên đối với thông tin đặt chỗ của khách.
+    """
     if not isinstance(booking, dict):
         return False
     if _is_admin_role(role):
@@ -3008,6 +3353,9 @@ def guide_can_access_booking(actor: str | None, role: str | None, booking: dict 
 
 
 def _can_manage_booking(booking: dict, actor: str | None, role: str | None) -> tuple[bool, str]:
+    """
+    Kiểm tra xem người dùng có quyền quản lý/hủy booking hay không.
+    """
     if _is_admin_role(role):
         return True, ""
     if _is_guide_role(role):
@@ -3026,6 +3374,9 @@ def _can_manage_booking(booking: dict, actor: str | None, role: str | None) -> t
 
 
 def _calc_refund_rate(days_before_departure: int | None, company_cancelled: bool) -> float:
+    """
+    Tính toán tỷ lệ hoàn tiền khi hủy tour dựa trên thời gian hủy trước ngày đi.
+    """
     if company_cancelled:
         return 1.0
     if days_before_departure is None:
@@ -3038,10 +3389,16 @@ def _calc_refund_rate(days_before_departure: int | None, company_cancelled: bool
 
 
 def _get_bookings(datastore):
+    """
+    Lấy toàn bộ danh sách booking.
+    """
     return getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
 
 
 def _find_tour(datastore, ma_tour):
+    """
+    Tìm kiếm tour theo mã tour.
+    """
     finder = getattr(datastore, "find_tour", None)
     if callable(finder):
         result = finder(ma_tour)
@@ -3091,6 +3448,9 @@ def can_hard_delete_booking(datastore, booking: dict | None) -> tuple[bool, str]
 
 
 def _next_booking_code(datastore) -> str:
+    """
+    Tạo mã đặt chỗ tự động tiếp theo.
+    """
     existing_ids = []
     for booking in _get_bookings(datastore):
         ma_booking = str(booking.get("maBooking", "")).strip().upper()
@@ -3104,6 +3464,9 @@ def _next_booking_code(datastore) -> str:
 
 
 def _payment_status(total_amount, paid_amount):
+    """
+    Tính toán trạng thái thanh toán dựa trên tổng tiền và số tiền đã trả.
+    """
     total = max(0, safe_int(total_amount))
     paid = max(0, safe_int(paid_amount))
     if paid <= 0:
@@ -3114,6 +3477,9 @@ def _payment_status(total_amount, paid_amount):
 
 
 def _occupied_seats(datastore, ma_tour):
+    """
+    Tính số ghế/chỗ đã được đặt của tour.
+    """
     getter = getattr(datastore, "get_occupied_seats", None)
     if callable(getter):
         return max(0, safe_int(getter(ma_tour)))
@@ -3147,6 +3513,9 @@ def create_booking(
     actor="",
     role="user",
 ):
+    """
+    Khởi tạo đơn đặt tour (booking) mới cho khách hàng.
+    """
     normalized_fullname = normalize_fullname(fullname)
     normalized_phone = normalize_phone(phone)
     if len(normalized_fullname) < 3:
@@ -3268,6 +3637,9 @@ def create_booking(
 
 
 def apply_payment(datastore, ma_booking, pay_more, method, actor="", role="user"):
+    """
+    Thực hiện thanh toán tiền cọc hoặc thanh toán hết cho booking.
+    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần thanh toán.", level="error")
@@ -3338,6 +3710,9 @@ def apply_payment(datastore, ma_booking, pay_more, method, actor="", role="user"
 
 
 def cancel_booking(datastore, ma_booking, actor="", role="user", note=""):
+    """
+    Thực hiện hủy booking từ khách hàng hoặc admin.
+    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần hủy.", level="error")
@@ -3428,6 +3803,9 @@ def cancel_booking(datastore, ma_booking, actor="", role="user", note=""):
 
 
 def approve_refund(datastore, ma_booking, actor="", note="", role=""):
+    """
+    Phê duyệt yêu cầu hoàn tiền cho booking đã hủy.
+    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần duyệt hoàn tiền.", level="error")
@@ -3488,6 +3866,9 @@ def approve_refund(datastore, ma_booking, actor="", note="", role=""):
 
 
 def reject_refund(datastore, ma_booking, actor="", note="", role=""):
+    """
+    Từ chối yêu cầu hoàn tiền cho booking.
+    """
     booking = _find_booking(datastore, ma_booking)
     if not booking:
         return BookingResult(False, "Không tìm thấy booking cần từ chối hoàn tiền.", level="error")
@@ -3534,6 +3915,9 @@ def reject_refund(datastore, ma_booking, actor="", note="", role=""):
 
 
 def summarize_bookings_by_tour(datastore, actor: str = "", role: str = "admin") -> list[dict]:
+    """
+    Tổng hợp trạng thái đặt chỗ, doanh thu và tình trạng tour chi tiết phục vụ báo cáo.
+    """
     if not _is_admin_role(role):
         return []
 
@@ -3598,12 +3982,18 @@ def summarize_bookings_by_tour(datastore, actor: str = "", role: str = "admin") 
 
 @dataclass(slots=True)
 class TourResult:
+    """
+    Lớp biểu diễn kết quả các thao tác xử lý tour.
+    """
     success: bool
     message: str
     tour: dict | None = None
     level: str = "info"
 
 def _parse_ddmmyyyy(value: str | None):
+    """
+    Phân tích ngày tháng năm định dạng dd/mm/yyyy.
+    """
     text = str(value or "").strip()
     if not text:
         return None
@@ -3614,6 +4004,9 @@ def _parse_ddmmyyyy(value: str | None):
 
 
 def _is_overlapped(tour_a: dict, tour_b: dict) -> bool:
+    """
+    Kiểm tra xem thời gian dẫn tour của 2 tour có bị trùng lặp nhau hay không.
+    """
     start_a = _parse_ddmmyyyy(tour_a.get("ngay"))
     end_a = _parse_ddmmyyyy(tour_a.get("ngayKetThuc")) or start_a
     start_b = _parse_ddmmyyyy(tour_b.get("ngay"))
@@ -3624,10 +4017,16 @@ def _is_overlapped(tour_a: dict, tour_b: dict) -> bool:
 
 
 def _bookings(datastore):
+    """
+    Lấy danh sách các booking.
+    """
     return getattr(datastore, "list_bookings", datastore.data.get("bookings", []))
 
 
 def assign_guide(datastore, ma_tour: str, ma_hdv: str, actor: str = "admin") -> TourResult:
+    """
+    Phân công hướng dẫn viên phụ trách tour du lịch.
+    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return TourResult(False, "Không tìm thấy tour cần phân công.", level="error")
@@ -3704,6 +4103,9 @@ def assign_guide(datastore, ma_tour: str, ma_hdv: str, actor: str = "admin") -> 
 
 
 def cancel_tour(datastore, ma_tour: str, actor: str = "admin", reason: str = "") -> TourResult:
+    """
+    Thực hiện hủy tour du lịch từ quản trị viên.
+    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return TourResult(False, "Không tìm thấy tour cần hủy.", level="error")
@@ -3762,6 +4164,9 @@ def cancel_tour(datastore, ma_tour: str, actor: str = "admin", reason: str = "")
 
 
 def complete_tour(datastore, ma_tour: str, actor: str = "guide", note: str = "") -> TourResult:
+    """
+    Hoàn tất và kết thúc tour du lịch.
+    """
     tour = datastore.find_tour(ma_tour) if hasattr(datastore, "find_tour") else None
     if not isinstance(tour, dict):
         return TourResult(False, "Không tìm thấy tour cần kết thúc.", level="error")
@@ -3837,16 +4242,25 @@ AUTO_CANCEL_UNPAID_DAYS = 15
 
 
 def _non_negative_int(value, default=0):
+    """
+    Chuyển giá trị sang số nguyên không âm.
+    """
     return max(0, _safe_int(value, default))
 
 
 
 
 def _normalize_voucher_scope(raw_value) -> str:
+    """
+    Chuẩn hóa phạm vi áp dụng của voucher.
+    """
     return normalize_tour_scope(raw_value)
 
 
 def _normalize_booking(booking: dict, tours_by_code: dict[str, dict], today: date) -> None:
+    """
+    Chuẩn hóa toàn diện thông tin một đơn đặt chỗ.
+    """
     tour_code = str(booking.get("maTour", "")).strip()
     tour = tours_by_code.get(tour_code)
 
@@ -4030,6 +4444,9 @@ def _normalize_booking(booking: dict, tours_by_code: dict[str, dict], today: dat
 
 
 def _normalize_voucher(voucher: dict, used_count: int, today: date) -> None:
+    """
+    Chuẩn hóa thông tin chi tiết một mã giảm giá.
+    """
     voucher["maVoucher"] = str(voucher.get("maVoucher", "")).strip().upper()
     voucher.setdefault("tenVoucher", "")
     voucher.setdefault("loaiGiam", "Tiền mặt")
@@ -4065,6 +4482,9 @@ def _normalize_voucher(voucher: dict, used_count: int, today: date) -> None:
 
 
 def _normalize_tour(tour: dict, occupied: int, today: date) -> None:
+    """
+    Chuẩn hóa thông tin trạng thái và chỗ ngồi của một tour.
+    """
     status = normalize_tour_status(str(tour.get("trangThai", "")).strip(), default=TOUR_STATUS_NOT_OPEN)
 
     valid_statuses = set(TOUR_STATUS_CHOICES)
@@ -4114,6 +4534,9 @@ def _normalize_tour(tour: dict, occupied: int, today: date) -> None:
 
 
 def _normalize_guide(guide: dict, assignments: dict[str, dict]) -> None:
+    """
+    Chuẩn hóa thông tin trạng thái hoạt động của một hướng dẫn viên.
+    """
     ma_hdv = str(guide.get("maHDV", "")).strip()
     current_status = str(guide.get("trangThai", "")).strip()
     assignment = assignments.get(ma_hdv, {"assigned": False, "in_progress": False})
@@ -4159,6 +4582,9 @@ def _normalize_record_list(records) -> list[dict]:
 
 
 def _voucher_booking_is_counted(booking: dict, include_pending_refund: bool = True) -> bool:
+    """
+    Kiểm tra xem booking sử dụng voucher có được tính là hợp lệ hay không.
+    """
     status = str(booking.get("trangThai", "")).strip()
     if status in {"Đã hủy", "Hoàn tiền"}:
         return False
@@ -4168,6 +4594,9 @@ def _voucher_booking_is_counted(booking: dict, include_pending_refund: bool = Tr
 
 
 def _soft_revalidate_booking_vouchers(data: dict, today: date) -> None:
+    """
+    Cập nhật và kiểm định trạng thái sử dụng của các voucher.
+    """
     vouchers_by_code = {
         str(voucher.get("maVoucher", "")).strip().upper(): voucher
         for voucher in data.get("maVoucher", [])
@@ -4256,6 +4685,9 @@ def _soft_revalidate_booking_vouchers(data: dict, today: date) -> None:
 
 
 def apply_system_rules(data: dict, today: date | None = None) -> dict:
+    """
+    Áp dụng toàn bộ quy tắc nghiệp vụ hệ thống tự động để chuẩn hóa dữ liệu.
+    """
     if not isinstance(data, dict):
         return data
 
@@ -4385,6 +4817,9 @@ DEFAULT_DB_FILENAME = "travel_management.db"
 
 
 class SQLiteDataStore:
+    """
+    Lớp quản lý lưu trữ và truy vấn dữ liệu thông qua cơ sở dữ liệu SQLite.
+    """
     def __init__(
         self,
         path: str,
@@ -4811,6 +5246,9 @@ class JSONDataStore(SQLiteDataStore):
 
 @dataclass(slots=True)
 class ServiceResult:
+    """
+    Lớp kết quả trả về của các dịch vụ chức năng hệ thống.
+    """
     success: bool
     message: str
     level: str = "info"
@@ -4820,6 +5258,9 @@ class ServiceResult:
 
 
 class AuthService:
+    """
+    Lớp quản lý xác thực tài khoản, đăng nhập, đăng ký và cập nhật hồ sơ người dùng.
+    """
     def __init__(self, datastore):
         self.datastore = datastore
 
@@ -5165,6 +5606,9 @@ def _decode_mojibake_pairs(text: str) -> str:
 
 
 def _fix_token(token: str) -> str:
+    """
+    Sửa lỗi các từ đơn lẻ bị lỗi hiển thị.
+    """
     if not token or not any(marker in token for marker in _MARKERS):
         return token
 
@@ -5185,6 +5629,9 @@ def _fix_token(token: str) -> str:
 
 
 def fix_mojibake(value):
+    """
+    Tự động quét và giải quyết lỗi font hiển thị tiếng Việt trong chuỗi văn bản.
+    """
     if isinstance(value, str):
 
         suspicious_markers = ("\u00c3", "\u00c4", "\u00c2", "\u00ca", "\u00d4", "\u00c6", "\ufffd")
@@ -5223,6 +5670,9 @@ def fix_mojibake(value):
 
 
 def enable_tk_text_autofix():
+    """
+    Kích hoạt cơ chế tự động sửa lỗi nhập liệu và font cho các widget văn bản Tkinter.
+    """
     global _PATCHED
     if _PATCHED:
         return

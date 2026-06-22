@@ -42,7 +42,13 @@ PASTEL = {
 
 
 class TravelSystem:
+    """
+    Lớp quản lý luồng đăng nhập, đăng ký và chuyển hướng màn hình chính của hệ thống.
+    """
     def __init__(self, root):
+        """
+        Khởi tạo hệ thống, thiết lập giao diện gốc, tải dữ liệu nền và mở màn hình chọn vai trò.
+        """
         self.root = root
         self.configure_ui_fonts()
         self.root.title("Hệ thống Quản lý Du lịch 2026")
@@ -65,6 +71,9 @@ class TravelSystem:
         self.show_role_selection()
 
     def configure_ui_fonts(self):
+        """
+        Cấu hình font chữ mặc định chuẩn (Times New Roman) cho toàn bộ widget hệ thống.
+        """
         default_font = ("Times New Roman", 12)
         heading_font = ("Times New Roman", 12, "bold")
 
@@ -83,15 +92,24 @@ class TravelSystem:
         style.configure("TCombobox", font=default_font)
 
     def clear_screen(self):
+        """
+        Dọn dẹp tất cả các widget hiện tại trong frame chính để vẽ màn hình mới.
+        """
         for widget in self.main_frame.winfo_children():
             widget.destroy()
         self.bg_label = None
 
     def get_bg_path(self):
+        """
+        Lấy đường dẫn tệp ảnh nền giao diện đăng nhập.
+        """
         base_dir = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(base_dir, "background.jpg")
 
     def set_background(self):
+        """
+        Tải và hiển thị ảnh nền tràn màn hình chính.
+        """
         try:
             image_path = self.get_bg_path()
             self.root.update_idletasks()
@@ -110,6 +128,9 @@ class TravelSystem:
             self.bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
     def make_soft_button(self, parent, text, bg, hover_bg, command, width=24, height=2):
+        """
+        Hàm tiện ích tạo nhanh nút giao diện bo tròn RoundedButton.
+        """
         btn = RoundedButton(
             parent,
             text=text,
@@ -128,6 +149,9 @@ class TravelSystem:
         return btn
 
     def make_entry(self, parent, show=None):
+        """
+        Tạo ô nhập liệu văn bản với kiểu dáng đồng bộ.
+        """
         return tk.Entry(
             parent,
             font=("Times New Roman", 12),
@@ -140,6 +164,9 @@ class TravelSystem:
         )
 
     def make_center_card(self, width=430, height=None):
+        """
+        Tạo thẻ card nằm ở chính giữa màn hình làm nền cho form đăng ký/đăng nhập.
+        """
         parent = self.bg_label if self.bg_label else self.main_frame
         card = tk.Frame(
             parent,
@@ -159,6 +186,9 @@ class TravelSystem:
         return card
 
     def show_role_selection(self):
+        """
+        Màn hình đầu tiên cho phép chọn vai trò đăng nhập (Admin, Hướng dẫn viên, Khách hàng).
+        """
         self.clear_screen()
         self.root.geometry(LOGIN_WINDOW_SIZE)
         self.set_background()
@@ -206,6 +236,9 @@ class TravelSystem:
         ).pack(pady=(24, 4))
 
     def show_login_screen(self, role):
+        """
+        Hiển thị form nhập tài khoản và mật khẩu tương ứng với vai trò đã chọn.
+        """
         self.clear_screen()
         self.root.geometry(LOGIN_WINDOW_SIZE)
         self.current_role = role
@@ -304,6 +337,9 @@ class TravelSystem:
         self.ent_pass.bind("<Return>", lambda e: self.handle_login())
 
     def handle_login(self):
+        """
+        Xử lý xác thực thông tin đăng nhập từ dịch vụ AuthService và chuyển màn hình nếu thành công.
+        """
         result = self.auth_service.authenticate(
             self.current_role,
             self.ent_user.get().strip(),
@@ -319,6 +355,9 @@ class TravelSystem:
         notifier("Lỗi", result.message)
 
     def redirect_to_interface(self, username):
+        """
+        Khởi tạo giao diện làm việc chính tương ứng với quyền của người dùng vừa đăng nhập thành công.
+        """
         self.main_frame.destroy()
         self.root.geometry(WORKSPACE_WINDOW_SIZE)
         self.root.resizable(True, True)
@@ -355,6 +394,9 @@ class TravelSystem:
             hien_thi_khach(self.root, user_data)
 
     def show_register_screen(self):
+        """
+        Hiển thị form đăng ký tài khoản mới cho Khách hàng.
+        """
         self.clear_screen()
         self.root.geometry(LOGIN_WINDOW_SIZE)
         self.set_background()
@@ -457,6 +499,9 @@ class TravelSystem:
 
 
 def main():
+    """
+    Hàm khởi tạo ứng dụng và chạy vòng lặp giao diện chính mainloop.
+    """
     enable_tk_text_autofix()
     root = tk.Tk()
     TravelSystem(root)

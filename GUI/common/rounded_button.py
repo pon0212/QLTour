@@ -11,6 +11,9 @@ class RoundedButton(tk.Canvas):
     """
 
     def __init__(self, master=None, cnf=None, **kw):
+        """
+        Khởi tạo nút bo tròn với các thuộc tính màu sắc, font, viền, bo góc và sự kiện nhấn chuột.
+        """
         options = {}
         if cnf:
             options.update(cnf)
@@ -72,9 +75,15 @@ class RoundedButton(tk.Canvas):
         self.after_idle(self._redraw)
 
     def _on_destroy(self, _event):
+        """
+        Xử lý dọn dẹp biến khi đối tượng nút bị hủy.
+        """
         self._alive = False
 
     def _rounded_points(self, x1, y1, x2, y2, r):
+        """
+        Tạo danh sách tọa độ đa giác để vẽ hình bo tròn.
+        """
         return [
             x1 + r,
             y1,
@@ -117,6 +126,9 @@ class RoundedButton(tk.Canvas):
         ]
 
     def _text_layout(self, width, height):
+        """
+        Tính toán tọa độ hiển thị văn bản trên nút dựa trên neo (anchor).
+        """
         anchor = str(self._anchor or "center").strip().lower()
 
 
@@ -145,6 +157,9 @@ class RoundedButton(tk.Canvas):
         return x, y, text_anchor
 
     def _get_font(self):
+        """
+        Lấy font chữ từ Tkinter một cách an toàn.
+        """
         try:
             return tkfont.nametofont(self._font)
         except Exception:
@@ -154,6 +169,9 @@ class RoundedButton(tk.Canvas):
                 return tkfont.nametofont("TkDefaultFont")
 
     def _estimate_text_lines(self, fnt, wraplength):
+        """
+        Ước lượng số dòng và độ rộng tối đa của văn bản khi xuống dòng tự động.
+        """
         lines = self._text.splitlines() or [""]
         if wraplength <= 0:
             return len(lines), max((fnt.measure(line) for line in lines), default=0)
@@ -167,6 +185,9 @@ class RoundedButton(tk.Canvas):
         return max(1, visual_lines), max_line_width
 
     def _update_requested_size(self):
+        """
+        Cập nhật kích thước mong muốn của nút dựa trên độ dài văn bản và padding.
+        """
         fnt = self._get_font()
         wrap = max(0, int(self._wraplength))
         line_count, text_width = self._estimate_text_lines(fnt, wrap)
@@ -177,6 +198,9 @@ class RoundedButton(tk.Canvas):
         self.configure(width=req_w, height=req_h)
 
     def _current_fill(self):
+        """
+        Lấy màu nền hiện tại của nút tùy theo trạng thái (bình thường, hover, nhấn, hoặc disable).
+        """
         if self._state == "disabled":
             return "#94a3b8"
         if self._pressed or self._hover:
@@ -184,6 +208,9 @@ class RoundedButton(tk.Canvas):
         return self._bg
 
     def _current_text_color(self):
+        """
+        Lấy màu chữ hiện tại của nút tùy theo trạng thái.
+        """
         if self._state == "disabled":
             return "#e2e8f0"
         if self._pressed or self._hover:
@@ -191,6 +218,9 @@ class RoundedButton(tk.Canvas):
         return self._fg
 
     def _redraw(self):
+        """
+        Vẽ lại hình dáng và văn bản trên Canvas khi thay đổi kích thước hoặc trạng thái.
+        """
         if not self._alive:
             return
 
@@ -218,15 +248,24 @@ class RoundedButton(tk.Canvas):
         )
 
     def _on_resize(self, _event):
+        """
+        Xử lý vẽ lại khi nút thay đổi kích thước.
+        """
         self._redraw()
 
     def _on_enter(self, _event):
+        """
+        Hiệu ứng khi di chuột vào nút (hover).
+        """
         if self._state == "disabled":
             return
         self._hover = True
         self._redraw()
 
     def _on_leave(self, _event):
+        """
+        Hiệu ứng khi di chuột ra khỏi nút.
+        """
         if self._state == "disabled":
             return
         self._hover = False
@@ -234,12 +273,18 @@ class RoundedButton(tk.Canvas):
         self._redraw()
 
     def _on_press(self, _event):
+        """
+        Hiệu ứng khi nhấn chuột trái lên nút.
+        """
         if self._state == "disabled":
             return
         self._pressed = True
         self._redraw()
 
     def _on_release(self, event):
+        """
+        Kích hoạt lệnh callback (command) khi thả chuột trái trong vùng của nút.
+        """
         if self._state == "disabled":
             return
         was_pressed = self._pressed
@@ -249,11 +294,17 @@ class RoundedButton(tk.Canvas):
             self._command()
 
     def invoke(self):
+        """
+        Kích hoạt nút lập trình bằng mã lệnh.
+        """
         if self._state != "disabled" and self._command:
             return self._command()
         return None
 
     def configure(self, cnf=None, **kw):
+        """
+        Cấu hình lại các tham số của nút (text, bg, fg, command, radius...).
+        """
         cfg = {}
         if cnf:
             cfg.update(cnf)
@@ -321,6 +372,9 @@ class RoundedButton(tk.Canvas):
     config = configure
 
     def cget(self, key):
+        """
+        Truy vấn giá trị thuộc tính cấu hình hiện tại của nút.
+        """
         lookup = str(key).lower()
         if lookup in {"text"}:
             return self._text
