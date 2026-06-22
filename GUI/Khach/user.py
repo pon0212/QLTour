@@ -487,7 +487,7 @@ def khoi_tao_khach(root, user_data=None):
     util = tk.Frame(sidebar_outer, bg=SIDEBAR_BG)
     util.pack(side="bottom", fill="x", padx=12, pady=14)
     tk.Frame(util, bg="#22365b", height=1).pack(fill="x", pady=(0, 12))
-    logout_btn = RoundedButton(util, text="  🚪  Đăng xuất", bg="#b91c1c", fg="white", activebackground="#dc2626", activeforeground="white", relief="flat", bd=0, cursor="hand2", anchor="w", font=("Times New Roman", 13, "bold"), padx=14, pady=12, command=lambda: logout_user(root))
+    logout_btn = RoundedButton(util, text="  \uE7E8  Đăng xuất", bg="#b91c1c", fg="white", activebackground="#dc2626", activeforeground="white", relief="flat", bd=0, cursor="hand2", anchor="w", font=("Times New Roman", 13, "bold"), padx=14, pady=12, command=lambda: logout_user(root))
     logout_btn.pack(fill="x")
 
     menu_scroll = ttk.Scrollbar(sidebar_outer, orient="vertical")
@@ -2275,12 +2275,12 @@ def khoi_tao_khach(root, user_data=None):
     style_button(head_right, "Tải lại", THEME["primary"], reload_current_page).pack(anchor="e")
 
     nav_buttons, nav_views = [], [
-        ("Khám phá Tour", "Xem danh sách tour mở bán và đăng ký nhanh.", "tour", tab_danh_sach_tour, "🗺", "DANH SÁCH TOUR", "#dbeafe", "#1d4ed8"),
-        ("Tour đã đặt", "Theo dõi lịch sử booking và trạng thái thanh toán.", "booked", tab_tour_da_dat, "🧾", "BOOKING", "#ede9fe", "#7c3aed"),
-        ("Lịch sử booking", "Xem các tour bạn đã hoàn thành.", "history", tab_lich_su_booking, "📜", "LỊCH SỬ", "#e2e8f0", "#475569"),
-        ("Thông báo", "Cập nhật thông báo mới nhất từ đoàn và hướng dẫn viên.", "notification", tab_thong_bao, "🔔", "THÔNG BÁO", "#fef3c7", "#d97706"),
-        ("Gửi đánh giá", "Góp ý dịch vụ và đánh giá chất lượng hướng dẫn viên.", "review", tab_gui_danh_gia, "⭐", "ĐÁNH GIÁ", "#dcfce7", "#059669"),
-        ("Hồ sơ cá nhân", "Quản lý thông tin cá nhân và bảo mật tài khoản.", "profile", tab_ho_so, "👤", "TÀI KHOẢN", "#fee2e2", "#dc2626"),
+        ("Khám phá Tour", "Xem danh sách tour mở bán và đăng ký nhanh.", "tour", tab_danh_sach_tour, "\uE707", "DANH SÁCH TOUR", "#dbeafe", "#1d4ed8"),
+        ("Tour đã đặt", "Theo dõi lịch sử booking và trạng thái thanh toán.", "booked", tab_tour_da_dat, "\uE1D8", "BOOKING", "#ede9fe", "#7c3aed"),
+        ("Lịch sử booking", "Xem các tour bạn đã hoàn thành.", "history", tab_lich_su_booking, "\uE81C", "LỊCH SỬ", "#e2e8f0", "#475569"),
+        ("Thông báo", "Cập nhật thông báo mới nhất từ đoàn và hướng dẫn viên.", "notification", tab_thong_bao, "\uEA8F", "THÔNG BÁO", "#fef3c7", "#d97706"),
+        ("Gửi đánh giá", "Góp ý dịch vụ và đánh giá chất lượng hướng dẫn viên.", "review", tab_gui_danh_gia, "\uE735", "ĐÁNH GIÁ", "#dcfce7", "#059669"),
+        ("Hồ sơ cá nhân", "Quản lý thông tin cá nhân và bảo mật tài khoản.", "profile", tab_ho_so, "\uE713", "TÀI KHOẢN", "#fee2e2", "#dc2626"),
     ]
 
     for idx, (title, subtitle, current_tab, view_fn, icon, badge_text, badge_bg, badge_fg) in enumerate(nav_views):
@@ -2304,14 +2304,14 @@ def khoi_tao_khach(root, user_data=None):
             if account_card.winfo_manager(): account_card.pack_forget()
             brand.pack_configure(padx=4)
             collapse_btn.configure(text="\u2630"); util.pack_configure(padx=8, pady=10); menu.pack_configure(padx=8)
-            logout_btn.configure(text="🚪", anchor="center", padx=8)
+            logout_btn.configure(text="\uE7E8", anchor="center", padx=8)
         else:
             brand_title.configure(text="VIETNAM TRAVEL", font=("Times New Roman", 16, "bold"))
             if not brand_subtitle.winfo_manager(): brand_subtitle.pack(fill="x", pady=(2, 0))
             if not account_card.winfo_manager(): account_card.pack(fill="x", padx=16, pady=(0, 8), before=menu)
             brand.pack_configure(padx=18)
             collapse_btn.configure(text="\u2630"); util.pack_configure(padx=12, pady=14); menu.pack_configure(padx=12)
-            logout_btn.configure(text="🚪  Đăng xuất", anchor="w", padx=14)
+            logout_btn.configure(text="\uE7E8  Đăng xuất", anchor="w", padx=14)
 
         for btn in nav_buttons: _refresh_menu_button_layout(btn)
 

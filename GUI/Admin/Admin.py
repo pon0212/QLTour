@@ -92,49 +92,49 @@ TAB_DEFINITIONS: tuple[AdminTabDef, ...] = (
         key="dashboard",
         title="Tổng quan Dashboard",
         subtitle="Theo dõi nhanh doanh thu, số tour, HDV và booking trong hệ thống.",
-        icon="🏠",
+        icon="\uE80F",
         handler_name="dashboard_tab",
     ),
     AdminTabDef(
         key="hdv",
         title="Quản lý hướng dẫn viên",
         subtitle="Quản trị hồ sơ nhân sự, trạng thái và thông tin điều phối HDV.",
-        icon="🧭",
+        icon="\uE726",
         handler_name="admin_hdv_tab",
     ),
     AdminTabDef(
         key="users",
         title="Quản lý khách hàng",
         subtitle="Theo dõi tài khoản khách, lịch sử đặt chỗ và thông tin liên hệ.",
-        icon="👥",
+        icon="\uE77B",
         handler_name="admin_user_tab",
     ),
     AdminTabDef(
         key="tours",
         title="Quản lý tour",
         subtitle="Điều phối lịch trình, trạng thái tour và hướng dẫn viên phụ trách.",
-        icon="🗺",
+        icon="\uE707",
         handler_name="admin_tour_tab",
     ),
     AdminTabDef(
         key="bookings",
         title="Quản lý booking",
         subtitle="Kiểm soát booking, thanh toán và danh sách khách theo tour.",
-        icon="🧾",
+        icon="\uE1D8",
         handler_name="admin_booking_tab",
     ),
     AdminTabDef(
         key="vouchers",
         title="Mã giảm giá",
         subtitle="Quản lý voucher, chương trình ưu đãi và điều kiện áp dụng.",
-        icon="🎟",
+        icon="\uE19A",
         handler_name="admin_voucher_tab",
     ),
     AdminTabDef(
         key="report",
         title="Báo cáo tổng hợp",
         subtitle="Xem nhanh báo cáo doanh thu và tổng hợp booking theo tour.",
-        icon="📊",
+        icon="\uE9D2",
         handler_name="report",
     ),
 
@@ -142,14 +142,14 @@ TAB_DEFINITIONS: tuple[AdminTabDef, ...] = (
         key="reviews",
         title="Đánh giá khách hàng",
         subtitle="Theo dõi phản hồi, điểm chấm và nội dung đánh giá từ khách hàng.",
-        icon="⭐",
+        icon="\uE735",
         handler_name="admin_reviews_tab",
     ),
     AdminTabDef(
         key="notifications",
         title="Thông báo HDV",
         subtitle="Tổng hợp các thông báo điều hành đã gửi tới hướng dẫn viên.",
-        icon="🔔",
+        icon="\uEA8F",
         handler_name="admin_notifications_tab",
     ),
 )
@@ -7754,7 +7754,7 @@ def main(root=None):
 
     util = tk.Frame(sidebar, bg=SIDEBAR_BG)
     util.pack(side="bottom", fill="x", padx=12, pady=14)
-    logout_btn = style_button(util, "🚪  Đăng xuất hệ thống", "#7f1d1d", lambda: logout(app))
+    logout_btn = style_button(util, "\uE7E8  Đăng xuất hệ thống", "#7f1d1d", lambda: logout(app))
     logout_btn.pack(fill="x")
 
     def apply_sidebar_mode():
@@ -7770,7 +7770,7 @@ def main(root=None):
             collapse_btn.configure(text="☰")
             util.pack_configure(padx=8, pady=10)
             menu_shell.pack_configure(padx=8)
-            logout_btn.configure(text="🚪", anchor="center", padx=8)
+            logout_btn.configure(text="\uE7E8", anchor="center", padx=8)
         else:
             brand_title.configure(text="VIETNAM TRAVEL", font=("Times New Roman", 16, "bold"))
             if not brand_subtitle.winfo_manager():
@@ -7780,7 +7780,7 @@ def main(root=None):
             collapse_btn.configure(text="☰")
             util.pack_configure(padx=12, pady=14)
             menu_shell.pack_configure(padx=12)
-            logout_btn.configure(text="🚪  Đăng xuất hệ thống", anchor="w", padx=14)
+            logout_btn.configure(text="\uE7E8  Đăng xuất hệ thống", anchor="w", padx=14)
 
         for nav_btn in nav_buttons:
             _refresh_menu_button_layout(nav_btn)

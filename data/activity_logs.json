@@ -1,0 +1,74 @@
+[
+  {
+    "timestamp": "2026-06-22T22:57:48",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-22T22:59:31",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-22T23:01:07",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-22T23:05:15",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "FAILED",
+    "detail": "Mật khẩu không hợp lệ."
+  },
+  {
+    "timestamp": "2026-06-22T23:05:17",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-22T23:06:01",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-22T23:06:51",
+    "actor": "admin",
+    "role": "admin",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-22T23:06:59",
+    "actor": "hdv01",
+    "role": "guide",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  },
+  {
+    "timestamp": "2026-06-22T23:08:21",
+    "actor": "ngoctuyen",
+    "role": "user",
+    "action": "LOGIN",
+    "status": "SUCCESS",
+    "detail": "Đăng nhập thành công."
+  }
+]

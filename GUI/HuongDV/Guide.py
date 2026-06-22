@@ -1911,10 +1911,10 @@ def khoi_tao_hdv(root, user_data=None):
             header_badge.config(text="CÀI ĐẶT CÁ NHÂN", bg="#fef3c7", fg="#d97706")
 
     nav_items = [
-        ("Lịch trình tour", "Theo dõi các tour được phân công, danh sách khách và trạng thái vận hành.", tab_danh_sach_tour, "🗺"),
-        ("Hiệu suất & đánh giá", "Tổng hợp điểm số, tỷ lệ hài lòng và năng lực chuyên môn của HDV.", tab_thong_ke, "⭐"),
-        ("Gửi thông báo", "Gửi thông báo khẩn cấp đến các đoàn khách đang hoạt động.", tab_thong_bao, "🔔"),
-        ("Cài đặt tài khoản", "Quản lý thông tin cá nhân và cập nhật mật khẩu bảo mật.", tab_cai_dat, "👤"),
+        ("Lịch trình tour", "Theo dõi các tour được phân công, danh sách khách và trạng thái vận hành.", tab_danh_sach_tour, "\uE707"),
+        ("Hiệu suất & đánh giá", "Tổng hợp điểm số, tỷ lệ hài lòng và năng lực chuyên môn của HDV.", tab_thong_ke, "\uE735"),
+        ("Gửi thông báo", "Gửi thông báo khẩn cấp đến các đoàn khách đang hoạt động.", tab_thong_bao, "\uEA8F"),
+        ("Cài đặt tài khoản", "Quản lý thông tin cá nhân và cập nhật mật khẩu bảo mật.", tab_cai_dat, "\uE713"),
     ]
 
     nav_buttons = []
@@ -1956,7 +1956,7 @@ def khoi_tao_hdv(root, user_data=None):
     tk.Frame(util, bg="#22365b", height=1).pack(fill="x", pady=(0, 12))
     logout_btn = RoundedButton(
         util,
-        text="  🚪  Đăng xuất",
+        text="  \uE7E8  Đăng xuất",
         bg="#b91c1c",
         fg="white",
         activebackground="#dc2626",
@@ -1985,7 +1985,7 @@ def khoi_tao_hdv(root, user_data=None):
             collapse_btn.configure(text="\u2630")
             util.pack_configure(padx=8, pady=10)
             menu.pack_configure(padx=8)
-            logout_btn.configure(text="🚪", anchor="center", padx=8)
+            logout_btn.configure(text="\uE7E8", anchor="center", padx=8)
         else:
             brand_title.configure(text="VIETNAM TRAVEL", font=("Times New Roman", 16, "bold"))
             if not brand_subtitle.winfo_manager():
@@ -1995,7 +1995,7 @@ def khoi_tao_hdv(root, user_data=None):
             collapse_btn.configure(text="\u2630")
             util.pack_configure(padx=12, pady=14)
             menu.pack_configure(padx=12)
-            logout_btn.configure(text="🚪  Đăng xuất", anchor="w", padx=14)
+            logout_btn.configure(text="\uE7E8  Đăng xuất", anchor="w", padx=14)
 
         for nav_btn in nav_buttons:
             _refresh_menu_button_layout(nav_btn)
