@@ -481,13 +481,6 @@ DEFAULT_DATA = {
 }
 
 
-
-
-
-
-
-
-
 def normalize_review_item(r, datastore=None):
     normalized = core_normalize_review_item(
         r,
@@ -5266,11 +5259,6 @@ def admin_booking_tab(app):
 
 
     refresh_bookings(app, app["search_booking_var"].get())
-
-
-
-
-
 
 
 def open_feedback_detail(app, mode, data):
